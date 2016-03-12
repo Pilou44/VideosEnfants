@@ -20,9 +20,6 @@ public abstract class BrowseActivity extends AppCompatActivity {
     protected VideoElement mCurrent;
     protected String mRoot = "root";
 
-    //protected Object mCurrentDir;
-    //protected Object mParentDir;
-
     private Drawable getDrawableForElement(String file, boolean isDirectory) {
         File picturesLocation = new File(PICTURES_LOCATION);
         if (!picturesLocation.exists()) {
@@ -92,21 +89,4 @@ public abstract class BrowseActivity extends AppCompatActivity {
 
     protected abstract void parseAndUpdate(VideoElement parent);
 
-    /*@Override
-    public void onBackPressed() {
-        if (isRoot(mCurrentDir)) {
-            super.onBackPressed();
-        }
-        else {
-            Object parent = getParentDirectory(mCurrentDir);
-            parseAndUpdate(parent);
-        }
-    }
-
-    protected void parseAndUpdate(Object directory) {
-        mCurrentDir = directory;
-    }
-
-    protected abstract boolean isRoot(Object directory);
-    protected abstract Object getParentDirectory(Object current);*/
 }

@@ -1,7 +1,6 @@
 package com.freak.videosenfants;
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,21 +10,14 @@ import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by Guillaume BEGUIN on 07/03/2016.
- */
 public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
-
-    private final Context mContext;
 
     public VideoElementAdapter(Context context, List<VideoElement> elements) {
         super(context, 0, elements);
-        mContext = context;
     }
 
     public VideoElementAdapter(Context context) {
         super(context, 0);
-        mContext = context;
     }
 
     @Override

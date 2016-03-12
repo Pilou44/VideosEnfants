@@ -21,21 +21,16 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
-;
-
 public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnItemClickListener {
 
     private static final boolean DEBUG = true;
     private static final String TAG = BrowseSDActivity.class.getSimpleName();
     private static final Pattern DIR_SEPORATOR = Pattern.compile("/");
-    private static final String PICTURES_LOCATION = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/VideosForChilds/";
 
     private ListView mListView;
     private Vector<VideoElement> mAllFiles;
     private VideoElementAdapter mAdapter;
     private Vector<File> mRoots;
-    //private String mCurrentDir;
-    //private VideoElement mCurrent;
     private VideoElement mRootElement;
 
     @Override
@@ -56,19 +51,19 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
 
         mRoots = new Vector<>();
         String[] sdSources = getStorageDirectories();
-        for (int i = 0 ; i < sdSources.length ; i++) {
-            File childrenFolder = new File(sdSources[i], "Movies/Enfants");
-            if (childrenFolder.exists() && childrenFolder.isDirectory()){
+        for (String sdSource : sdSources) {
+            File childrenFolder = new File(sdSource, "Movies/Enfants");
+            if (childrenFolder.exists() && childrenFolder.isDirectory()) {
                 if (DEBUG) {
                     Log.i(TAG, "New root found: " + childrenFolder.getAbsolutePath());
                 }
                 mRoots.add(childrenFolder);
             }
         }
-        //mCurrentDir = "root";
+
         mRootElement = new VideoElement(true, null, mRoot, mRoot, null);
         mCurrent = mRootElement;
-        mAllFiles = new Vector<VideoElement>();
+        mAllFiles = new Vector<>();
         addFilesToList(mRoots, mCurrent);
         mAdapter = new VideoElementAdapter(this, mAllFiles);
 
@@ -80,13 +75,13 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
     private void addFilesToList(Vector<File> filesVector, VideoElement parent) {
         for (int i = 0 ; i < filesVector.size() ; i++) {
             File[] files = filesVector.get(i).listFiles();
-            for (int j = 0; j < files.length; j++) {
+            for (File file : files) {
                 String name;
-                if (!files[j].isDirectory())
-                    name = files[j].getName().substring(0, files[j].getName().lastIndexOf("."));
+                if (!file.isDirectory())
+                    name = file.getName().substring(0, file.getName().lastIndexOf("."));
                 else
-                    name = files[j].getName();
-                mAllFiles.add(new VideoElement(files[j], generateScreenshot(files[j].getAbsolutePath(), name, files[j].isDirectory()), parent));
+                    name = file.getName();
+                mAllFiles.add(new VideoElement(file, generateScreenshot(file.getAbsolutePath(), name, file.isDirectory()), parent));
             }
         }
         sortFiles();
@@ -94,13 +89,13 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
 
     private void addFilesToList(File file, VideoElement parent) {
         File[] files = file.listFiles();
-        for (int j = 0; j < files.length; j++) {
+        for (File file1 : files) {
             String name;
-            if (!files[j].isDirectory())
-                name = files[j].getName().substring(0, files[j].getName().lastIndexOf("."));
+            if (!file1.isDirectory())
+                name = file1.getName().substring(0, file1.getName().lastIndexOf("."));
             else
-                name = files[j].getName();
-            mAllFiles.add(new VideoElement(files[j], generateScreenshot(files[j].getAbsolutePath(), name, files[j].isDirectory()), parent));
+                name = file1.getName();
+            mAllFiles.add(new VideoElement(file1, generateScreenshot(file1.getAbsolutePath(), name, file1.isDirectory()), parent));
         }
         sortFiles();
     }
@@ -160,63 +155,6 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         } while (permut);
     }
 
-    /*private Drawable generateScreenshot(File file) {
-        Drawable ret = getDrawableForElement(file.getName(), file.isDirectory());
-        if (ret == null) {
-            if (file.isDirectory()) {
-                return this.getResources().getDrawable(R.drawable.dossier, null);
-            } else {
-                return new BitmapDrawable(this.getResources(), ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Images.Thumbnails.MINI_KIND));
-            }
-        }
-        else {
-            return ret;
-        }
-    }*/
-
-    /*private Drawable getDrawableForElement(File file) {
-        File picturesLocation = new File(PICTURES_LOCATION);
-        if (!picturesLocation.exists()) {
-            picturesLocation.mkdir();
-        }
-        if (DEBUG) {
-            Log.i(TAG, "Pictures location: " + picturesLocation.getAbsolutePath());
-        }
-
-        String fileNamePng = file.getName();
-        String fileNameJpg = file.getName();
-        String fileNameJpeg = file.getName();
-        if (file.isDirectory()) {
-            fileNamePng += ".png";
-            fileNameJpg += ".jpg";
-            fileNameJpeg += ".jpeg";
-        }
-        else {
-            fileNamePng = fileNamePng.substring(0, fileNamePng.lastIndexOf(".")) + ".png";
-            fileNameJpg = fileNameJpg.substring(0, fileNameJpg.lastIndexOf(".")) + ".jpg";
-            fileNameJpeg = fileNameJpeg.substring(0, fileNameJpeg.lastIndexOf(".")) + ".jpeg";
-        }
-        File picPng = new File(picturesLocation, fileNamePng);
-        File picJpg = new File(picturesLocation, fileNameJpg);
-        File picJpeg = new File(picturesLocation, fileNameJpeg);
-
-        if (picPng.exists()) {
-            Bitmap bMap = BitmapFactory.decodeFile(picPng.getAbsolutePath());
-            return new BitmapDrawable(this.getResources(), bMap);
-        }
-        else if (picJpg.exists()) {
-            Bitmap bMap = BitmapFactory.decodeFile(picJpg.getAbsolutePath());
-            return new BitmapDrawable(this.getResources(), bMap);
-        }
-        else if (picJpeg.exists()) {
-            Bitmap bMap = BitmapFactory.decodeFile(picJpeg.getAbsolutePath());
-            return new BitmapDrawable(this.getResources(), bMap);
-        }
-        else {
-            return null;
-        }
-    }*/
-
     /**
      * Raturns all available SD-Cards in the system (include emulated)
      *
@@ -229,7 +167,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
     public static String[] getStorageDirectories()
         {
         // Final set of paths
-        final Set<String> rv = new HashSet<String>();
+        final Set<String> rv = new HashSet<>();
         // Primary physical SD-CARD (not emulated)
         final String rawExternalStorage = System.getenv("EXTERNAL_STORAGE");
         // All Secondary SD-CARDs (all exclude primary) separated by ":"
@@ -311,17 +249,6 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         }
     }
 
-    /*@Override
-    public void onBackPressed() {
-        Log.i(TAG, "Back pressed");
-        if (mCurrent.getPath().equals("root")) {
-            super.onBackPressed();
-        }
-        else {
-            parseAndUpdate(mCurrent.getParent());
-        }
-    }*/
-
     protected void parseAndUpdate(VideoElement element) {
         mAllFiles.removeAllElements();
 
@@ -344,39 +271,4 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         mListView.setSelectionAfterHeaderView();
     }
 
-    /*protected boolean isRoot(File directory) {
-        boolean end = false;
-        for (int i = 0 ; i < mRoots.size() ; i++){
-            if (mRoots.get(i).getAbsolutePath().equals(directory.getAbsolutePath())) {
-                end = true;
-            }
-        }
-        return end;
-    }*/
-
-    /*@Override
-    protected void parseAndUpdate(Object directory) {
-        super.parseAndUpdate(directory);
-        mAllFiles.removeAllElements();
-        addFilesToList(new File((String)directory));
-        mAdapter.notifyDataSetChanged();
-        mListView.setSelectionAfterHeaderView();
-    }
-
-    @Override
-    protected boolean isRoot(Object directory) {
-        boolean end = false;
-        for (int i = 0 ; i < mRoots.size() ; i++){
-            if (mRoots.get(i).getAbsolutePath().equals(directory)) {
-                end = true;
-            }
-        }
-        return end;
-    }
-
-    @Override
-    protected String getParentDirectory(Object current) {
-        File directory = new File((String)current);
-        return directory.getParent();
-    }*/
 }

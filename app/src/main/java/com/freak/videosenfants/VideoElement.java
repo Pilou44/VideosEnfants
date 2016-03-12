@@ -46,27 +46,7 @@ public class VideoElement {
     public String getName() {
         return mName;
     }
-
-    public void setDirectory(boolean directory) {
-        this.mDirectory = directory;
-    }
-
-    public void setIcon(Drawable icon) {
-        this.mIcon = icon;
-    }
-
-    public void setPath(String path) {
-        this.mPath = path;
-    }
-
-    public void setName(String name) {
-        this.mName = name;
-    }
-
-    public void setParent(VideoElement parent) {
-        this.mParent = mParent;
-    }
-
+    
     public VideoElement getParent() {
         return mParent;
     }
