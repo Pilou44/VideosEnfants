@@ -69,7 +69,14 @@ public abstract class BrowseActivity extends AppCompatActivity {
             if (isDirectory) {
                 return this.getResources().getDrawable(R.drawable.dossier, null);
             } else {
-                return new BitmapDrawable(this.getResources(), ThumbnailUtils.createVideoThumbnail(path, MediaStore.Images.Thumbnails.MINI_KIND));
+                Bitmap bmp = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Images.Thumbnails.MINI_KIND);
+                if (bmp == null) {
+                    ret = this.getResources().getDrawable(R.drawable.fichier, null);
+                }
+                else {
+                    ret = new BitmapDrawable(this.getResources(), bmp);
+                }
+                return ret;
             }
         }
         else {
