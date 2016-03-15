@@ -1,5 +1,6 @@
 package com.freak.videosenfants;
 
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -19,12 +20,14 @@ import android.widget.ListView;
 import org.fourthline.cling.android.AndroidUpnpService;
 import org.fourthline.cling.android.AndroidUpnpServiceImpl;
 import org.fourthline.cling.android.FixedAndroidLogHandler;
+import org.fourthline.cling.model.ValidationException;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.message.header.UDNHeader;
 import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.RemoteDevice;
+import org.fourthline.cling.model.meta.RemoteDeviceIdentity;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.types.UDN;
 import org.fourthline.cling.registry.DefaultRegistryListener;
@@ -32,6 +35,11 @@ import org.fourthline.cling.registry.Registry;
 import org.fourthline.cling.support.contentdirectory.callback.Browse;
 import org.fourthline.cling.support.model.BrowseFlag;
 import org.fourthline.cling.support.model.DIDLContent;
+
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.UnknownHostException;
 
 public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.OnItemClickListener {
 
@@ -44,8 +52,6 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     private BrowseRegistryListener mRegistryListener = new BrowseRegistryListener();
     private AndroidUpnpService mUpnpService;
     private VideoElementAdapter mAdapter;
-
-    protected String mRoot = "33$14";
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -67,13 +73,41 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
             }
 
             // Search asynchronously for all devices, they will respond soon
+            mRoot = "33$14";
             mUpnpService.getControlPoint().search(new UDNHeader(new UDN("0011324b-22b7-0011-b722-b7224b321100")));
+
+            Thread thread = new Thread() {
+                public void run(){
+                    if (DEBUG)
+                        Log.i(TAG, "Retrieve remote device");
+                    try {
+                        RemoteDeviceIdentity deviceIdentity = new RemoteDeviceIdentity(
+                                new UDN("0011324b-22b7-0011-b722-b7224b321100"),
+                                1900,
+                                new URL("http://192.168.1.63:50001/desc/device.xml"),
+                                null,
+                                InetAddress.getLocalHost()
+                        );
+                        RemoteDevice device = new RemoteDevice(deviceIdentity);
+                        if (DEBUG)
+                            Log.i(TAG, "Device created");
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (UnknownHostException e) {
+                        e.printStackTrace();
+                    } catch (ValidationException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            thread.start();
         }
 
         public void onServiceDisconnected(ComponentName className) {
             mUpnpService = null;
         }
     };
+    private ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +150,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                 Context.BIND_AUTO_CREATE
         );
 
+        mDialog = ProgressDialog.show(this, "Recherche du serveur", "Merci de patienter...", true);
     }
 
     @Override
@@ -253,6 +288,12 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                                 if (service.getServiceType().getType().equals("ContentDirectory")) {
                                     mService = service;
 
+                                    Log.i(TAG, "UDN=" + device.getIdentity().getUdn().getIdentifierString());
+                                    Log.i(TAG, "MaxAge=" + device.getIdentity().getMaxAgeSeconds());
+                                    Log.i(TAG, "URL=" + ((RemoteDeviceIdentity)device.getIdentity()).getDescriptorURL());
+                                    Log.i(TAG, "Mac=" + ((RemoteDeviceIdentity)device.getIdentity()).getInterfaceMacAddress());
+                                    Log.i(TAG, "Inet=" + ((RemoteDeviceIdentity)device.getIdentity()).getDiscoveredOnLocalAddress());
+
                                     if (DEBUG)
                                         Log.i(TAG, "ContentDirectory found");
 
@@ -273,6 +314,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                                         public void failure(ActionInvocation arg0, UpnpResponse arg1, String arg2) {
                                         }
                                     });
+                                    mDialog.dismiss();
                                 }
                             }
                         }
