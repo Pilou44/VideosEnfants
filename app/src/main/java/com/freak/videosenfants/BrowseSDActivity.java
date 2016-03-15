@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +33,9 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
     private VideoElementAdapter mAdapter;
     private Vector<File> mRoots;
     private VideoElement mRootElement;
+
+    private String[] mExtensions = {"avi" , "mkv", "wmv", "mpg", "mpeg", "mp4"};
+    private Set<String> mSet = new HashSet<>(Arrays.asList(mExtensions));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,21 +77,29 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
 
     private void addFilesToList(Vector<File> filesVector, VideoElement parent) {
         for (int i = 0 ; i < filesVector.size() ; i++) {
-            File[] files = filesVector.get(i).listFiles();
-            for (File file : files) {
-                String name;
-                if (!file.isDirectory())
-                    name = file.getName().substring(0, file.getName().lastIndexOf("."));
-                else
-                    name = file.getName();
-                mAllFiles.add(new VideoElement(file, generateScreenshot(file.getAbsolutePath(), name, file.isDirectory()), parent));
-            }
+            addFilesToList(filesVector.get(i), parent);
         }
         sortFiles();
     }
 
     private void addFilesToList(File file, VideoElement parent) {
-        File[] files = file.listFiles();
+        File[] files = file.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                if (pathname.isDirectory()) {
+                    return true;
+                }
+                else {
+                    try {
+                        String extension = pathname.getName().substring(pathname.getName().lastIndexOf(".") + 1);
+                        return mSet.contains(extension);
+                    }
+                    catch (Exception e) {
+                        return false;
+                    }
+                }
+            }
+        });
         for (File file1 : files) {
             String name;
             if (!file1.isDirectory())
