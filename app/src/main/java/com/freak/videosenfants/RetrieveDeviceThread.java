@@ -92,7 +92,8 @@ public class RetrieveDeviceThread extends Thread {
             if (headers != null)
                 deviceDescRetrievalMsg.getHeaders().putAll(headers);
 
-            Log.i(TAG, "Sending device descriptor retrieval message: " + deviceDescRetrievalMsg);
+            if (DEBUG)
+                Log.i(TAG, "Sending device descriptor retrieval message: " + deviceDescRetrievalMsg);
             deviceDescMsg = mUpnpService.get().getRouter().send(deviceDescRetrievalMsg);
 
         } catch(IllegalArgumentException ex) {
@@ -135,7 +136,8 @@ public class RetrieveDeviceThread extends Thread {
             return;
         }
 
-        Log.i(TAG, "Received root device descriptor: " + deviceDescMsg);
+        if (DEBUG)
+            Log.i(TAG, "Received root device descriptor: " + deviceDescMsg);
         describe(descriptorContent);
     }
 
@@ -152,10 +154,12 @@ public class RetrieveDeviceThread extends Thread {
                     descriptorXML
             );
 
-            Log.i(TAG, "Remote device described (without services) notifying listeners: " + describedDevice);
+            if (DEBUG)
+                Log.i(TAG, "Remote device described (without services) notifying listeners: " + describedDevice);
             notifiedStart = mUpnpService.getRegistry().notifyDiscoveryStart(describedDevice);
 
-            Log.i(TAG, "Hydrating described device's services: " + describedDevice);
+            if (DEBUG)
+                Log.i(TAG, "Hydrating described device's services: " + describedDevice);
             RemoteDevice hydratedDevice = describeServices(describedDevice);
             if (hydratedDevice == null) {
                 //if(!errorsAlreadyLogged.contains(rd.getIdentity().getUdn())) {
@@ -168,7 +172,8 @@ public class RetrieveDeviceThread extends Thread {
                             new DescriptorBindingException("Device service description failed: " + mDevice)
                     );
             } else {
-                Log.i(TAG, "Adding fully hydrated remote device to registry: " + hydratedDevice);
+                if (DEBUG)
+                    Log.i(TAG, "Adding fully hydrated remote device to registry: " + hydratedDevice);
                 // The registry will do the right thing: A new root device is going to be added, if it's
                 // already present or we just received the descriptor again (because we got an embedded
                 // devices' notification), it will simply update the expiration timestamp of the root
@@ -268,7 +273,8 @@ public class RetrieveDeviceThread extends Thread {
         if (headers != null)
             serviceDescRetrievalMsg.getHeaders().putAll(headers);
 
-        Log.i(TAG, "Sending service descriptor retrieval message: " + serviceDescRetrievalMsg);
+        if (DEBUG)
+            Log.i(TAG, "Sending service descriptor retrieval message: " + serviceDescRetrievalMsg);
         StreamResponseMessage serviceDescMsg = mUpnpService.get().getRouter().send(serviceDescRetrievalMsg);
 
         if (serviceDescMsg == null) {
@@ -285,7 +291,8 @@ public class RetrieveDeviceThread extends Thread {
         }
 
         if (!serviceDescMsg.isContentTypeTextUDA()) {
-            Log.i(TAG, "Received service descriptor without or with invalid Content-Type: " + descriptorURL);
+            if (DEBUG)
+                Log.i(TAG, "Received service descriptor without or with invalid Content-Type: " + descriptorURL);
             // We continue despite the invalid UPnP message because we can still hope to convert the content
         }
 
@@ -295,7 +302,8 @@ public class RetrieveDeviceThread extends Thread {
             return null;
         }
 
-        Log.i(TAG, "Received service descriptor, hydrating service model: " + serviceDescMsg);
+        if (DEBUG)
+            Log.i(TAG, "Received service descriptor, hydrating service model: " + serviceDescMsg);
         ServiceDescriptorBinder serviceDescriptorBinder =
                 mUpnpService.getConfiguration().getServiceDescriptorBinderUDA10();
 
@@ -312,10 +320,12 @@ public class RetrieveDeviceThread extends Thread {
         for (RemoteService discoveredService : services) {
             for (ServiceType exclusiveType : exclusiveTypes) {
                 if (discoveredService.getServiceType().implementsVersion(exclusiveType)) {
-                    Log.i(TAG, "Including exclusive service: " + discoveredService);
+                    if (DEBUG)
+                        Log.i(TAG, "Including exclusive service: " + discoveredService);
                     exclusiveServices.add(discoveredService);
                 } else {
-                    Log.i(TAG, "Excluding unwanted service: " + exclusiveType);
+                    if (DEBUG)
+                        Log.i(TAG, "Excluding unwanted service: " + exclusiveType);
                 }
             }
         }
