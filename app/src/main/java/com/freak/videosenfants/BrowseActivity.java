@@ -22,45 +22,44 @@ public abstract class BrowseActivity extends AppCompatActivity {
 
     private Drawable getDrawableForElement(String file, boolean isDirectory) {
         File picturesLocation = new File(PICTURES_LOCATION);
-        if (!picturesLocation.exists()) {
-            picturesLocation.mkdir();
-        }
-        if (DEBUG) {
-            Log.i(TAG, "Pictures location: " + picturesLocation.getAbsolutePath());
+        boolean locationExists = picturesLocation.exists();
+        if (!locationExists) {
+            locationExists = picturesLocation.mkdir();
         }
 
-        String fileNamePng = file;
-        String fileNameJpg = file;
-        String fileNameJpeg = file;
-        if (isDirectory) {
-            fileNamePng += ".png";
-            fileNameJpg += ".jpg";
-            fileNameJpeg += ".jpeg";
-        }
-        else {
-            fileNamePng = fileNamePng + ".png";
-            fileNameJpg = fileNameJpg + ".jpg";
-            fileNameJpeg = fileNameJpeg + ".jpeg";
-        }
-        File picPng = new File(picturesLocation, fileNamePng);
-        File picJpg = new File(picturesLocation, fileNameJpg);
-        File picJpeg = new File(picturesLocation, fileNameJpeg);
+        if (locationExists) {
+            if (DEBUG) {
+                Log.i(TAG, "Pictures location: " + picturesLocation.getAbsolutePath());
+            }
 
-        if (picPng.exists()) {
-            Bitmap bMap = BitmapFactory.decodeFile(picPng.getAbsolutePath());
-            return new BitmapDrawable(this.getResources(), bMap);
+            String fileNamePng = file;
+            String fileNameJpg = file;
+            String fileNameJpeg = file;
+            if (isDirectory) {
+                fileNamePng += ".png";
+                fileNameJpg += ".jpg";
+                fileNameJpeg += ".jpeg";
+            } else {
+                fileNamePng = fileNamePng + ".png";
+                fileNameJpg = fileNameJpg + ".jpg";
+                fileNameJpeg = fileNameJpeg + ".jpeg";
+            }
+            File picPng = new File(picturesLocation, fileNamePng);
+            File picJpg = new File(picturesLocation, fileNameJpg);
+            File picJpeg = new File(picturesLocation, fileNameJpeg);
+
+            if (picPng.exists()) {
+                Bitmap bMap = BitmapFactory.decodeFile(picPng.getAbsolutePath());
+                return new BitmapDrawable(this.getResources(), bMap);
+            } else if (picJpg.exists()) {
+                Bitmap bMap = BitmapFactory.decodeFile(picJpg.getAbsolutePath());
+                return new BitmapDrawable(this.getResources(), bMap);
+            } else if (picJpeg.exists()) {
+                Bitmap bMap = BitmapFactory.decodeFile(picJpeg.getAbsolutePath());
+                return new BitmapDrawable(this.getResources(), bMap);
+            }
         }
-        else if (picJpg.exists()) {
-            Bitmap bMap = BitmapFactory.decodeFile(picJpg.getAbsolutePath());
-            return new BitmapDrawable(this.getResources(), bMap);
-        }
-        else if (picJpeg.exists()) {
-            Bitmap bMap = BitmapFactory.decodeFile(picJpeg.getAbsolutePath());
-            return new BitmapDrawable(this.getResources(), bMap);
-        }
-        else {
-            return null;
-        }
+        return null;
     }
 
     protected Drawable generateScreenshot(String path, String name, boolean isDirectory) {
