@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -20,26 +19,17 @@ import android.widget.ListView;
 import org.fourthline.cling.android.AndroidUpnpService;
 import org.fourthline.cling.android.AndroidUpnpServiceImpl;
 import org.fourthline.cling.android.FixedAndroidLogHandler;
-import org.fourthline.cling.model.ValidationException;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.UpnpResponse;
-import org.fourthline.cling.model.message.header.UDNHeader;
 import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.RemoteDevice;
-import org.fourthline.cling.model.meta.RemoteDeviceIdentity;
 import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.types.UDN;
 import org.fourthline.cling.registry.DefaultRegistryListener;
 import org.fourthline.cling.registry.Registry;
 import org.fourthline.cling.support.contentdirectory.callback.Browse;
 import org.fourthline.cling.support.model.BrowseFlag;
 import org.fourthline.cling.support.model.DIDLContent;
-
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.UnknownHostException;
 
 public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.OnItemClickListener {
 
@@ -74,33 +64,13 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
 
             // Search asynchronously for all devices, they will respond soon
             mRoot = "33$14";
-            mUpnpService.getControlPoint().search(new UDNHeader(new UDN("0011324b-22b7-0011-b722-b7224b321100")));
+            String udn = "0011324b-22b7-0011-b722-b7224b321100";
+            String url = "http://192.168.1.63:50001/desc/device.xml";
+            int maxAge = 1900;
 
-            Thread thread = new Thread() {
-                public void run(){
-                    if (DEBUG)
-                        Log.i(TAG, "Retrieve remote device");
-                    try {
-                        RemoteDeviceIdentity deviceIdentity = new RemoteDeviceIdentity(
-                                new UDN("0011324b-22b7-0011-b722-b7224b321100"),
-                                1900,
-                                new URL("http://192.168.1.63:50001/desc/device.xml"),
-                                null,
-                                InetAddress.getLocalHost()
-                        );
-                        RemoteDevice device = new RemoteDevice(deviceIdentity);
-                        if (DEBUG)
-                            Log.i(TAG, "Device created");
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (UnknownHostException e) {
-                        e.printStackTrace();
-                    } catch (ValidationException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
+            RetrieveDeviceThread thread = new RetrieveDeviceThread(mUpnpService, udn, url, maxAge);
             thread.start();
+
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -287,12 +257,6 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                             for (RemoteService service : (RemoteService[]) device.getServices()) {
                                 if (service.getServiceType().getType().equals("ContentDirectory")) {
                                     mService = service;
-
-                                    Log.i(TAG, "UDN=" + device.getIdentity().getUdn().getIdentifierString());
-                                    Log.i(TAG, "MaxAge=" + device.getIdentity().getMaxAgeSeconds());
-                                    Log.i(TAG, "URL=" + ((RemoteDeviceIdentity)device.getIdentity()).getDescriptorURL());
-                                    Log.i(TAG, "Mac=" + ((RemoteDeviceIdentity)device.getIdentity()).getInterfaceMacAddress());
-                                    Log.i(TAG, "Inet=" + ((RemoteDeviceIdentity)device.getIdentity()).getDiscoveredOnLocalAddress());
 
                                     if (DEBUG)
                                         Log.i(TAG, "ContentDirectory found");
