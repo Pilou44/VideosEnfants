@@ -18,6 +18,7 @@
         <activity
             android:name=".StartActivity"
             android:label="@string/app_name"
+            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,10 +29,12 @@
         <activity
             android:name=".BrowseSDActivity"
             android:label="@string/app_name"
+            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".BrowseDlnaActivity"
             android:label="@string/app_name"
+            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <service android:name="org.fourthline.cling.android.AndroidUpnpServiceImpl"/>
     </application>
