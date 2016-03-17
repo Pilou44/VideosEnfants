@@ -196,10 +196,10 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                 for (int i = 0; i < didl.getContainers().size(); i++) {
                     VideoElement element = new VideoElement(
                             true,
-                            generateScreenshot(null, didl.getContainers().get(i).getTitle(), true),
                             didl.getContainers().get(i).getId(),
                             didl.getContainers().get(i).getTitle(),
-                            mCurrent);
+                            mCurrent,
+                            BrowseDlnaActivity.this);
                     mAdapter.add(element);
                 }
 
@@ -208,10 +208,10 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                 for (int i = 0; i < didl.getItems().size(); i++) {
                     mAdapter.add(new VideoElement(
                             false,
-                            generateScreenshot(didl.getItems().get(i).getResources().get(0).getValue(), didl.getItems().get(i).getTitle(), false),
                             didl.getItems().get(i).getResources().get(0).getValue(),
                             didl.getItems().get(i).getTitle(),
-                            mCurrent));
+                            mCurrent,
+                            BrowseDlnaActivity.this));
                 }
                 mAdapter.notifyDataSetChanged();
                 mListView.setSelectionAfterHeaderView();
@@ -266,7 +266,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                                         public void received(ActionInvocation arg0,
                                                              DIDLContent didl) {
                                             parseAndUpdate(didl);
-                                            mCurrent = new VideoElement(true, null, mRoot, "Root", null);
+                                            mCurrent = new VideoElement(true, mRoot, "Root", null, BrowseDlnaActivity.this);
                                         }
 
                                         @Override

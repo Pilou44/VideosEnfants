@@ -10,9 +10,22 @@
         android:id="@+id/icon"
         android:layout_width="300dp"
         android:layout_height="240dp"
-        tools:background="#AAA"
         />
-
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="240dp"
+        android:layout_alignBottom="@+id/icon"
+        android:layout_alignLeft="@+id/icon"
+        android:padding="10dp">
+        <ImageView
+            android:id="@+id/sub_icon"
+            android:layout_width="280dp"
+            android:layout_height="170dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            />
+        </RelativeLayout>
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"

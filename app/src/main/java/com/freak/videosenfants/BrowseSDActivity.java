@@ -64,7 +64,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
             }
         }
 
-        mRootElement = new VideoElement(true, null, mRoot, mRoot, null);
+        mRootElement = new VideoElement(true, mRoot, mRoot, null, this);
         mCurrent = mRootElement;
         mAllFiles = new Vector<>();
         addFilesToList(mRoots, mCurrent);
@@ -101,12 +101,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
             }
         });
         for (File file1 : files) {
-            String name;
-            if (!file1.isDirectory())
-                name = file1.getName().substring(0, file1.getName().lastIndexOf("."));
-            else
-                name = file1.getName();
-            mAllFiles.add(new VideoElement(file1, generateScreenshot(file1.getAbsolutePath(), name, file1.isDirectory()), parent));
+            mAllFiles.add(new VideoElement(file1, parent, this));
         }
         sortFiles();
     }

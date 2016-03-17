@@ -32,6 +32,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
             viewHolder = new VideoElementHolder();
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
             viewHolder.icon = (ImageView) convertView.findViewById(R.id.icon);
+            viewHolder.subIcon = (ImageView) convertView.findViewById(R.id.sub_icon);
             convertView.setTag(viewHolder);
         }
 
@@ -40,7 +41,20 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
 
         //il ne reste plus qu'à remplir notre vue
         viewHolder.name.setText(element.getName());
-        viewHolder.icon.setImageDrawable(element.getIcon());
+        if (element.isDirectory()) {
+            viewHolder.icon.setImageDrawable(convertView.getContext().getResources().getDrawable(R.drawable.dossier, null));
+            if (element.getIcon() != null) {
+                viewHolder.subIcon.setVisibility(View.VISIBLE);
+                viewHolder.subIcon.setImageDrawable(element.getIcon());
+            }
+            else {
+                viewHolder.subIcon.setVisibility(View.GONE);
+            }
+        }
+        else {
+            viewHolder.subIcon.setVisibility(View.GONE);
+            viewHolder.icon.setImageDrawable(element.getIcon());
+        }
 
         return convertView;
     }
@@ -48,5 +62,6 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
     private class VideoElementHolder{
         public TextView name;
         public ImageView icon;
+        public ImageView subIcon;
     }
 }
