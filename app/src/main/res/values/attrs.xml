@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="browse_preference">
+        <attr name="visible" format="boolean" />
+        <attr name="deletable" format="boolean" />
+        <attr name="itemsNumber" format="integer" />
+    </declare-styleable>
+</resources>

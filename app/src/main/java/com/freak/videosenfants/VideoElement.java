@@ -1,12 +1,13 @@
 package com.freak.videosenfants;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
-import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -16,7 +17,6 @@ public class VideoElement {
 
     private static final boolean DEBUG = true;
     protected static final String TAG = VideoElement.class.getSimpleName();
-    private static final String PICTURES_LOCATION = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/VideosForChilds/";
 
     private Context mContext;
     private boolean mDirectory;
@@ -67,7 +67,9 @@ public class VideoElement {
     }
 
     private Drawable getDrawableForElement() {
-        File picturesLocation = new File(PICTURES_LOCATION);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+
+        File picturesLocation = new File(sharedPref.getString("local_pictures", mContext.getString(R.string.default_local_pictures)));
         boolean locationExists = picturesLocation.exists();
         if (!locationExists) {
             locationExists = picturesLocation.mkdir();
@@ -81,7 +83,7 @@ public class VideoElement {
             String fileNamePng = mName + ".png";
             String fileNameJpg = mName + ".jpg";
             String fileNameJpeg = mName + ".jpeg";
-            
+
             File picPng = new File(picturesLocation, fileNamePng);
             File picJpg = new File(picturesLocation, fileNameJpg);
             File picJpeg = new File(picturesLocation, fileNameJpeg);

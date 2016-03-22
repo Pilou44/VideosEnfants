@@ -1,0 +1,53 @@
+package com.freak.videosenfants.elements.preferences;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.freak.videosenfants.R;
+
+import java.util.List;
+
+public class FileAdapter extends ArrayAdapter<FileElement> {
+    public FileAdapter(Context context, List<FileElement> elements) {
+        super(context, 0, elements);
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        if(convertView == null){
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.file_element,parent, false);
+        }
+
+        FileHolder viewHolder = (FileHolder) convertView.getTag();
+        if(viewHolder == null){
+            viewHolder = new FileHolder();
+            viewHolder.name = (TextView) convertView.findViewById(R.id.name);
+            viewHolder.layout = (RelativeLayout) convertView.findViewById(R.id.layout);
+            convertView.setTag(viewHolder);
+        }
+
+        //getItem(position) va récupérer l'item [position] de la List<Tweet> tweets
+        FileElement element = getItem(position);
+
+        //il ne reste plus qu'à remplir notre vue
+        viewHolder.name.setText(element.getName());
+
+        int padding = viewHolder.layout.getPaddingRight();
+        viewHolder.layout.setPadding(
+                padding * (element.getIndent() + 1),
+                padding, padding, padding);
+
+        return convertView;
+    }
+
+    private class FileHolder{
+        public TextView name;
+        public RelativeLayout layout;
+    }
+}
