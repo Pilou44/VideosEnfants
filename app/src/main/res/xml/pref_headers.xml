@@ -4,15 +4,17 @@
 
     <header
         android:fragment="com.freak.videosenfants.SettingsActivity$GeneralPreferenceFragment"
-        android:icon="@drawable/ic_info_black_24dp"
+        android:icon="@drawable/ic_photo_24dp"
         android:title="@string/pref_header_general" />
 
     <header
         android:fragment="com.freak.videosenfants.SettingsActivity$LocalPreferenceFragment"
+        android:icon="@drawable/ic_sd_storage_24dp"
         android:title="@string/pref_header_local" />
 
     <header
         android:fragment="com.freak.videosenfants.SettingsActivity$DlnaPreferenceFragment"
+        android:icon="@drawable/ic_cast_connected_24dp"
         android:title="@string/pref_header_dlna" />
 
 </preference-headers>
