@@ -1,7 +1,9 @@
 package com.freak.videosenfants;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.view.MenuItem;
 import android.widget.ImageButton;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private ImageButton mVoiture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +25,20 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         ImageButton maison = (ImageButton) findViewById(R.id.maison);
         maison.setOnClickListener(this);
 
-        ImageButton voiture = (ImageButton) findViewById(R.id.voiture);
-        voiture.setOnClickListener(this);
+        mVoiture = (ImageButton) findViewById(R.id.voiture);
+        mVoiture.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPreferences.getBoolean(getString(R.string.key_local_switch), false)) {
+            mVoiture.setVisibility(View.VISIBLE);
+        }
+        else {
+            mVoiture.setVisibility(View.GONE);
+        }
     }
 
     @Override
