@@ -240,6 +240,7 @@ public class BrowseLocalPreference extends DialogPreference implements AdapterVi
                 }
             });
             if (subDirs != null) {
+                sort(subDirs);
                 for (int i = 0; i < subDirs.length; i++) {
                     mAllFiles.insertElementAt(new FileElement(subDirs[i], element.getIndent() + 1), position + i + 1);
                 }
@@ -248,6 +249,27 @@ public class BrowseLocalPreference extends DialogPreference implements AdapterVi
             }
         }
         mValue.setText(element.getFile().getAbsolutePath());
+    }
+
+    private void sort(File[] files) {
+        int longueur = files.length;
+        File tampon;
+        boolean permut;
+
+        do {
+            // hypothèse : le tableau est trié
+            permut = false;
+            for (int i = 0; i < longueur - 1; i++) {
+                // Teste si 2 éléments successifs sont dans le bon ordre ou non
+                if (files[i].getName().compareToIgnoreCase(files[i+1].getName()) > 0) {
+                    // s'ils ne le sont pas, on échange leurs positions
+                    tampon = files[i];
+                    files[i] = files[i+1];
+                    files[i+1] = tampon;
+                    permut = true;
+                }
+            }
+        } while (permut);
     }
 
     @Override
