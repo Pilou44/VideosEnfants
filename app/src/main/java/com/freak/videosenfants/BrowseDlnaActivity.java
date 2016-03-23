@@ -3,6 +3,7 @@ package com.freak.videosenfants;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
@@ -31,7 +32,7 @@ import org.fourthline.cling.support.contentdirectory.callback.Browse;
 import org.fourthline.cling.support.model.BrowseFlag;
 import org.fourthline.cling.support.model.DIDLContent;
 
-public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.OnItemClickListener {
+public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.OnItemClickListener, DialogInterface.OnCancelListener {
 
     private static final boolean DEBUG = true;
     private static final String TAG = BrowseDlnaActivity.class.getSimpleName();
@@ -42,6 +43,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     private BrowseRegistryListener mRegistryListener = new BrowseRegistryListener();
     private AndroidUpnpService mUpnpService;
     private VideoElementAdapter mAdapter;
+    private ProgressDialog mDialog;
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -77,7 +79,6 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
             mUpnpService = null;
         }
     };
-    private ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +121,8 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                 Context.BIND_AUTO_CREATE
         );
 
-        mDialog = ProgressDialog.show(this, "Recherche du serveur", "Merci de patienter...", true);
+        mDialog = ProgressDialog.show(this, "Recherche du serveur", "Merci de patienter...", true, true, this);
+        mDialog.setCanceledOnTouchOutside(false);
     }
 
     @Override
@@ -219,6 +221,11 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
         });
     }
 
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        onBackPressed();
+    }
+
     protected class BrowseRegistryListener extends DefaultRegistryListener {
 
         @Override
@@ -267,6 +274,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                                                              DIDLContent didl) {
                                             parseAndUpdate(didl);
                                             mCurrent = new VideoElement(true, mRoot, "Root", null, BrowseDlnaActivity.this);
+                                            mDialog.dismiss();
                                         }
 
                                         @Override
@@ -278,7 +286,6 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                                         public void failure(ActionInvocation arg0, UpnpResponse arg1, String arg2) {
                                         }
                                     });
-                                    mDialog.dismiss();
                                 }
                             }
                         }
