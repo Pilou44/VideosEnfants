@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res/com.freak.videosenfants">
 
     <SwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="@bool/default_switch_local"
         android:key="@string/key_local_switch"
         android:title="@string/pref_title_local_switch" />
 
