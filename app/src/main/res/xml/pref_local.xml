@@ -7,24 +7,24 @@
         android:title="@string/pref_title_local_switch" />
 
     <com.freak.videosenfants.elements.preferences.AddButtonPreference
-        android:key="local_browse"
+        android:key="@string/key_local_browse"
         android:title="@string/pref_local_add_button"
         app:itemsNumber="@integer/local_roots_number" />
     <com.freak.videosenfants.elements.preferences.BrowseLocalPreference
         android:defaultValue="@null"
-        android:key="local_browse_0"
+        android:key="@string/key_local_browse_0"
         android:title="@string/pref_local_add"
         app:visible="false"
         app:deletable="true" />
     <com.freak.videosenfants.elements.preferences.BrowseLocalPreference
         android:defaultValue="@null"
-        android:key="local_browse_1"
+        android:key="@string/key_local_browse_1"
         android:title="@string/pref_local_add"
         app:visible="false"
         app:deletable="true" />
     <com.freak.videosenfants.elements.preferences.BrowseLocalPreference
         android:defaultValue="@null"
-        android:key="local_browse_2"
+        android:key="@string/key_local_browse_2"
         android:title="@string/pref_local_add"
         app:visible="false"
         app:deletable="true" />

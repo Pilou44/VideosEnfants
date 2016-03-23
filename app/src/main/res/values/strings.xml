@@ -5,6 +5,9 @@
 
     <string name="key_local_switch" translatable="false">local_switch</string>
     <string name="key_local_browse" translatable="false">local_browse</string>
+    <string name="key_local_browse_0" translatable="false">local_browse_0</string>
+    <string name="key_local_browse_1" translatable="false">local_browse_1</string>
+    <string name="key_local_browse_2" translatable="false">local_browse_2</string>
     <string name="key_visible" translatable="false">_visible</string>
 
     <!-- Strings related to Settings -->
