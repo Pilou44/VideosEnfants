@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
-public class BrowseLocalPreference extends DialogPreference implements AdapterView.OnItemClickListener, View.OnClickListener, /*Preference.OnPreferenceChangeListener,*/ SharedPreferences.OnSharedPreferenceChangeListener {
+public class BrowseLocalPreference extends DialogPreference implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     private static final String TAG = BrowseLocalPreference.class.getSimpleName();
     private static final boolean DEBUG = true;
@@ -77,8 +77,6 @@ public class BrowseLocalPreference extends DialogPreference implements AdapterVi
     private void parseAttrs(AttributeSet attrs) {
         if (DEBUG)
             Log.i(TAG, "attributes:" + attrs.getAttributeCount());
-
-        PreferenceManager.getDefaultSharedPreferences(mContext).registerOnSharedPreferenceChangeListener(this);
 
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
@@ -241,13 +239,15 @@ public class BrowseLocalPreference extends DialogPreference implements AdapterVi
                     return pathname.isDirectory();
                 }
             });
-            for (int i = 0 ; i < subDirs.length ; i++) {
-                mAllFiles.insertElementAt(new FileElement(subDirs[i], element.getIndent() + 1), position + i + 1);
+            if (subDirs != null) {
+                for (int i = 0; i < subDirs.length; i++) {
+                    mAllFiles.insertElementAt(new FileElement(subDirs[i], element.getIndent() + 1), position + i + 1);
+                }
+                mAdapter.notifyDataSetChanged();
+                element.setExpanded(true);
             }
-            mAdapter.notifyDataSetChanged();
-            element.setExpanded(true);
-            mValue.setText(element.getFile().getAbsolutePath());
         }
+        mValue.setText(element.getFile().getAbsolutePath());
     }
 
     @Override
@@ -263,14 +263,10 @@ public class BrowseLocalPreference extends DialogPreference implements AdapterVi
         }
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(this.getKey() + "_visible")) {
-            mVisible = mSharedPref.getBoolean(this.getKey() + "_visible", mVisible);
-            if (DEBUG)
-                Log.i(TAG, "refresh preference " + getKey());
-            notifyChanged();
-        }
+    public void setVisible(boolean visible) {
+        if (DEBUG)
+            Log.i(TAG, "refresh preference " + getKey());
+        mVisible = visible;
+        notifyChanged();
     }
-
 }

@@ -6,7 +6,11 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 import android.util.Log;
+
+import com.freak.videosenfants.elements.preferences.AddButtonPreference;
+import com.freak.videosenfants.elements.preferences.BrowseLocalPreference;
 
 import java.util.List;
 
@@ -48,9 +52,10 @@ public class SettingsActivity extends PreferenceActivity {
     /**
      * This fragment shows the preferences for the local header.
      */
-    public static class LocalPreferenceFragment extends PreferenceFragment {
+    public static class LocalPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
         private static final String TAG = LocalPreferenceFragment.class.getSimpleName();
         private static final boolean DEBUG = true;
+        private SwitchPreference mSwitchButton;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,14 @@ public class SettingsActivity extends PreferenceActivity {
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.pref_local);
+            mSwitchButton = (SwitchPreference) findPreference(getString(R.string.key_local_switch));
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            PreferenceManager.getDefaultSharedPreferences(this.getActivity()).registerOnSharedPreferenceChangeListener(this);
+            setEnabled();
         }
 
         @Override
@@ -65,6 +78,7 @@ public class SettingsActivity extends PreferenceActivity {
             super.onPause();
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+            prefs.unregisterOnSharedPreferenceChangeListener(this);
 
             int nbRoots = getResources().getInteger(R.integer.local_roots_number);
 
@@ -85,6 +99,29 @@ public class SettingsActivity extends PreferenceActivity {
                 }
             }
 
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals(getString(R.string.key_local_switch))) {
+                setEnabled();
+            }
+            else if (key.startsWith(getString(R.string.key_local_browse)) && key.endsWith(getString(R.string.key_visible))){
+                String prefKey = key.substring(0, key.lastIndexOf(getString(R.string.key_visible)));
+                BrowseLocalPreference pref = (BrowseLocalPreference) findPreference(prefKey);
+                pref.setVisible(sharedPreferences.getBoolean(key, false));
+            }
+        }
+
+        private void setEnabled() {
+            int nbRoots = getResources().getInteger(R.integer.local_roots_number);
+            for (int i = 0 ; i < nbRoots ; i++) {
+                String prefKey = getString(R.string.key_local_browse) + "_" + i;
+                BrowseLocalPreference pref = (BrowseLocalPreference) findPreference(prefKey);
+                pref.setEnabled(mSwitchButton.isChecked());
+            }
+            AddButtonPreference addPref = (AddButtonPreference) findPreference(getString(R.string.key_local_browse));
+            addPref.setEnabled(mSwitchButton.isChecked());
         }
     }
 

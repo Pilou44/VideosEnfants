@@ -3,6 +3,10 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
 
+    <string name="key_local_switch" translatable="false">local_switch</string>
+    <string name="key_local_browse" translatable="false">local_browse</string>
+    <string name="key_visible" translatable="false">_visible</string>
+
     <!-- Strings related to Settings -->
     <string name="pref_header_general">General</string>
     <string name="pref_header_local">Local browsing</string>
