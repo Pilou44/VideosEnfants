@@ -72,7 +72,14 @@ public class VideoElement {
         File picturesLocation = new File(sharedPref.getString("local_pictures", mContext.getString(R.string.default_local_pictures)));
         boolean locationExists = picturesLocation.exists();
         if (!locationExists) {
+            if (DEBUG) {
+                Log.i(TAG, "Create directory: " + picturesLocation.getAbsolutePath());
+            }
             locationExists = picturesLocation.mkdir();
+            if (DEBUG) {
+                Log.i(TAG, "Directory created: " + locationExists);
+            }
+
         }
 
         if (locationExists) {
