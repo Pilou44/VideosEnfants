@@ -38,13 +38,15 @@ public class RetrieveDeviceThread extends Thread {
     private final String mUdn;
     private final String mUrl;
     private final int mMaxAge;
+    private final RetrieveDeviceThradListener mListener;
     private RemoteDevice mDevice;
 
-    public RetrieveDeviceThread(AndroidUpnpService upnpService, String udn, String url, int maxAge) {
+    public RetrieveDeviceThread(AndroidUpnpService upnpService, String udn, String url, int maxAge, RetrieveDeviceThradListener listener) {
         mUpnpService = upnpService;
         mUdn = udn;
         mUrl = url;
         mMaxAge = maxAge;
+        mListener = listener;
     }
 
     public void run(){
@@ -63,6 +65,7 @@ public class RetrieveDeviceThread extends Thread {
         } catch (MalformedURLException | UnknownHostException | ValidationException | RouterException e) {
             Log.e(TAG, "Error while retrieving device");
             e.printStackTrace();
+            mListener.onDeviceNotFound();
         }
     }
 

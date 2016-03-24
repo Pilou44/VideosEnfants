@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,7 +34,7 @@ import org.fourthline.cling.support.contentdirectory.callback.Browse;
 import org.fourthline.cling.support.model.BrowseFlag;
 import org.fourthline.cling.support.model.DIDLContent;
 
-public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.OnItemClickListener, DialogInterface.OnCancelListener {
+public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.OnItemClickListener, DialogInterface.OnCancelListener, RetrieveDeviceThradListener{
 
     private static final boolean DEBUG = true;
     private static final String TAG = BrowseDlnaActivity.class.getSimpleName();
@@ -44,6 +46,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     private AndroidUpnpService mUpnpService;
     private VideoElementAdapter mAdapter;
     private ProgressDialog mDialog;
+    private int mIndex;
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -65,20 +68,46 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
             }
 
             // Search asynchronously for all devices, they will respond soon
-            mRoot = "33$14";
-            String udn = "0011324b-22b7-0011-b722-b7224b321100";
-            String url = "http://192.168.1.63:50001/desc/device.xml";
-            int maxAge = 1900;
-
-            RetrieveDeviceThread thread = new RetrieveDeviceThread(mUpnpService, udn, url, maxAge);
-            thread.start();
-
+            mIndex = 0;
+            findDevice(mIndex);
         }
 
         public void onServiceDisconnected(ComponentName className) {
             mUpnpService = null;
         }
     };
+
+    private void findDevice(int index) {
+        if (DEBUG)
+            Log.i(TAG, "Trying to connect to DLNA server " + index);
+        if (index < getResources().getInteger(R.integer.dlna_servers_number)){
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(BrowseDlnaActivity.this);
+            String key = getString(R.string.key_dlna_browse) + "_" + index;
+            if ((prefs.getBoolean(key + getString(R.string.key_visible), false)) &&
+                (prefs.getString(key, "").length() > 0)) {
+                if (DEBUG)
+                    Log.i(TAG, "DLNA server " + index +" is defined (key " + key + "), trying to connect");
+
+                mRoot = prefs.getString(key + getString(R.string.key_path), "0");
+                String udn = prefs.getString(key + getString(R.string.key_udn), "");
+                String url =  prefs.getString(key + getString(R.string.key_url), "");
+                int maxAge = prefs.getInt(key + getString(R.string.key_max_age), 0);
+
+                RetrieveDeviceThread thread = new RetrieveDeviceThread(mUpnpService, udn, url, maxAge, BrowseDlnaActivity.this);
+                thread.start();
+            }
+            else {
+                if (DEBUG)
+                    Log.i(TAG, "DLNA server " + index +" is not defined, trying to connect to another one");
+                mIndex++;
+                findDevice(mIndex);
+            }
+        }
+        else {
+            if (DEBUG)
+                Log.i(TAG, "No known device have been found");
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,6 +253,14 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     @Override
     public void onCancel(DialogInterface dialog) {
         onBackPressed();
+    }
+
+    @Override
+    public void onDeviceNotFound() {
+        if (DEBUG)
+            Log.i(TAG, "Unable to connect to DLNA server " + mIndex +", trying another one");
+        mIndex++;
+        findDevice(mIndex);
     }
 
     protected class BrowseRegistryListener extends DefaultRegistryListener {

@@ -15,6 +15,10 @@
     <string name="key_dlna_browse_1" translatable="false">dlna_browse_1</string>
     <string name="key_dlna_browse_2" translatable="false">dlna_browse_2</string>
     <string name="key_visible" translatable="false">_visible</string>
+    <string name="key_udn" translatable="false">_udn</string>
+    <string name="key_url" translatable="false">_url</string>
+    <string name="key_path" translatable="false">_path</string>
+    <string name="key_max_age" translatable="false">_max_age</string>
 
     <!-- Strings related to Settings -->
     <string name="pref_header_general">General</string>
