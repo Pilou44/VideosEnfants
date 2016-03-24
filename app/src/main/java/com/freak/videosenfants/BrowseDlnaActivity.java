@@ -150,7 +150,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                 Context.BIND_AUTO_CREATE
         );
 
-        mDialog = ProgressDialog.show(this, "Recherche du serveur", "Merci de patienter...", true, true, this);
+        mDialog = ProgressDialog.show(this, getString(R.string.dlna_progress_dialog_title), getString(R.string.dlna_progress_dialog_text), true, true, this);
         mDialog.setCanceledOnTouchOutside(false);
     }
 
