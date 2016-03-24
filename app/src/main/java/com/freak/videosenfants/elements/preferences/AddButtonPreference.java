@@ -68,6 +68,7 @@ public class AddButtonPreference extends Preference implements View.OnClickListe
     protected void onBindView(View view) {
         super.onBindView(view);
         Button addButton = (Button) view.findViewById(R.id.add_button);
+        addButton.setText(getTitle());
         addButton.setOnClickListener(this);
     }
 

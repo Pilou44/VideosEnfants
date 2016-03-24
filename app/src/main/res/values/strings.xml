@@ -3,25 +3,30 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
 
+    <!-- Key strings -->
     <string name="key_local_switch" translatable="false">local_switch</string>
     <string name="key_local_browse" translatable="false">local_browse</string>
     <string name="key_local_browse_0" translatable="false">local_browse_0</string>
     <string name="key_local_browse_1" translatable="false">local_browse_1</string>
     <string name="key_local_browse_2" translatable="false">local_browse_2</string>
+    <string name="key_dlna_switch" translatable="false">dlna_switch</string>
+    <string name="key_dlna_browse" translatable="false">dlna_browse</string>
+    <string name="key_dlna_browse_0" translatable="false">dlna_browse_0</string>
+    <string name="key_dlna_browse_1" translatable="false">dlna_browse_1</string>
+    <string name="key_dlna_browse_2" translatable="false">dlna_browse_2</string>
     <string name="key_visible" translatable="false">_visible</string>
 
     <!-- Strings related to Settings -->
     <string name="pref_header_general">General</string>
     <string name="pref_header_local">Local browsing</string>
-    <string name="pref_header_dlna">DLNA browsing</string>
-    <string name="pref_title_dlna_list" />
-    <string name="browse">Browse</string>
-    <string name="pref_title_dlna_switch">DLNA/UPnP</string>
-    <string name="pref_dlna_add">Add a DLNA server</string>
+    <string name="pref_header_dlna">UPnP/DLNA browsing</string>
     <string name="default_local_pictures">/sdcard/VideosForChildren/</string>
     <string name="pref_description_local_pictures">Path to thumbnails directory</string>
     <string name="pref_title_local_pictures">Thumbnails</string>
     <string name="pref_title_local_switch">Local files</string>
-    <string name="pref_local_add">Add a local directory</string>
+    <string name="pref_local_add">Root directory for local files</string>
     <string name="pref_local_add_button">Add a root directory</string>
+    <string name="pref_title_dlna_switch">UPnP/DLNA</string>
+    <string name="pref_dlna_add">UPnP/DLNA server</string>
+    <string name="pref_dlna_add_button">Add a UPnP/DLNA server</string>
 </resources>

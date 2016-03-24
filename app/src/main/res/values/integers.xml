@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="local_roots_number">3</integer>
+    <integer name="dlna_servers_number">3</integer>
 </resources>
