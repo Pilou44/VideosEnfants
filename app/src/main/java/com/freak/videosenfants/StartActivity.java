@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 public class StartActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageButton mVoiture;
+    private ImageButton mMaison;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +23,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ImageButton maison = (ImageButton) findViewById(R.id.maison);
-        maison.setOnClickListener(this);
+        mMaison = (ImageButton) findViewById(R.id.maison);
+        mMaison.setOnClickListener(this);
 
         mVoiture = (ImageButton) findViewById(R.id.voiture);
         mVoiture.setOnClickListener(this);
@@ -33,11 +34,19 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        
         if (sharedPreferences.getBoolean(getString(R.string.key_local_switch), getResources().getBoolean(R.bool.default_switch_local))) {
             mVoiture.setVisibility(View.VISIBLE);
         }
         else {
             mVoiture.setVisibility(View.GONE);
+        }
+
+        if (sharedPreferences.getBoolean(getString(R.string.key_dlna_switch), getResources().getBoolean(R.bool.default_switch_dlna))) {
+            mMaison.setVisibility(View.VISIBLE);
+        }
+        else {
+            mMaison.setVisibility(View.GONE);
         }
     }
 
