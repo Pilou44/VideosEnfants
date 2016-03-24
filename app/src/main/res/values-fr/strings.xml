@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_settings">Param&#232;tres</string>
+    <string name="title_activity_settings">Param&#232;tres</string>
+    <string name="pref_header_general">G&#233;n&#233;ral</string>
+    <string name="pref_header_local">Navigation locale</string>
+    <string name="pref_header_dlna">Navigation UPnP/DLNA</string>
+    <string name="pref_description_local_pictures">Chemin vers le dossier de vignettes</string>
+    <string name="pref_title_local_pictures">Vignettes</string>
+    <string name="pref_title_local_switch">Fichiers locaux</string>
+    <string name="pref_local_add">Dossier racine pour des fichiers locaux</string>
+    <string name="pref_local_add_button">Ajouter un dossier</string>
+    <string name="pref_title_dlna_switch">UPnP/DLNA</string>
+    <string name="pref_dlna_add">Serveur UPnP/DLNA</string>
+    <string name="pref_dlna_add_button">Ajouter un serveur UPnP/DLNA</string>
+    <string name="dlna_progress_dialog_title">Connexion à un serveur en cours</string>
+    <string name="dlna_progress_dialog_text">Merci de patienter&#8230;</string>
+</resources>

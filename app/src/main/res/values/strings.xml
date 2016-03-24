@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Easy Videos for Kids</string>
+    <string name="app_name" translatable="false">Easy Videos for Kids</string>
 
     <!-- Key strings -->
     <string name="key_local_switch" translatable="false">local_switch</string>
