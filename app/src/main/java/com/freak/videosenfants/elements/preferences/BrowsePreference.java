@@ -100,7 +100,7 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
             summaryView.setVisibility(View.GONE);
         }
         TextView valueView = (TextView) view.findViewById(R.id.value);
-        valueView.setText(mSharedPref.getString(this.getKey(), ""));
+        valueView.setText(mSharedPref.getString(this.getKey(), mDefaultValue));
         if (mVisible) {
             view.setVisibility(View.VISIBLE);
         }
