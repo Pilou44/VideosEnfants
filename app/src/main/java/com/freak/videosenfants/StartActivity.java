@@ -15,6 +15,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
     private ImageButton mVoiture;
     private ImageButton mMaison;
+    private ImageButton mOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         mVoiture = (ImageButton) findViewById(R.id.voiture);
         mVoiture.setOnClickListener(this);
+
+        mOptions = (ImageButton) findViewById(R.id.options);
+        mOptions.setOnClickListener(this);
     }
 
     @Override
@@ -47,6 +51,13 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         }
         else {
             mMaison.setVisibility(View.GONE);
+        }
+
+        if (mMaison.getVisibility() == View.GONE && mVoiture.getVisibility() == View.GONE) {
+            mOptions.setVisibility(View.VISIBLE);
+        }
+        else {
+            mOptions.setVisibility(View.GONE);
         }
     }
 
@@ -82,6 +93,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         }
         else if (view.getId() == R.id.maison){
             intent = new Intent(this, BrowseDlnaActivity.class);
+        }
+        else if (view.getId() == R.id.options) {
+            intent = new Intent(this, SettingsActivity.class);
         }
         startActivity(intent);
     }
