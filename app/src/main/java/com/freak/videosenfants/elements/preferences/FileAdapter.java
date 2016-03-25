@@ -43,6 +43,13 @@ public class FileAdapter extends ArrayAdapter<FileElement> {
                 padding * (element.getIndent() + 1),
                 padding, padding, padding);
 
+        if (convertView.isSelected()) {
+            convertView.setBackgroundColor(0x66666666);
+        }
+        else {
+            convertView.setBackgroundColor(0x00ffffff);
+        }
+
         return convertView;
     }
 
