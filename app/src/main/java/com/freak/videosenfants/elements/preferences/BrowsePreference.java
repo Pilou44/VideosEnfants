@@ -20,7 +20,6 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
     private final Context mContext;
     private SharedPreferences mSharedPref;
     private String mDefaultValue = "";
-    private boolean mVisible = true;
     private boolean mDeletable = false;
 
     public BrowsePreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -69,9 +68,6 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
                 if (DEBUG)
                     Log.i(TAG, "default: " + mDefaultValue);
             }
-            else if (attrs.getAttributeName(i).equals("visible")) {
-                mVisible = mSharedPref.getBoolean(this.getKey() + "_visible", attrs.getAttributeBooleanValue(i, true));
-            }
             else if (attrs.getAttributeName(i).equals("deletable")) {
                 mDeletable = attrs.getAttributeBooleanValue(i, false);
             }
@@ -89,26 +85,25 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
     protected void onBindView(View view) {
         super.onBindView(view);
         ImageButton removeButton = (ImageButton) view.findViewById(R.id.remove_button);
-        removeButton.setOnClickListener(this);
         TextView titleView = (TextView) view.findViewById(R.id.title);
-        titleView.setText(this.getTitle());
         TextView summaryView = (TextView) view.findViewById(R.id.summary);
+        TextView valueView = (TextView) view.findViewById(R.id.value);
+
+        titleView.setText(this.getTitle());
+        valueView.setText(mSharedPref.getString(this.getKey(), mDefaultValue));
         if (getSummary() != null && getSummary().length() > 0) {
+            summaryView.setVisibility(View.VISIBLE);
             summaryView.setText(getSummary());
         }
         else {
             summaryView.setVisibility(View.GONE);
         }
-        TextView valueView = (TextView) view.findViewById(R.id.value);
-        valueView.setText(mSharedPref.getString(this.getKey(), mDefaultValue));
-        if (mVisible) {
-            view.setVisibility(View.VISIBLE);
-        }
-        else {
-            view.setVisibility(View.GONE);
-        }
         if (mDeletable) {
             removeButton.setVisibility(View.VISIBLE);
+            removeButton.setOnClickListener(this);
+        }
+        else {
+            removeButton.setVisibility(View.GONE);
         }
     }
 
@@ -123,13 +118,6 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
         else {
             super.onClick();
         }
-    }
-
-    public void setVisible(boolean visible) {
-        if (DEBUG)
-            Log.i(TAG, "refresh preference " + getKey());
-        mVisible = visible;
-        notifyChanged();
     }
 
     public Context getContext() {
