@@ -8,9 +8,9 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.freak.videosenfants.R;
 
@@ -31,7 +31,7 @@ public class BrowseLocalPreference extends BrowsePreference implements AdapterVi
     private ListView mListView;
     private Vector<FileElement> mAllFiles;
     private FileAdapter mAdapter;
-    private TextView mValue;
+    private FileElement mSelectedElement;
 
     public BrowseLocalPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
@@ -51,9 +51,9 @@ public class BrowseLocalPreference extends BrowsePreference implements AdapterVi
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
-        if (positiveResult) {
+        if (positiveResult && mSelectedElement != null) {
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
-            editor.putString(this.getKey(), mValue.getText().toString());
+            editor.putString(this.getKey(), mSelectedElement.getFile().getPath());
             editor.apply();
             this.notifyChanged();
         }
@@ -64,7 +64,9 @@ public class BrowseLocalPreference extends BrowsePreference implements AdapterVi
         super.onBindDialogView(view);
 
         mListView = (ListView)view.findViewById(R.id.list);
-        mValue = (TextView)view.findViewById(R.id.value);
+        mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+
+        mSelectedElement = null;
 
         mAllFiles = new Vector<>();
         String[] sdSources = getStorageDirectories();
@@ -166,7 +168,12 @@ public class BrowseLocalPreference extends BrowsePreference implements AdapterVi
                 element.setExpanded(true);
             }
         }
-        mValue.setText(element.getFile().getAbsolutePath());
+        for(int a = 0; a < parent.getChildCount(); a++)
+        {
+            parent.getChildAt(a).setSelected(false);
+        }
+        view.setSelected(true);
+        mSelectedElement = element;
     }
 
     private void sort(File[] files) {

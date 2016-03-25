@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -91,6 +92,9 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
         super.onBindDialogView(view);
 
         mListView = (ListView)view.findViewById(R.id.list);
+        mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+
+        mSelectedElement = null;
 
         mAllFiles = new Vector<>();
         mAdapter = new DlnaAdapter(getContext(), mAllFiles);
@@ -114,7 +118,7 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
-        if (positiveResult) {
+        if (positiveResult && mSelectedElement != null) {
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
             if (DEBUG) {
                 Log.i(TAG, "Add server");
@@ -168,6 +172,12 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
             });
             element.setExpanded(true);
         }
+
+        for(int a = 0; a < parent.getChildCount(); a++)
+        {
+            parent.getChildAt(a).setSelected(false);
+        }
+        view.setSelected(true);
         mSelectedElement = element;
     }
 
