@@ -8,7 +8,10 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
+import android.support.design.widget.AppBarLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.widget.LinearLayout;
 
 import com.freak.videosenfants.elements.preferences.AddButtonPreference;
 import com.freak.videosenfants.elements.preferences.BrowseDlnaPreference;
@@ -25,6 +28,15 @@ public class SettingsActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
+        AppBarLayout bar = (AppBarLayout) LayoutInflater.from(this).inflate(R.layout.toolbar_settings, root, false);
+        root.addView(bar, 0);
+    }
+    
     /**
      * Populate the activity with the top-level headers.
      */
