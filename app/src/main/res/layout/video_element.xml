@@ -26,15 +26,16 @@
             android:layout_alignParentBottom="true"
             android:visibility="gone"
             />
-        </RelativeLayout>
+    </RelativeLayout>
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
+        android:textSize="36dp"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/icon"
-        android:layout_alignTop="@+id/icon"
+        android:layout_centerVertical="true"
         tools:text="Name"
         />
 
