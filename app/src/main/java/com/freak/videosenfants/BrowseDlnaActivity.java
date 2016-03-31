@@ -135,9 +135,12 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
 
         mListView = (ListView) findViewById(R.id.listView);
         mListView.setOnItemClickListener(this);
+        mListView.setLongClickable(true);
+        mListView.setOnItemLongClickListener(this);
 
         mAdapter = new VideoElementAdapter(this);
         mAdapter.setNotifyOnChange(false);
+
         mListView.setAdapter(mAdapter);
 
         if (DEBUG)
@@ -152,6 +155,29 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
 
         mDialog = ProgressDialog.show(this, getString(R.string.dlna_progress_dialog_title), getString(R.string.dlna_progress_dialog_text), true, true, this);
         mDialog.setCanceledOnTouchOutside(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mUpnpService != null && mService != null && mCurrent != null) {
+            mUpnpService.getControlPoint().execute(new Browse(mService, mCurrent.getPath(), BrowseFlag.DIRECT_CHILDREN) {
+                @Override
+                public void received(ActionInvocation arg0,
+                                     DIDLContent didl) {
+                    parseAndUpdate(didl);
+                }
+
+                @Override
+                public void updateStatus(Status status) {
+
+                }
+
+                @Override
+                public void failure(ActionInvocation arg0, UpnpResponse arg1, String arg2) {
+                }
+            });
+        }
     }
 
     @Override
@@ -176,7 +202,9 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                 public void received(ActionInvocation arg0,
                                      DIDLContent didl) {
                     parseAndUpdate(didl);
+                    goToTop();
                     mCurrent = element;
+                    //mListView.setSelectionAfterHeaderView();
                 }
 
                 @Override
@@ -196,13 +224,16 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
         }
     }
 
+    /* Called by onBackPressed() */
     protected void parseAndUpdate(final VideoElement element) {
         mUpnpService.getControlPoint().execute(new Browse(mService, element.getPath(), BrowseFlag.DIRECT_CHILDREN) {
             @Override
             public void received(ActionInvocation arg0,
                                  DIDLContent didl) {
                 parseAndUpdate(didl);
+                goToTop();
                 mCurrent = element;
+                //mListView.setSelectionAfterHeaderView();
             }
 
             @Override
@@ -245,6 +276,15 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                             BrowseDlnaActivity.this));
                 }
                 mAdapter.notifyDataSetChanged();
+                //mListView.setSelectionAfterHeaderView();
+            }
+        });
+    }
+
+    private void goToTop() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
                 mListView.setSelectionAfterHeaderView();
             }
         });
@@ -310,6 +350,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                                         public void received(ActionInvocation arg0,
                                                              DIDLContent didl) {
                                             parseAndUpdate(didl);
+                                            goToTop();
                                             mCurrent = new VideoElement(true, mRoot, "Root", null, BrowseDlnaActivity.this);
                                             mDialog.dismiss();
                                         }
