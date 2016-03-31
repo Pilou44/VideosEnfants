@@ -68,12 +68,27 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         mRootElement = new VideoElement(true, mRoot, mRoot, null, this);
         mCurrent = mRootElement;
         mAllFiles = new Vector<>();
-        addFilesToList(mRoots, mCurrent);
+        //addFilesToList(mRoots, mCurrent);
         mAdapter = new VideoElementAdapter(this, mAllFiles);
 
         mListView = (ListView)findViewById(R.id.listView);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
+        mListView.setLongClickable(true);
+        mListView.setOnItemLongClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAllFiles.removeAllElements();
+        if (mCurrent.equals(mRootElement)) {
+            addFilesToList(mRoots, mCurrent);
+        }
+        else {
+            addFilesToList(new File(mCurrent.getPath()), mCurrent);
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
     private void addFilesToList(Vector<File> filesVector, VideoElement parent) {
@@ -168,7 +183,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         if (element.isDirectory()) {
             mAllFiles.removeAllElements();
             mCurrent = element;
-            addFilesToList(new File(element.getPath()), mCurrent);
+            addFilesToList(new File(mCurrent.getPath()), mCurrent);
             mAdapter.notifyDataSetChanged();
             mListView.setSelectionAfterHeaderView();
         }
