@@ -61,7 +61,9 @@ public class RetrieveDeviceThread extends Thread {
                     InetAddress.getLocalHost()
             );
             mDevice = new RemoteDevice(deviceIdentity);
-            describe();
+            if (!describe()) {
+                mListener.onDeviceNotFound();
+            }
         } catch (MalformedURLException | UnknownHostException | ValidationException | RouterException e) {
             Log.e(TAG, "Error while retrieving device");
             e.printStackTrace();
@@ -69,7 +71,7 @@ public class RetrieveDeviceThread extends Thread {
         }
     }
 
-    private void describe() throws RouterException {
+    private boolean describe() throws RouterException {
 
         // All of the following is a very expensive and time consuming procedure, thanks to the
         // braindead design of UPnP. Several GET requests, several descriptors, several XML parsing
@@ -78,7 +80,7 @@ public class RetrieveDeviceThread extends Thread {
 
         if(mUpnpService.get().getRouter() == null) {
             Log.w(TAG, "Router not yet initialized");
-            return ;
+            return false;
         }
 
         StreamRequestMessage deviceDescRetrievalMsg;
@@ -106,14 +108,14 @@ public class RetrieveDeviceThread extends Thread {
                     "Device descriptor retrieval failed: "
                             + mDevice.getIdentity().getDescriptorURL()
                             + ", possibly invalid URL: " + ex);
-            return ;
+            return false;
         }
 
         if (deviceDescMsg == null) {
             Log.w(TAG,
                     "Device descriptor retrieval failed, no response: " + mDevice.getIdentity().getDescriptorURL()
             );
-            return;
+            return false;
         }
 
         if (deviceDescMsg.getOperation().isFailed()) {
@@ -123,7 +125,7 @@ public class RetrieveDeviceThread extends Thread {
                             ", "
                             + deviceDescMsg.getOperation().getResponseDetails()
             );
-            return;
+            return false;
         }
 
         if (!deviceDescMsg.isContentTypeTextUDA()) {
@@ -136,12 +138,13 @@ public class RetrieveDeviceThread extends Thread {
         String descriptorContent = deviceDescMsg.getBodyString();
         if (descriptorContent == null || descriptorContent.length() == 0) {
             Log.w(TAG, "Received empty device descriptor:" + mDevice.getIdentity().getDescriptorURL());
-            return;
+            return false;
         }
 
         if (DEBUG)
             Log.i(TAG, "Received root device descriptor: " + deviceDescMsg);
         describe(descriptorContent);
+        return true;
     }
 
     private void describe(String descriptorXML) throws RouterException {
