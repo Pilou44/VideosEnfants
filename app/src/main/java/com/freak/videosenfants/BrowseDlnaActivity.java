@@ -1,5 +1,6 @@
 package com.freak.videosenfants;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -7,6 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,7 +38,7 @@ import org.fourthline.cling.support.contentdirectory.callback.Browse;
 import org.fourthline.cling.support.model.BrowseFlag;
 import org.fourthline.cling.support.model.DIDLContent;
 
-public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.OnItemClickListener, DialogInterface.OnCancelListener, RetrieveDeviceThradListener{
+public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.OnItemClickListener, DialogInterface.OnCancelListener, RetrieveDeviceThradListener ,DialogInterface.OnClickListener{
 
     private static final boolean DEBUG = true;
     private static final String TAG = BrowseDlnaActivity.class.getSimpleName();
@@ -47,6 +51,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     private VideoElementAdapter mAdapter;
     private ProgressDialog mDialog;
     private int mIndex;
+    private boolean mBinded;
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -132,6 +137,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
         // Logger.getLogger("org.fourthline.cling").setLevel(Level.FINEST);
 
         mHandler = new Handler();
+        mBinded = false;
 
         mListView = (ListView) findViewById(R.id.listView);
         mListView.setOnItemClickListener(this);
@@ -143,40 +149,68 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
 
         mListView.setAdapter(mAdapter);
 
-        if (DEBUG)
-            Log.i(TAG, "Bind service");
-
-        // This will start the UPnP service if it wasn't already started
-        getApplicationContext().bindService(
-                new Intent(this, AndroidUpnpServiceImpl.class),
-                mServiceConnection,
-                Context.BIND_AUTO_CREATE
-        );
-
-        mDialog = ProgressDialog.show(this, getString(R.string.dlna_progress_dialog_title), getString(R.string.dlna_progress_dialog_text), true, true, this);
-        mDialog.setCanceledOnTouchOutside(false);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mUpnpService != null && mService != null && mCurrent != null) {
-            mUpnpService.getControlPoint().execute(new Browse(mService, mCurrent.getPath(), BrowseFlag.DIRECT_CHILDREN) {
-                @Override
-                public void received(ActionInvocation arg0,
-                                     DIDLContent didl) {
-                    parseAndUpdate(didl);
-                }
 
-                @Override
-                public void updateStatus(Status status) {
+        if (DEBUG)
+            Log.i(TAG, "Test WiFi connexion");
 
-                }
+        boolean wiFiConnected = false;
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        //NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        Network[] networks = connManager.getAllNetworks();
+        for (Network network : networks) {
+            NetworkInfo info = connManager.getNetworkInfo(network);
+            if (info.getType() == ConnectivityManager.TYPE_WIFI && info.isConnected()) {
+                wiFiConnected = true;
+                if (DEBUG)
+                    Log.i(TAG, "WiFi is connected");
+            }
+        }
 
-                @Override
-                public void failure(ActionInvocation arg0, UpnpResponse arg1, String arg2) {
-                }
-            });
+        if (wiFiConnected) {
+            if (mUpnpService == null || mService == null || mCurrent == null) {
+                if (DEBUG)
+                    Log.i(TAG, "Bind service");
+
+                // This will start the UPnP service if it wasn't already started
+                getApplicationContext().bindService(
+                        new Intent(this, AndroidUpnpServiceImpl.class),
+                        mServiceConnection,
+                        Context.BIND_AUTO_CREATE
+                );
+                mBinded = true;
+
+                mDialog = ProgressDialog.show(this, getString(R.string.dlna_progress_dialog_title), getString(R.string.dlna_progress_dialog_text), true, true, this);
+                mDialog.setCanceledOnTouchOutside(false);
+            } else {
+                mUpnpService.getControlPoint().execute(new Browse(mService, mCurrent.getPath(), BrowseFlag.DIRECT_CHILDREN) {
+                    @Override
+                    public void received(ActionInvocation arg0,
+                                         DIDLContent didl) {
+                        parseAndUpdate(didl);
+                    }
+
+                    @Override
+                    public void updateStatus(Status status) {
+
+                    }
+
+                    @Override
+                    public void failure(ActionInvocation arg0, UpnpResponse arg1, String arg2) {
+                    }
+                });
+            }
+        }
+        else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.no_wifi_connexion);
+            builder.setNeutralButton(R.string.ok, this);
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     }
 
@@ -187,7 +221,9 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
             mUpnpService.getRegistry().removeListener(mRegistryListener);
         }
         // This will stop the UPnP service if nobody else is bound to it
-        getApplicationContext().unbindService(mServiceConnection);
+        if (mBinded) {
+            getApplicationContext().unbindService(mServiceConnection);
+        }
     }
 
     @Override
@@ -301,6 +337,14 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
             Log.i(TAG, "Unable to connect to DLNA server " + mIndex +", trying another one");
         mIndex++;
         findDevice(mIndex);
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        if (which == DialogInterface.BUTTON_NEUTRAL) {
+            dialog.dismiss();
+            this.finish();
+        }
     }
 
     protected class BrowseRegistryListener extends DefaultRegistryListener {
