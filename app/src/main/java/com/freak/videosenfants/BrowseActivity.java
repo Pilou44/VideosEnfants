@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.freak.videosenfants.elements.ApplicationSingleton;
+
 public abstract class BrowseActivity extends AppCompatActivity implements AdapterView.OnItemLongClickListener {
 
     protected VideoElement mCurrent;
@@ -22,18 +24,23 @@ public abstract class BrowseActivity extends AppCompatActivity implements Adapte
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
-        final VideoElement element = (VideoElement) parent.getItemAtPosition(position);
-        Intent intent = new Intent(this, ImageSearchActivity.class);
-        String search = element.getName();
-        VideoElement parentElement = element.getParent();
-        while (parentElement != null && parentElement.getParent() != null) {
-            search += " " + parentElement.getName();
-            parentElement = parentElement.getParent();
+        if (ApplicationSingleton.getInstance(this).isParentMode()) {
+            final VideoElement element = (VideoElement) parent.getItemAtPosition(position);
+            Intent intent = new Intent(this, ImageSearchActivity.class);
+            String search = element.getName();
+            VideoElement parentElement = element.getParent();
+            while (parentElement != null && parentElement.getParent() != null) {
+                search += " " + parentElement.getName();
+                parentElement = parentElement.getParent();
+            }
+            intent.putExtra("search", search);
+            intent.putExtra("name", element.getName());
+            startActivity(intent);
+            return true;
         }
-        intent.putExtra("search", search);
-        intent.putExtra("name", element.getName());
-        startActivity(intent);
-        return true;
+        else {
+            return false;
+        }
     }
 
     protected abstract void parseAndUpdate(VideoElement parent);
