@@ -18,10 +18,6 @@ public class DlnaAdapter extends ArrayAdapter<DlnaElement> {
         super(context, 0, elements);
     }
 
-    public DlnaAdapter(Context context) {
-        super(context, 0);
-    }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -47,6 +43,13 @@ public class DlnaAdapter extends ArrayAdapter<DlnaElement> {
         viewHolder.layout.setPadding(
                 padding * (element.getIndent() + 1),
                 padding, padding, padding);
+
+        if (convertView.isSelected()) {
+            convertView.setBackgroundColor(0x66666666);
+        }
+        else {
+            convertView.setBackgroundColor(0x00ffffff);
+        }
 
         return convertView;
     }
