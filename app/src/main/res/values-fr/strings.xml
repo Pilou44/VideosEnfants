@@ -18,4 +18,12 @@
     <string name="no_wifi_connexion">Aucune connection WiFi d&#233;tect&#233;e</string>
     <string name="ok">OK</string>
     <string name="parent_mode">Mode parent</string>
+    <string name="set_image">Rechercher une vignette</string>
+    <string name="copy">Copier en local</string>
+    <string name="browse_context_menu_title">S&#233;lectionnez une option</string>
+    <string name="delete">Supprimer</string>
+    <string name="delete_title">Voulez-vous supprimer ce fichier ?</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="delete_dir_title">Le dossier doit être vide</string>
 </resources>

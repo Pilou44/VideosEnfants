@@ -1,5 +1,7 @@
 package com.freak.videosenfants;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -10,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.io.File;
@@ -47,6 +50,8 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
                 BrowseSDActivity.this.onBackPressed();
             }
         });
+
+        getDialog().setContentView(R.layout.browse_sd_context_menu_layout);
 
         mRoots = new Vector<>();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -214,6 +219,53 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         }
         mAdapter.notifyDataSetChanged();
         mListView.setSelectionAfterHeaderView();
+    }
+
+    @Override
+    protected void prepareContextMenu(final AdapterView<?> parent, final int position) {
+        Log.i(TAG, "prepareContexMenu SD");
+        super.prepareContextMenu(parent, position);
+        Button deleteButton = (Button) getDialog().findViewById(R.id.delete_button);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final VideoElement element = mAllFiles.get(position);
+                Log.i(TAG, "Delete " + element.getPath());
+                getDialog().dismiss();
+                AlertDialog.Builder builder = new AlertDialog.Builder(BrowseSDActivity.this);
+                builder.setTitle(getString(R.string.delete_title));
+                builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        File file = new File(element.getPath());
+                        if (!file.isDirectory() || file.listFiles().length == 0) {
+                            if (file.delete()) {
+                                mAllFiles.removeElementAt(position);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(BrowseSDActivity.this);
+                            builder.setTitle(getString(R.string.delete_dir_title));
+                            builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            builder.create().show();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
+            }
+        });
     }
 
 }
