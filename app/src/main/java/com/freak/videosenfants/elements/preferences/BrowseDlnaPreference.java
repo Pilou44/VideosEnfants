@@ -173,11 +173,8 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
             element.setExpanded(true);
         }
 
-        for(int a = 0; a < parent.getChildCount(); a++)
-        {
-            parent.getChildAt(a).setSelected(false);
-        }
-        view.setSelected(true);
+        mAdapter.setSelectedElement(position);
+        mAdapter.notifyDataSetChanged();
         mSelectedElement = element;
     }
 

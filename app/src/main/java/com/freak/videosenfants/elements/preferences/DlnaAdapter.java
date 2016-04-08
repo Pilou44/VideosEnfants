@@ -14,8 +14,11 @@ import java.util.List;
 
 public class DlnaAdapter extends ArrayAdapter<DlnaElement> {
 
+    private int mSelectedElement;
+
     public DlnaAdapter(Context context, List<DlnaElement> elements) {
         super(context, 0, elements);
+        mSelectedElement = -1;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class DlnaAdapter extends ArrayAdapter<DlnaElement> {
                 padding * (element.getIndent() + 1),
                 padding, padding, padding);
 
-        if (convertView.isSelected()) {
+        if (position == mSelectedElement) {
             convertView.setBackgroundColor(0x66666666);
         }
         else {
@@ -52,6 +55,10 @@ public class DlnaAdapter extends ArrayAdapter<DlnaElement> {
         }
 
         return convertView;
+    }
+
+    public void setSelectedElement(int selectedElement) {
+        mSelectedElement = selectedElement;
     }
 
     private class DlnaHolder{
