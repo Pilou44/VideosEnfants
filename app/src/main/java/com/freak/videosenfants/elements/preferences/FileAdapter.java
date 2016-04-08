@@ -13,8 +13,11 @@ import com.freak.videosenfants.R;
 import java.util.List;
 
 public class FileAdapter extends ArrayAdapter<FileElement> {
+    private int mSelectedElement;
+
     public FileAdapter(Context context, List<FileElement> elements) {
         super(context, 0, elements);
+        mSelectedElement = -1;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class FileAdapter extends ArrayAdapter<FileElement> {
                 padding * (element.getIndent() + 1),
                 padding, padding, padding);
 
-        if (convertView.isSelected()) {
+        if (position == mSelectedElement) {
             convertView.setBackgroundColor(0x66666666);
         }
         else {
@@ -51,6 +54,10 @@ public class FileAdapter extends ArrayAdapter<FileElement> {
         }
 
         return convertView;
+    }
+
+    public void setSelectedElement(int selectedElement) {
+        mSelectedElement = selectedElement;
     }
 
     private class FileHolder{
