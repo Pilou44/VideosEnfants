@@ -26,4 +26,10 @@
     <string name="yes">Oui</string>
     <string name="no">Non</string>
     <string name="delete_dir_title">Le dossier doit être vide</string>
+    <string name="to">vers</string>
+    <string name="free_space">Espace libre :</string>
+    <string name="bytes">o</string>
+    <string name="kilo_bytes">ko</string>
+    <string name="mega_bytes">Mo</string>
+    <string name="giga_bytes">Go</string>
 </resources>

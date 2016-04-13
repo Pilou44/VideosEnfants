@@ -1,6 +1,7 @@
 package com.freak.videosenfants;
 
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,7 +22,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.freak.videosenfants.elements.ApplicationSingleton;
+import com.freak.videosenfants.elements.DestSpinnerAdapter;
 
 import org.fourthline.cling.android.AndroidUpnpService;
 import org.fourthline.cling.android.AndroidUpnpServiceImpl;
@@ -37,6 +44,9 @@ import org.fourthline.cling.registry.Registry;
 import org.fourthline.cling.support.contentdirectory.callback.Browse;
 import org.fourthline.cling.support.model.BrowseFlag;
 import org.fourthline.cling.support.model.DIDLContent;
+import org.fourthline.cling.support.model.Res;
+
+import java.io.File;
 
 public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.OnItemClickListener, DialogInterface.OnCancelListener, RetrieveDeviceThradListener ,DialogInterface.OnClickListener{
 
@@ -52,6 +62,11 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     private ProgressDialog mDialog;
     private int mIndex;
     private boolean mBinded;
+
+    // Used for copy
+    private Spinner mDest;
+    private String mSrc;
+    private String mSelected;
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -128,6 +143,8 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                 BrowseDlnaActivity.this.onBackPressed();
             }
         });
+
+        getDialog().setContentView(R.layout.browse_dlna_context_menu_layout);
 
         // Fix the logging integration between java.util.logging and Android internal logging
         org.seamless.util.logging.LoggingUtil.resetRootHandler(
@@ -239,7 +256,9 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                                      DIDLContent didl) {
                     parseAndUpdate(didl);
                     goToTop();
+                    String path = mCurrent.getPathFromRoot() + "/" + element.getName();
                     mCurrent = element;
+                    mCurrent.setPathFromRoot(path);
                     //mListView.setSelectionAfterHeaderView();
                 }
 
@@ -304,12 +323,17 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                 if (DEBUG)
                     Log.i(TAG, "found " + didl.getItems().size() + " items.");
                 for (int i = 0; i < didl.getItems().size(); i++) {
-                    mAdapter.add(new VideoElement(
+                    VideoElement element = new VideoElement(
                             false,
                             didl.getItems().get(i).getResources().get(0).getValue(),
                             didl.getItems().get(i).getTitle(),
                             mCurrent,
-                            BrowseDlnaActivity.this));
+                            BrowseDlnaActivity.this);
+                    for (final Res resource : didl.getItems().get(i).getResources()) {
+                        if (resource.getSize() != null)
+                            element.setSize(resource.getSize());
+                    }
+                    mAdapter.add(element);
                 }
                 mAdapter.notifyDataSetChanged();
                 //mListView.setSelectionAfterHeaderView();
@@ -344,6 +368,108 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
         if (which == DialogInterface.BUTTON_NEUTRAL) {
             dialog.dismiss();
             this.finish();
+        }
+    }
+
+    @Override
+    protected void prepareContextMenu(final AdapterView<?> parent, final int position) {
+        super.prepareContextMenu(parent, position);
+
+        final VideoElement element = (VideoElement) parent.getItemAtPosition(position);
+
+        Button copyButton = (Button) getDialog().findViewById(R.id.copy_button);
+
+        if (element.isDirectory()){
+            copyButton.setVisibility(View.GONE);
+        }
+        else {
+            copyButton.setVisibility(View.VISIBLE);
+            copyButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(BrowseDlnaActivity.this);
+                    builder.setTitle(R.string.copy);
+                    builder.setView(R.layout.copy_dialog_layout);
+                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startCopy();
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    mDest = (Spinner) dialog.findViewById(R.id.copy_dest);
+                    DestSpinnerAdapter adapter = new DestSpinnerAdapter(BrowseDlnaActivity.this, android.R.layout.simple_spinner_item, BrowseSDActivity.getLocalRoots(BrowseDlnaActivity.this));
+                    mDest.setAdapter(adapter);
+                    mSrc = element.getPath();
+                    mSelected = element.getName();
+                    TextView src = (TextView) dialog.findViewById(R.id.copy_src);
+                    String text = element.getName() + " (" + ApplicationSingleton.getInstance(BrowseDlnaActivity.this).formatByteSize(element.getSize()) + ")";
+                    src.setText(text);
+
+                    getDialog().dismiss();
+                }
+            });
+        }
+    }
+
+    private void startCopy() {
+        String source = mSrc;
+        String parentPath = mDest.getSelectedItem() + mCurrent.getPathFromRoot();
+        final String dest = parentPath + "/" + mSelected + mSrc.substring(mSrc.lastIndexOf("."));
+
+        if (DEBUG)
+            Log.i(TAG, "Start copy from " + source + " to " + dest);
+
+       File parentFile = new File(parentPath);
+        boolean dirExists = parentFile.exists();
+        if (!dirExists) {
+            dirExists = parentFile.mkdirs();
+            if (DEBUG)
+                Log.i(TAG, "Directory created: " + dirExists);
+        }
+
+        if (!dirExists) {
+            Log.e(TAG, "Can't access destination directory");
+        }
+        else {
+            final File destFile = new File(dest);
+
+            //TODO tester si fichier existe déjà
+            /*if (!destFile.exists()) {
+                boolean create = false;
+                try {
+                    create = destFile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Log.i(TAG, "File created: " + create);
+            }*/
+
+            if (DEBUG)
+                Log.i(TAG, "Create download request");
+
+            Uri srcUri = Uri.parse(source);
+            Uri destUri = Uri.fromFile(destFile);
+
+            DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+            DownloadManager.Request request = new DownloadManager.Request(srcUri);
+            request.setDestinationUri(destUri);
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
+            request.setTitle(destFile.getName());
+            request.setVisibleInDownloadsUi(true);
+
+            if (DEBUG)
+                Log.i(TAG, "Send download request");
+
+            downloadManager.enqueue(request);
         }
     }
 
@@ -396,6 +522,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                                             parseAndUpdate(didl);
                                             goToTop();
                                             mCurrent = new VideoElement(true, mRoot, "Root", null, BrowseDlnaActivity.this);
+                                            mCurrent.setPathFromRoot("");
                                             mDialog.dismiss();
                                         }
 
