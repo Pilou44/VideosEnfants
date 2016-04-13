@@ -36,7 +36,7 @@ public class DestSpinnerAdapter extends ArrayAdapter<File> {
         File element = getItem(position);
 
         //il ne reste plus qu'à remplir notre vue
-        String text = element.getName() + " (" + getContext().getString(R.string.free_space) + " " + ApplicationSingleton.getInstance(getContext()).formatByteSize(element.getFreeSpace()) + ")";
+        String text = element.getAbsolutePath() + " (" + getContext().getString(R.string.free_space) + " " + ApplicationSingleton.getInstance(getContext()).formatByteSize(element.getFreeSpace()) + ")";
         viewHolder.name.setText(text);
 
         return convertView;
@@ -60,7 +60,7 @@ public class DestSpinnerAdapter extends ArrayAdapter<File> {
         File element = getItem(position);
 
         //il ne reste plus qu'à remplir notre vue
-        String text = element.getName() + " (" + getContext().getString(R.string.free_space) + " " + ApplicationSingleton.getInstance(getContext()).formatByteSize(element.getFreeSpace()) + ")";
+        String text = element.getAbsolutePath() + " (" + getContext().getString(R.string.free_space) + " " + ApplicationSingleton.getInstance(getContext()).formatByteSize(element.getFreeSpace()) + ")";
         viewHolder.name.setText(text);
 
         return convertView;
