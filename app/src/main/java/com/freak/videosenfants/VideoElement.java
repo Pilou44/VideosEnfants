@@ -24,6 +24,8 @@ public class VideoElement {
     private String mPath;
     private String mName;
     private VideoElement mParent;
+    private Long mSize;
+    private String mPathFromRoot;
 
     public VideoElement(boolean directory, String path, String name, VideoElement parent, Context context) {
         mContext = context;
@@ -44,6 +46,7 @@ public class VideoElement {
         }
         mParent = parent;
         mIcon = generateScreenshot();
+        mSize = file.length();
     }
 
     public boolean isDirectory() {
@@ -130,4 +133,19 @@ public class VideoElement {
         }
     }
 
+    public void setSize(long size) {
+        mSize = size;
+    }
+
+    public long getSize() {
+        return mSize;
+    }
+
+    public void setPathFromRoot(String pathFromRoot) {
+        mPathFromRoot = pathFromRoot;
+    }
+
+    public String getPathFromRoot(){
+        return mPathFromRoot;
+    }
 }

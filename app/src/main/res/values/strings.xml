@@ -48,4 +48,10 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="delete_dir_title">Directory must be empty</string>
+    <string name="to">to</string>
+    <string name="free_space">Free space:</string>
+    <string name="bytes">B</string>
+    <string name="kilo_bytes">kB</string>
+    <string name="mega_bytes">MB</string>
+    <string name="giga_bytes">GB</string>
 </resources>

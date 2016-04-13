@@ -1,6 +1,7 @@
 package com.freak.videosenfants;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -53,9 +54,24 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
 
         getDialog().setContentView(R.layout.browse_sd_context_menu_layout);
 
-        mRoots = new Vector<>();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        int nbRoots = getResources().getInteger(R.integer.local_roots_number);
+        mRoots = getLocalRoots(this);
+
+        mRootElement = new VideoElement(true, mRoot, mRoot, null, this);
+        mCurrent = mRootElement;
+        mAllFiles = new Vector<>();
+        mAdapter = new VideoElementAdapter(this, mAllFiles);
+
+        mListView = (ListView)findViewById(R.id.listView);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(this);
+        mListView.setLongClickable(true);
+        mListView.setOnItemLongClickListener(this);
+    }
+
+    public static Vector<File> getLocalRoots(Context context) {
+        Vector<File> result = new Vector<>();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int nbRoots = context.getResources().getInteger(R.integer.local_roots_number);
         for (int i = 0 ; i < nbRoots ; i++){
             boolean visible = prefs.getBoolean("local_browse_" + i + "_visible", false);
             boolean empty = prefs.getString("local_browse_" + i, "").length() == 0;
@@ -65,22 +81,11 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
                     if (DEBUG) {
                         Log.i(TAG, "New root found: " + childrenFolder.getAbsolutePath());
                     }
-                    mRoots.add(childrenFolder);
+                    result.add(childrenFolder);
                 }
             }
         }
-
-        mRootElement = new VideoElement(true, mRoot, mRoot, null, this);
-        mCurrent = mRootElement;
-        mAllFiles = new Vector<>();
-        //addFilesToList(mRoots, mCurrent);
-        mAdapter = new VideoElementAdapter(this, mAllFiles);
-
-        mListView = (ListView)findViewById(R.id.listView);
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
-        mListView.setLongClickable(true);
-        mListView.setOnItemLongClickListener(this);
+        return result;
     }
 
     @Override
