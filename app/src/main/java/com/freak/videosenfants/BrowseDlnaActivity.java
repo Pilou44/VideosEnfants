@@ -68,6 +68,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     private String mSrc;
     private String mSelected;
 
+    private boolean[] mTestedDlnas;
     private ServiceConnection mServiceConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -88,7 +89,12 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
             }
 
             // Search asynchronously for all devices, they will respond soon
-            mIndex = 0;
+            mTestedDlnas = new boolean[getResources().getInteger(R.integer.dlna_servers_number)];
+            for (int i = 0 ; i < mTestedDlnas.length ; i++) {
+                mTestedDlnas[i] = false;
+            }
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(BrowseDlnaActivity.this);
+            mIndex = prefs.getInt(getString(R.string.key_last_used_dlna), 0);
             findDevice(mIndex);
         }
 
@@ -100,7 +106,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     private void findDevice(int index) {
         if (DEBUG)
             Log.i(TAG, "Trying to connect to DLNA server " + index);
-        if (index < getResources().getInteger(R.integer.dlna_servers_number)){
+        if (!mTestedDlnas[mIndex]){
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(BrowseDlnaActivity.this);
             String key = getString(R.string.key_dlna_browse) + "_" + index;
             if ((prefs.getBoolean(key + getString(R.string.key_visible), false)) &&
@@ -119,7 +125,8 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
             else {
                 if (DEBUG)
                     Log.i(TAG, "DLNA server " + index +" is not defined, trying to connect to another one");
-                mIndex++;
+                mTestedDlnas[mIndex] = true;
+                mIndex = (mIndex + 1) % getResources().getInteger(R.integer.dlna_servers_number);
                 findDevice(mIndex);
             }
         }
@@ -359,7 +366,8 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     public void onDeviceNotFound() {
         if (DEBUG)
             Log.i(TAG, "Unable to connect to DLNA server " + mIndex +", trying another one");
-        mIndex++;
+        mTestedDlnas[mIndex] = true;
+        mIndex = (mIndex + 1) % getResources().getInteger(R.integer.dlna_servers_number);
         findDevice(mIndex);
     }
 
@@ -524,6 +532,12 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                                             mCurrent = new VideoElement(true, mRoot, "Root", null, BrowseDlnaActivity.this);
                                             mCurrent.setPathFromRoot("");
                                             mDialog.dismiss();
+
+                                            if (DEBUG)
+                                                Log.i(TAG, "Store last used DLNA: " + mIndex);
+                                            SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(BrowseDlnaActivity.this).edit();
+                                            edit.putInt(getString(R.string.key_last_used_dlna), mIndex);
+                                            edit.apply();
                                         }
 
                                         @Override

@@ -17,6 +17,7 @@
     <string name="key_url" translatable="false">_url</string>
     <string name="key_path" translatable="false">_path</string>
     <string name="key_max_age" translatable="false">_max_age</string>
+    <string name="key_last_used_dlna" translatable="false">last_used_dlna</string>
 
     <!-- Not translatable strings -->
     <string name="default_local_pictures" translatable="false">/sdcard/VideosForKids/</string>
