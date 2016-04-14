@@ -557,10 +557,10 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                                         @Override
                                         public void received(ActionInvocation arg0,
                                                              DIDLContent didl) {
-                                            parseAndUpdate(didl);
-                                            goToTop();
                                             mCurrent = new VideoElement(true, mRoot, "Root", null, BrowseDlnaActivity.this);
                                             mCurrent.setPathFromRoot("");
+                                            parseAndUpdate(didl);
+                                            goToTop();
                                             mDialog.dismiss();
 
                                             if (DEBUG)
