@@ -13,7 +13,7 @@
     <string name="pref_title_dlna_switch">UPnP/DLNA</string>
     <string name="pref_dlna_add">Serveur UPnP/DLNA</string>
     <string name="pref_dlna_add_button">Ajouter un serveur UPnP/DLNA</string>
-    <string name="dlna_progress_dialog_title">Connexion à un serveur en cours</string>
+    <string name="dlna_progress_dialog_title">Connexion &#224; un serveur en cours</string>
     <string name="dlna_progress_dialog_text">Merci de patienter&#8230;</string>
     <string name="no_wifi_connexion">Aucune connection WiFi d&#233;tect&#233;e</string>
     <string name="ok">OK</string>
@@ -25,11 +25,13 @@
     <string name="delete_title">Voulez-vous supprimer ce fichier ?</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
-    <string name="delete_dir_title">Le dossier doit être vide</string>
+    <string name="delete_dir_title">Le dossier doit &#234;tre vide</string>
     <string name="to">vers</string>
     <string name="free_space">Espace libre :</string>
     <string name="bytes">o</string>
     <string name="kilo_bytes">ko</string>
     <string name="mega_bytes">Mo</string>
     <string name="giga_bytes">Go</string>
+    <string name="rename">Renommer</string>
+    <string name="exist_dest_dialog_title">Un fichier avec le m&#234;me nom existe d&#233;j&#224;. Voulez-vous l\&#039;&#233;craser ?</string>
 </resources>

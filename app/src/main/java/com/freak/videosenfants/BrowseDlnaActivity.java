@@ -429,14 +429,14 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     }
 
     private void startCopy() {
-        String source = mSrc;
+        final String source = mSrc;
         String parentPath = mDest.getSelectedItem() + mCurrent.getPathFromRoot();
         final String dest = parentPath + "/" + mSelected + mSrc.substring(mSrc.lastIndexOf("."));
 
         if (DEBUG)
             Log.i(TAG, "Start copy from " + source + " to " + dest);
 
-       File parentFile = new File(parentPath);
+        File parentFile = new File(parentPath);
         boolean dirExists = parentFile.exists();
         if (!dirExists) {
             dirExists = parentFile.mkdirs();
@@ -450,35 +450,65 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
         else {
             final File destFile = new File(dest);
 
-            //TODO tester si fichier existe déjà
-            /*if (!destFile.exists()) {
-                boolean create = false;
-                try {
-                    create = destFile.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Log.i(TAG, "File created: " + create);
-            }*/
-
-            if (DEBUG)
-                Log.i(TAG, "Create download request");
-
-            Uri srcUri = Uri.parse(source);
-            Uri destUri = Uri.fromFile(destFile);
-
-            DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-            DownloadManager.Request request = new DownloadManager.Request(srcUri);
-            request.setDestinationUri(destUri);
-            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
-            request.setTitle(destFile.getName());
-            request.setVisibleInDownloadsUi(true);
-
-            if (DEBUG)
-                Log.i(TAG, "Send download request");
-
-            downloadManager.enqueue(request);
+            if (destFile.exists()) {
+                if (DEBUG)
+                    Log.i(TAG, "Destination file already exists");
+                AlertDialog.Builder existDestDialog = new AlertDialog.Builder(this);
+                existDestDialog.setTitle(R.string.exist_dest_dialog_title);
+                existDestDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG)
+                            Log.i(TAG, "Override");
+                        dialog.dismiss();
+                        if (destFile.delete()) {
+                            launchCopy(source, destFile);
+                        }
+                    }
+                });
+                existDestDialog.setNeutralButton(R.string.rename, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG)
+                            Log.i(TAG, "Rename");
+                        dialog.dismiss();
+                        launchCopy(source, destFile);
+                    }
+                });
+                existDestDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG)
+                            Log.i(TAG, "Cancel copy");
+                        dialog.dismiss();
+                    }
+                });
+                existDestDialog.create().show();
+            }
+            else {
+                launchCopy(source, destFile);
+            }
         }
+    }
+
+    private void launchCopy(String source, File destination) {
+        if (DEBUG)
+            Log.i(TAG, "Create download request");
+
+        Uri srcUri = Uri.parse(source);
+        Uri destUri = Uri.fromFile(destination);
+
+        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(srcUri);
+        request.setDestinationUri(destUri);
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
+        request.setTitle(destination.getName());
+        request.setVisibleInDownloadsUi(true);
+
+        if (DEBUG)
+            Log.i(TAG, "Send download request");
+
+        downloadManager.enqueue(request);
     }
 
     protected class BrowseRegistryListener extends DefaultRegistryListener {
