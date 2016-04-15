@@ -33,7 +33,6 @@ public class VideoElement {
         mPath = path;
         mName = name;
         mParent = parent;
-        mIcon = generateScreenshot();
     }
 
     public VideoElement(File file, VideoElement parent, Context context){
@@ -45,7 +44,6 @@ public class VideoElement {
             mName = mName.substring(0, mName.lastIndexOf("."));
         }
         mParent = parent;
-        mIcon = generateScreenshot();
         mSize = file.length();
     }
 
@@ -112,24 +110,34 @@ public class VideoElement {
         return null;
     }
 
-    protected Drawable generateScreenshot() {
+    protected void generateScreenshot() {
         Drawable ret = getDrawableForElement();
-        if (ret == null) {
-            if (mDirectory) {
-                return null;
-            } else {
-                Bitmap bmp = ThumbnailUtils.createVideoThumbnail(mPath, MediaStore.Images.Thumbnails.MINI_KIND);
-                if (bmp == null) {
-                    ret = mContext.getResources().getDrawable(R.drawable.fichier, null);
-                }
-                else {
-                    ret = new BitmapDrawable(mContext.getResources(), bmp);
-                }
-                return ret;
-            }
+        if (ret != null) {
+            mIcon = ret;
         }
         else {
-            return ret;
+            if (DEBUG) {
+                Log.i(TAG, "No local image found");
+            }
+            if (mDirectory) {
+                mIcon = mContext.getDrawable(R.drawable.empty);
+            } else {
+                if (DEBUG) {
+                    Log.i(TAG, "Try to extract thumbnail");
+                }
+
+                Bitmap bmp = ThumbnailUtils.createVideoThumbnail(mPath, MediaStore.Images.Thumbnails.MINI_KIND);
+                if (bmp == null) {
+                    mIcon = mContext.getResources().getDrawable(R.drawable.fichier, null);
+                }
+                else {
+                    mIcon = new BitmapDrawable(mContext.getResources(), bmp);
+                }
+
+                if (DEBUG) {
+                    Log.i(TAG, "Thumbnail extraction finished");
+                }
+            }
         }
     }
 
