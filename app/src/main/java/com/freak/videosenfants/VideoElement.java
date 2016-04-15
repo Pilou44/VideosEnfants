@@ -6,12 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.ThumbnailUtils;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.util.Log;
 
 import java.io.File;
+
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class VideoElement {
 
@@ -126,7 +126,11 @@ public class VideoElement {
                     Log.i(TAG, "Try to extract thumbnail");
                 }
 
-                Bitmap bmp = ThumbnailUtils.createVideoThumbnail(mPath, MediaStore.Images.Thumbnails.MINI_KIND);
+                FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
+                mmr.setDataSource(mPath);
+                Bitmap bmp = mmr.getFrameAtTime(120000000); // frame at 120 seconds
+                mmr.release();
+
                 if (bmp == null) {
                     mIcon = mContext.getResources().getDrawable(R.drawable.fichier, null);
                 }

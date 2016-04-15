@@ -36,4 +36,5 @@ dependencies {
     compile 'com.android.support:support-v4:23.1.1'
     compile 'org.apache.httpcomponents:httpcore:4.4.1'
     compile 'com.android.volley:volley:1.0.0'
+    compile 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.6'
 }
