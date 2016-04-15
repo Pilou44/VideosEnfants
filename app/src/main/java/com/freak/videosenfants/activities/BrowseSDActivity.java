@@ -1,4 +1,4 @@
-package com.freak.videosenfants;
+package com.freak.videosenfants.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,6 +15,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+
+import com.freak.videosenfants.R;
+import com.freak.videosenfants.elements.browsing.VideoElement;
+import com.freak.videosenfants.elements.browsing.VideoElementAdapter;
 
 import java.io.File;
 import java.io.FileFilter;

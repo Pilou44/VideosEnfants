@@ -1,4 +1,4 @@
-package com.freak.videosenfants;
+package com.freak.videosenfants.elements.browsing;
 
 import android.util.Log;
 
@@ -38,10 +38,10 @@ public class RetrieveDeviceThread extends Thread {
     private final String mUdn;
     private final String mUrl;
     private final int mMaxAge;
-    private final RetrieveDeviceThradListener mListener;
+    private final RetrieveDeviceThreadListener mListener;
     private RemoteDevice mDevice;
 
-    public RetrieveDeviceThread(AndroidUpnpService upnpService, String udn, String url, int maxAge, RetrieveDeviceThradListener listener) {
+    public RetrieveDeviceThread(AndroidUpnpService upnpService, String udn, String url, int maxAge, RetrieveDeviceThreadListener listener) {
         mUpnpService = upnpService;
         mUdn = udn;
         mUrl = url;

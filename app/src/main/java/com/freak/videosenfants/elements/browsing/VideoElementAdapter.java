@@ -1,4 +1,4 @@
-package com.freak.videosenfants;
+package com.freak.videosenfants.elements.browsing;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.freak.videosenfants.R;
 
 import java.util.List;
 import java.util.Vector;

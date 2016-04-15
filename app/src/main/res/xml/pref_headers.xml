@@ -3,17 +3,17 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.freak.videosenfants.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="com.freak.videosenfants.activities.SettingsActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_photo_24dp"
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="com.freak.videosenfants.SettingsActivity$LocalPreferenceFragment"
+        android:fragment="com.freak.videosenfants.activities.SettingsActivity$LocalPreferenceFragment"
         android:icon="@drawable/ic_sd_storage_24dp"
         android:title="@string/pref_header_local" />
 
     <header
-        android:fragment="com.freak.videosenfants.SettingsActivity$DlnaPreferenceFragment"
+        android:fragment="com.freak.videosenfants.activities.SettingsActivity$DlnaPreferenceFragment"
         android:icon="@drawable/ic_cast_connected_24dp"
         android:title="@string/pref_header_dlna" />
 
