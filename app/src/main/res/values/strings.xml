@@ -57,4 +57,7 @@
     <string name="giga_bytes">GB</string>
     <string name="rename">Rename file automatically</string>
     <string name="exist_dest_dialog_title">A file with the same name already exists. Do you want to override it?</string>
+    <string name="developed_by">Developed by Guillaume B&#233;guin (guillaume.beguin@gmail.com)</string>
+    <string name="modules_list">This application uses the following open sources projects:\n</string>
+    <string name="action_about">About</string>
 </resources>
