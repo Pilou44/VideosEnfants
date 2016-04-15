@@ -1,4 +1,4 @@
-package com.freak.videosenfants;
+package com.freak.videosenfants.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 
+import com.freak.videosenfants.R;
+import com.freak.videosenfants.elements.browsing.VideoElement;
 import com.freak.videosenfants.elements.ApplicationSingleton;
 
 public abstract class BrowseActivity extends AppCompatActivity implements AdapterView.OnItemLongClickListener {

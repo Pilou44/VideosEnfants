@@ -1,4 +1,4 @@
-package com.freak.videosenfants;
+package com.freak.videosenfants.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.freak.videosenfants.R;
 import com.freak.videosenfants.elements.ApplicationSingleton;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener {

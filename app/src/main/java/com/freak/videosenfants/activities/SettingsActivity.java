@@ -1,4 +1,4 @@
-package com.freak.videosenfants;
+package com.freak.videosenfants.activities;
 
 
 import android.content.SharedPreferences;
@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
+import com.freak.videosenfants.R;
 import com.freak.videosenfants.elements.preferences.AddButtonPreference;
 import com.freak.videosenfants.elements.preferences.BrowseDlnaPreference;
 import com.freak.videosenfants.elements.preferences.BrowseLocalPreference;

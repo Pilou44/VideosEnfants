@@ -1,4 +1,4 @@
-package com.freak.videosenfants.elements.customsearch;
+package com.freak.videosenfants.elements.imagesearch;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;

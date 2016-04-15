@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".StartActivity"
+            android:name=".activities.StartActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar">
@@ -28,24 +28,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BrowseSDActivity"
+            android:name=".activities.BrowseSDActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".BrowseDlnaActivity"
+            android:name=".activities.BrowseDlnaActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="landscape" />
 
         <service android:name="org.fourthline.cling.android.AndroidUpnpServiceImpl" />
 
         <activity
-            android:name=".ImageSearchActivity"
+            android:name=".activities.ImageSearchActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />

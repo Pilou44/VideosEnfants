@@ -1,4 +1,4 @@
-package com.freak.videosenfants;
+package com.freak.videosenfants.elements.browsing;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,6 +8,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.freak.videosenfants.R;
 
 import java.io.File;
 

@@ -1,4 +1,4 @@
-package com.freak.videosenfants.elements;
+package com.freak.videosenfants.elements.browsing;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.elements.ApplicationSingleton;
 
 import java.io.File;
 import java.util.List;

@@ -1,10 +1,9 @@
-package com.freak.videosenfants;
+package com.freak.videosenfants.activities;
 
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -27,8 +26,13 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.freak.videosenfants.R;
+import com.freak.videosenfants.elements.browsing.RetrieveDeviceThreadListener;
+import com.freak.videosenfants.elements.browsing.RetrieveDeviceThread;
+import com.freak.videosenfants.elements.browsing.VideoElement;
+import com.freak.videosenfants.elements.browsing.VideoElementAdapter;
 import com.freak.videosenfants.elements.ApplicationSingleton;
-import com.freak.videosenfants.elements.DestSpinnerAdapter;
+import com.freak.videosenfants.elements.browsing.DestSpinnerAdapter;
 
 import org.fourthline.cling.android.AndroidUpnpService;
 import org.fourthline.cling.android.AndroidUpnpServiceImpl;
@@ -48,7 +52,7 @@ import org.fourthline.cling.support.model.Res;
 
 import java.io.File;
 
-public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.OnItemClickListener, DialogInterface.OnCancelListener, RetrieveDeviceThradListener ,DialogInterface.OnClickListener{
+public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.OnItemClickListener, DialogInterface.OnCancelListener, RetrieveDeviceThreadListener,DialogInterface.OnClickListener{
 
     private static final boolean DEBUG = true;
     private static final String TAG = BrowseDlnaActivity.class.getSimpleName();
@@ -183,7 +187,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
             Log.i(TAG, "Test WiFi connexion");
 
         boolean wiFiConnected = false;
-        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         //NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         Network[] networks = connManager.getAllNetworks();
         for (Network network : networks) {
@@ -204,7 +208,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                 getApplicationContext().bindService(
                         new Intent(this, AndroidUpnpServiceImpl.class),
                         mServiceConnection,
-                        Context.BIND_AUTO_CREATE
+                        BIND_AUTO_CREATE
                 );
                 mBinded = true;
 
@@ -498,7 +502,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
         Uri srcUri = Uri.parse(source);
         Uri destUri = Uri.fromFile(destination);
 
-        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(srcUri);
         request.setDestinationUri(destUri);
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);

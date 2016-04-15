@@ -1,4 +1,4 @@
-package com.freak.videosenfants;
+package com.freak.videosenfants.activities;
 
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -17,9 +17,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.freak.videosenfants.elements.customsearch.CustomSearchAdapter;
-import com.freak.videosenfants.elements.customsearch.CustomSearchSingleton;
-import com.freak.videosenfants.elements.customsearch.SingleImage;
+import com.freak.videosenfants.R;
+import com.freak.videosenfants.elements.imagesearch.CustomSearchAdapter;
+import com.freak.videosenfants.elements.imagesearch.CustomSearchSingleton;
+import com.freak.videosenfants.elements.imagesearch.SingleImage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
