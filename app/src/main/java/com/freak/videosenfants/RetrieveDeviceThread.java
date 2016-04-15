@@ -62,6 +62,8 @@ public class RetrieveDeviceThread extends Thread {
             );
             mDevice = new RemoteDevice(deviceIdentity);
             if (!describe()) {
+                if (DEBUG)
+                    Log.i(TAG, "Device not found");
                 mListener.onDeviceNotFound();
             }
         } catch (MalformedURLException | UnknownHostException | ValidationException | RouterException e) {
