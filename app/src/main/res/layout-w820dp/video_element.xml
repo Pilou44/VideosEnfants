@@ -3,25 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
+    android:padding="10dp"
     >
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="150dp"
-        android:layout_height="120dp"
+        android:layout_width="300dp"
+        android:layout_height="240dp"
         android:scaleType="fitCenter"
         />
     <RelativeLayout
-        android:layout_width="150dp"
-        android:layout_height="120dp"
+        android:layout_width="300dp"
+        android:layout_height="240dp"
         android:layout_alignBottom="@+id/icon"
         android:layout_alignLeft="@+id/icon"
-        android:padding="5dp">
+        android:padding="10dp">
         <ImageView
             android:id="@+id/sub_icon"
-            android:layout_width="140dp"
-            android:layout_height="85dp"
+            android:layout_width="280dp"
+            android:layout_height="170dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
             android:visibility="gone"
@@ -32,8 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
-        android:textSize="18dp"
-        android:layout_marginLeft="5dp"
+        android:textSize="36dp"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/icon"
         android:layout_centerVertical="true"
         tools:text="Name"
