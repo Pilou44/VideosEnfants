@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -36,12 +37,10 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
 
     private static final boolean DEBUG = true;
     private static final String TAG = ImageSearchActivity.class.getSimpleName();
-    //private static String CUSTOM_SEARCH_KEY = "AIzaSyD1JaCxnn-tRxRQvSz1e4xY-QpmvufQ3Po";
     private static final String CUSTOM_SEARCH_KEY = "AIzaSyA3A0UsXI6lgAGVxtKsT2XLAh-ahDbElTk";
     private static final String CUSTOM_SEARCH_CX = "003716044463688473868%3A-2hh_9a9o0u";
 
     private CustomSearchAdapter mAdapter;
-    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +58,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
         });
 
         mAdapter = new CustomSearchAdapter(this);
-        mListView = (ListView)findViewById(R.id.list_view);
+        ListView mListView = (ListView) findViewById(R.id.list_view);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
 
@@ -109,7 +108,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
                                                 mAdapter.notifyDataSetChanged();
                                                 //mImageView.setImageBitmap(bitmap);
                                             }
-                                        }, 0, 0, null,
+                                        }, 0, 0, ImageView.ScaleType.CENTER_INSIDE, null,
                                         new Response.ErrorListener() {
                                             public void onErrorResponse(VolleyError error) {
                                                 SingleImage image = new SingleImage(null, null);
@@ -146,7 +145,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
         onBackPressed();
     }
 
-    public boolean saveBitmapToFile(SingleImage image) {
+    private void saveBitmapToFile(SingleImage image) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String dir = prefs.getString("local_pictures", this.getString(R.string.default_local_pictures));
         String fileName = image.getName() + ".png";
@@ -161,12 +160,9 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(imageFile);
-
             bm.compress(Bitmap.CompressFormat.PNG, 80, fos);
-
             fos.close();
 
-            return true;
         }
         catch (IOException e) {
             Log.e("app", e.getMessage());
@@ -178,6 +174,5 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
                 }
             }
         }
-        return false;
     }
 }

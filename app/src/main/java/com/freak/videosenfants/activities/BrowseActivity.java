@@ -14,10 +14,8 @@ import com.freak.videosenfants.elements.ApplicationSingleton;
 
 public abstract class BrowseActivity extends AppCompatActivity implements AdapterView.OnItemLongClickListener {
 
-    private static final String TAG = BrowseActivity.class.getSimpleName();
-
-    protected VideoElement mCurrent;
-    protected String mRoot = "root";
+    VideoElement mCurrent;
+    String mRoot = "root";
     private Dialog mDialog;
 
     @Override
@@ -51,7 +49,7 @@ public abstract class BrowseActivity extends AppCompatActivity implements Adapte
         }
     }
 
-    protected void prepareContextMenu(final AdapterView<?> parent, final int position) {
+    void prepareContextMenu(final AdapterView<?> parent, final int position) {
         Button imageButton = (Button) mDialog.findViewById(R.id.image_button);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +70,7 @@ public abstract class BrowseActivity extends AppCompatActivity implements Adapte
         });
     }
 
-    public Dialog getDialog() {
+    Dialog getDialog() {
         return mDialog;
     }
 

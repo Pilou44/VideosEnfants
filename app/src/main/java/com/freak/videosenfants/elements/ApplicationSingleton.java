@@ -10,7 +10,7 @@ public class ApplicationSingleton {
     private final Context mContext;
     private boolean mParentMode;
 
-    public ApplicationSingleton(Context context) {
+    private ApplicationSingleton(Context context) {
         mParentMode = false;
         mContext = context;
     }

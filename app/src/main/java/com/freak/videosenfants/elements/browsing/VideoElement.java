@@ -18,14 +18,14 @@ import wseemann.media.FFmpegMediaMetadataRetriever;
 public class VideoElement {
 
     private static final boolean DEBUG = true;
-    protected static final String TAG = VideoElement.class.getSimpleName();
+    private static final String TAG = VideoElement.class.getSimpleName();
 
-    private Context mContext;
-    private boolean mDirectory;
+    private final Context mContext;
+    private final boolean mDirectory;
     private Drawable mIcon;
-    private String mPath;
+    private final String mPath;
     private String mName;
-    private VideoElement mParent;
+    private final VideoElement mParent;
     private Long mSize;
     private String mPathFromRoot;
 
@@ -112,7 +112,7 @@ public class VideoElement {
         return null;
     }
 
-    protected void generateScreenshot() {
+    void generateScreenshot() {
         Drawable ret = getDrawableForElement();
         if (ret != null) {
             mIcon = ret;

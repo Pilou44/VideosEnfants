@@ -37,4 +37,6 @@
     <string name="developed_by">D&#233;velopp&#233; par Guillaume B&#233;guin (guillaume.beguin@gmail.com)</string>
     <string name="modules_list">Cette application utilise les projets open sources suivants :\n</string>
     <string name="action_about">&#192; propos</string>
+    <string name="pref_add_button">Ajouter</string>
+    <string name="select_directory">S&#233;lectionnez un dossier :</string>
 </resources>
