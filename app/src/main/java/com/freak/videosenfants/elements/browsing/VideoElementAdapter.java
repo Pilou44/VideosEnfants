@@ -21,7 +21,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
     private static final String TAG = VideoElementAdapter.class.getSimpleName();
 
     private final Context mContext;
-    private final Vector<AsyncTask> tasks;
+    private final Vector<MyAsync> tasks;
 
     public VideoElementAdapter(Context context, List<VideoElement> elements) {
         super(context, 0, elements);
@@ -64,12 +64,18 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
             }
             else {
                 viewHolder.subIcon.setImageDrawable(mContext.getDrawable(R.drawable.empty));
+
                 if (DEBUG)
                     Log.i(TAG, "Create new task for " + element.getName() +" in view " + viewHolder.subIcon);
+
                 viewHolder.subIcon.setTag(element);
+                cancelPreviousTasks(element);
                 MyAsync task = new MyAsync(viewHolder.subIcon);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, element);
                 tasks.add(task);
+
+                if (DEBUG)
+                    Log.i(TAG, tasks.size() + " tasks launched");
             }
         }
         else {
@@ -79,16 +85,37 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
             }
             else {
                 viewHolder.icon.setImageDrawable(mContext.getDrawable(R.drawable.fichier));
+
                 if (DEBUG)
                     Log.i(TAG, "Create new task for " + element.getName());
+
                 viewHolder.icon.setTag(element);
+                cancelPreviousTasks(element);
                 MyAsync task = new MyAsync(viewHolder.icon);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, element);
                 tasks.add(task);
+
+                if (DEBUG)
+                    Log.i(TAG, tasks.size() + " tasks launched");
             }
         }
 
         return convertView;
+    }
+
+    private void cancelPreviousTasks(VideoElement element) {
+        if (DEBUG)
+            Log.i(TAG, "Cancel previous tasks for " + element.getName());
+
+        for (int i = 0 ; i < tasks.size() ; i++) {
+            if (tasks.get(i).getPath().equals(element)){
+                tasks.get(i).cancel(true);
+                tasks.remove(i);
+            }
+        }
+
+        if (DEBUG)
+            Log.i(TAG, tasks.size() + " tasks remaining");
     }
 
     @Override
@@ -115,6 +142,11 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
     public class MyAsync extends AsyncTask<VideoElement, Void, VideoElement> {
 
         private final ImageView mView;
+
+        public Object getPath() {
+            return mPath;
+        }
+
         private final Object mPath;
 
         public MyAsync(ImageView view) {
