@@ -15,8 +15,8 @@ import java.util.List;
 
 public class DestSpinnerAdapter extends ArrayAdapter<File> {
 
-    public DestSpinnerAdapter(Context context, int id, List<File> list) {
-        super(context, id, list);
+    public DestSpinnerAdapter(Context context, List<File> list) {
+        super(context, android.R.layout.simple_spinner_item, list);
     }
 
     @Override

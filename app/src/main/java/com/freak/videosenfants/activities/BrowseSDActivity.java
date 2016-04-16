@@ -38,8 +38,8 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
     private Vector<File> mRoots;
     private VideoElement mRootElement;
 
-    private String[] mExtensions = {"avi" , "mkv", "wmv", "mpg", "mpeg", "mp4"};
-    private Set<String> mSet = new HashSet<>(Arrays.asList(mExtensions));
+    private final String[] mExtensions = {"avi" , "mkv", "wmv", "mpg", "mpeg", "mp4"};
+    private final Set<String> mSet = new HashSet<>(Arrays.asList(mExtensions));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,7 +232,6 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
 
     @Override
     protected void prepareContextMenu(final AdapterView<?> parent, final int position) {
-        Log.i(TAG, "prepareContexMenu SD");
         super.prepareContextMenu(parent, position);
         Button deleteButton = (Button) getDialog().findViewById(R.id.delete_button);
         deleteButton.setOnClickListener(new View.OnClickListener() {

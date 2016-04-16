@@ -21,7 +21,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
     private static final String TAG = VideoElementAdapter.class.getSimpleName();
 
     private final Context mContext;
-    private Vector<AsyncTask> tasks;
+    private final Vector<AsyncTask> tasks;
 
     public VideoElementAdapter(Context context, List<VideoElement> elements) {
         super(context, 0, elements);
@@ -112,7 +112,6 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
         public ImageView subIcon;
     }
 
-    //This version is still not working, but it's more readable (edited: Selvin).
     public class MyAsync extends AsyncTask<VideoElement, Void, VideoElement> {
 
         private final ImageView mView;

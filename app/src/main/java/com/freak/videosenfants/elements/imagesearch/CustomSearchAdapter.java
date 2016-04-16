@@ -10,18 +10,9 @@ import android.widget.ImageView;
 
 import com.freak.videosenfants.R;
 
-import java.util.List;
-
 public class CustomSearchAdapter extends ArrayAdapter<SingleImage> {
 
-    private static final boolean DEBUG = true;
-    private static final String TAG = CustomSearchAdapter.class.getSimpleName();
     private final Context mContext;
-
-    public CustomSearchAdapter(Context context, List<SingleImage> elements) {
-        super(context, 0, elements);
-        mContext = context;
-    }
 
     public CustomSearchAdapter(Context context) {
         super(context, 0);

@@ -60,12 +60,12 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     private ListView mListView;
     private Handler mHandler;
     private RemoteService mService;
-    private BrowseRegistryListener mRegistryListener = new BrowseRegistryListener();
+    private final BrowseRegistryListener mRegistryListener = new BrowseRegistryListener();
     private AndroidUpnpService mUpnpService;
     private VideoElementAdapter mAdapter;
     private ProgressDialog mDialog;
     private int mIndex;
-    private boolean mBinded;
+    private boolean mBound;
 
     // Used for copy
     private Spinner mDest;
@@ -73,7 +73,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     private String mSelected;
 
     private boolean[] mTestedDlnas;
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, IBinder service) {
             if (DEBUG)
@@ -165,7 +165,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
         // Logger.getLogger("org.fourthline.cling").setLevel(Level.FINEST);
 
         mHandler = new Handler();
-        mBinded = false;
+        mBound = false;
 
         mListView = (ListView) findViewById(R.id.listView);
         mListView.setOnItemClickListener(this);
@@ -210,7 +210,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                         mServiceConnection,
                         BIND_AUTO_CREATE
                 );
-                mBinded = true;
+                mBound = true;
 
                 mDialog = ProgressDialog.show(this, getString(R.string.dlna_progress_dialog_title), getString(R.string.dlna_progress_dialog_text), true, true, this);
                 mDialog.setCanceledOnTouchOutside(false);
@@ -249,7 +249,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
             mUpnpService.getRegistry().removeListener(mRegistryListener);
         }
         // This will stop the UPnP service if nobody else is bound to it
-        if (mBinded) {
+        if (mBound) {
             getApplicationContext().unbindService(mServiceConnection);
         }
     }
@@ -418,7 +418,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                     AlertDialog dialog = builder.create();
                     dialog.show();
                     mDest = (Spinner) dialog.findViewById(R.id.copy_dest);
-                    DestSpinnerAdapter adapter = new DestSpinnerAdapter(BrowseDlnaActivity.this, android.R.layout.simple_spinner_item, BrowseSDActivity.getLocalRoots(BrowseDlnaActivity.this));
+                    DestSpinnerAdapter adapter = new DestSpinnerAdapter(BrowseDlnaActivity.this, BrowseSDActivity.getLocalRoots(BrowseDlnaActivity.this));
                     mDest.setAdapter(adapter);
                     mSrc = element.getPath();
                     mSelected = element.getName();
@@ -515,7 +515,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
         downloadManager.enqueue(request);
     }
 
-    protected class BrowseRegistryListener extends DefaultRegistryListener {
+    class BrowseRegistryListener extends DefaultRegistryListener {
 
         @Override
         public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device) {

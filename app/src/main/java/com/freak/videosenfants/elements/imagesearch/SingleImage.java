@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 public class SingleImage {
     private final String mName;
-    private Bitmap mImage1;
+    private final Bitmap mImage1;
 
     public SingleImage(Bitmap image1, String name){
         mImage1 = image1;
