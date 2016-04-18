@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ThumbnailUtils;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -69,7 +70,7 @@ public class VideoElement {
         return mParent;
     }
 
-    private Drawable getDrawableForElement() {
+    private Bitmap getBitmapForElement() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
         File picturesLocation = new File(sharedPref.getString("local_pictures", mContext.getString(R.string.default_local_pictures)));
@@ -99,25 +100,30 @@ public class VideoElement {
             File picJpeg = new File(picturesLocation, fileNameJpeg);
 
             if (picPng.exists()) {
-                Bitmap bMap = BitmapFactory.decodeFile(picPng.getAbsolutePath());
-                return new BitmapDrawable(mContext.getResources(), bMap);
+                return BitmapFactory.decodeFile(picPng.getAbsolutePath());
             } else if (picJpg.exists()) {
-                Bitmap bMap = BitmapFactory.decodeFile(picJpg.getAbsolutePath());
-                return new BitmapDrawable(mContext.getResources(), bMap);
+                return BitmapFactory.decodeFile(picJpg.getAbsolutePath());
             } else if (picJpeg.exists()) {
-                Bitmap bMap = BitmapFactory.decodeFile(picJpeg.getAbsolutePath());
-                return new BitmapDrawable(mContext.getResources(), bMap);
+                return BitmapFactory.decodeFile(picJpeg.getAbsolutePath());
             }
         }
         return null;
     }
 
     void generateScreenshot() {
+        if (DEBUG)
+            Log.i(TAG, "Generate thumbnail for " + mName);
+
+        int pxWidth = mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_width);
+        int pxHeight = mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_height);
+
         if (mIcon == null) {
-            Drawable ret = getDrawableForElement();
-            if (ret != null) {
-                mIcon = ret;
-            } else {
+            Bitmap bmp = getBitmapForElement();
+            if (bmp != null) {
+                mIcon = new BitmapDrawable(mContext.getResources(), Bitmap.createScaledBitmap(bmp, pxWidth, pxHeight, false));
+                bmp.recycle();
+            }
+            else {
                 if (DEBUG) {
                     Log.i(TAG, "No local image found");
                 }
@@ -128,7 +134,6 @@ public class VideoElement {
                         Log.i(TAG, "Try to extract thumbnail");
                     }
 
-                    Bitmap bmp = null;
                     try {
                         FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
                         mmr.setDataSource(mPath);
@@ -143,7 +148,7 @@ public class VideoElement {
                     if (bmp == null) {
                         mIcon = mContext.getResources().getDrawable(R.drawable.fichier, null);
                     } else {
-                        mIcon = new BitmapDrawable(mContext.getResources(), bmp);
+                        mIcon = new BitmapDrawable(mContext.getResources(), ThumbnailUtils.extractThumbnail(bmp, pxWidth, pxHeight, ThumbnailUtils.OPTIONS_RECYCLE_INPUT));
                     }
 
                     if (DEBUG) {
@@ -172,4 +177,5 @@ public class VideoElement {
     public String getPathFromRoot(){
         return mPathFromRoot;
     }
+
 }
