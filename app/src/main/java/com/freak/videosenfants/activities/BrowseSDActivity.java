@@ -222,7 +222,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
             Log.i(TAG, "Parent = " + mCurrent.getParent().getPath());
             mAllFiles.removeAllElements();
             mCurrent = element;
-            addFilesToList(new File(element.getPath()), mCurrent.getParent());
+            addFilesToList(new File(mCurrent.getPath()), mCurrent);
             mAdapter.notifyDataSetChanged();
             mListView.setSelectionAfterHeaderView();
         }
