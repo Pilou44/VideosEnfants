@@ -1,0 +1,15 @@
+<!-- Animation frames are wheel0.png through wheel5.png
+    files inside the res/drawable/ folder -->
+<animation-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loading"
+    android:oneshot="false">
+    <item android:drawable="@drawable/loading1" android:duration="50" />
+    <item android:drawable="@drawable/loading2" android:duration="50" />
+    <item android:drawable="@drawable/loading3" android:duration="50" />
+    <item android:drawable="@drawable/loading4" android:duration="50" />
+    <item android:drawable="@drawable/loading5" android:duration="50" />
+    <item android:drawable="@drawable/loading6" android:duration="50" />
+    <item android:drawable="@drawable/loading7" android:duration="50" />
+    <item android:drawable="@drawable/loading8" android:duration="50" />
+</animation-list>
