@@ -69,9 +69,8 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
                     Log.i(TAG, "Create new task for " + element.getName() +" in view " + viewHolder.subIcon);
 
                 viewHolder.subIcon.setTag(element);
-                cancelPreviousTasks(element);
                 MyAsync task = new MyAsync(viewHolder.subIcon);
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, element);
+                task.execute(element);
                 tasks.add(task);
 
                 if (DEBUG)
@@ -90,9 +89,8 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
                     Log.i(TAG, "Create new task for " + element.getName());
 
                 viewHolder.icon.setTag(element);
-                cancelPreviousTasks(element);
                 MyAsync task = new MyAsync(viewHolder.icon);
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, element);
+                task.execute(element);
                 tasks.add(task);
 
                 if (DEBUG)
@@ -101,21 +99,6 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
         }
 
         return convertView;
-    }
-
-    private void cancelPreviousTasks(VideoElement element) {
-        if (DEBUG)
-            Log.i(TAG, "Cancel previous tasks for " + element.getName());
-
-        for (int i = 0 ; i < tasks.size() ; i++) {
-            if (tasks.get(i).getPath().equals(element)){
-                tasks.get(i).cancel(true);
-                tasks.remove(i);
-            }
-        }
-
-        if (DEBUG)
-            Log.i(TAG, tasks.size() + " tasks remaining");
     }
 
     @Override
