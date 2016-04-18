@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.elements.ApplicationSingleton;
 import com.freak.videosenfants.elements.imagesearch.CustomSearchAdapter;
 import com.freak.videosenfants.elements.imagesearch.CustomSearchSingleton;
 import com.freak.videosenfants.elements.imagesearch.SingleImage;
@@ -41,13 +43,14 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
     private static final String CUSTOM_SEARCH_CX = "003716044463688473868%3A-2hh_9a9o0u";
 
     private CustomSearchAdapter mAdapter;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_search);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +73,16 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
         }
 
         getImages(search, name);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (ApplicationSingleton.getInstance(this).isParentMode())
+            mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorParent));
+        else
+            mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
     }
 
     private void getImages(String search, final String name) {

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.elements.ApplicationSingleton;
 import com.freak.videosenfants.elements.browsing.VideoElement;
 import com.freak.videosenfants.elements.browsing.VideoElementAdapter;
 
@@ -40,13 +42,14 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
 
     private final String[] mExtensions = {"avi" , "mkv", "wmv", "mpg", "mpeg", "mp4"};
     private final Set<String> mSet = new HashSet<>(Arrays.asList(mExtensions));
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse_sd);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +98,12 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
     @Override
     protected void onResume() {
         super.onResume();
+        
+        if (ApplicationSingleton.getInstance(this).isParentMode())
+            mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorParent));
+        else
+            mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+
         mAllFiles.removeAllElements();
         if (mCurrent.equals(mRootElement)) {
             addFilesToList(mRoots, mCurrent);
