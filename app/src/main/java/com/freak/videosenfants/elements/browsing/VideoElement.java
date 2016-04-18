@@ -120,7 +120,20 @@ public class VideoElement {
         if (mIcon == null) {
             Bitmap bmp = getBitmapForElement();
             if (bmp != null) {
-                mIcon = new BitmapDrawable(mContext.getResources(), Bitmap.createScaledBitmap(bmp, pxWidth, pxHeight, false));
+                int srcWidth = bmp.getWidth();
+                int srcHeight = bmp.getHeight();
+                int destWidth;
+                int destHeight;
+
+                destWidth = pxWidth;
+                destHeight = (srcHeight * pxWidth) / srcWidth;
+
+                if (destHeight > pxHeight){
+                    destHeight = pxHeight;
+                    destWidth = (srcWidth * pxHeight) / srcHeight;
+                }
+
+                mIcon = new BitmapDrawable(mContext.getResources(), Bitmap.createScaledBitmap(bmp, destWidth, destHeight, false));
                 bmp.recycle();
             }
             else {
