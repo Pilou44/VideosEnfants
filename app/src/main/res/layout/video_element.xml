@@ -8,13 +8,13 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="150dp"
-        android:layout_height="120dp"
+        android:layout_width="@dimen/thumbnail_width"
+        android:layout_height="@dimen/thumbnail_height"
         android:scaleType="fitCenter"
         />
     <RelativeLayout
-        android:layout_width="150dp"
-        android:layout_height="120dp"
+        android:layout_width="@dimen/thumbnail_width"
+        android:layout_height="@dimen/thumbnail_height"
         android:layout_alignBottom="@+id/icon"
         android:layout_alignLeft="@+id/icon"
         android:padding="5dp">
