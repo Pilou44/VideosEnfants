@@ -128,10 +128,17 @@ public class VideoElement {
                         Log.i(TAG, "Try to extract thumbnail");
                     }
 
-                    FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
-                    mmr.setDataSource(mPath);
-                    Bitmap bmp = mmr.getFrameAtTime(120000000); // frame at 120 seconds
-                    mmr.release();
+                    Bitmap bmp = null;
+                    try {
+                        FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
+                        mmr.setDataSource(mPath);
+                        bmp = mmr.getFrameAtTime(120000000); // frame at 120 seconds
+                        mmr.release();
+                    }
+                    catch (IllegalArgumentException e) {
+                        Log.e(TAG, "Error ith source (" + mPath + ")");
+                        e.printStackTrace();
+                    }
 
                     if (bmp == null) {
                         mIcon = mContext.getResources().getDrawable(R.drawable.fichier, null);
