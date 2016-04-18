@@ -1,6 +1,7 @@
 package com.freak.videosenfants.elements.browsing;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,6 +49,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
             viewHolder.icon = (ImageView) convertView.findViewById(R.id.icon);
             viewHolder.subIcon = (ImageView) convertView.findViewById(R.id.sub_icon);
+            viewHolder.animation = (ImageView) convertView.findViewById(R.id.animation);
             convertView.setTag(viewHolder);
         }
 
@@ -63,13 +65,22 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
                 viewHolder.subIcon.setImageDrawable(element.getIcon());
             }
             else {
+                viewHolder.animation.setVisibility(View.VISIBLE);
+                final VideoElementHolder finalViewHolder = viewHolder;
+                viewHolder.animation.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        AnimationDrawable frameAnimation = (AnimationDrawable) finalViewHolder.animation.getBackground();
+                        frameAnimation.start();
+                    }
+                });
                 viewHolder.subIcon.setImageDrawable(mContext.getDrawable(R.drawable.empty));
 
                 if (DEBUG)
                     Log.i(TAG, "Create new task for " + element.getName() +" in view " + viewHolder.subIcon);
 
                 viewHolder.subIcon.setTag(element);
-                MyAsync task = new MyAsync(viewHolder.subIcon);
+                MyAsync task = new MyAsync(viewHolder.subIcon, viewHolder.animation);
                 task.execute(element);
                 tasks.add(task);
 
@@ -83,13 +94,22 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
                 viewHolder.icon.setImageDrawable(element.getIcon());
             }
             else {
+                viewHolder.animation.setVisibility(View.VISIBLE);
+                final VideoElementHolder finalViewHolder = viewHolder;
+                viewHolder.animation.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        AnimationDrawable frameAnimation = (AnimationDrawable) finalViewHolder.animation.getBackground();
+                        frameAnimation.start();
+                    }
+                });
                 viewHolder.icon.setImageDrawable(mContext.getDrawable(R.drawable.fichier));
 
                 if (DEBUG)
                     Log.i(TAG, "Create new task for " + element.getName());
 
                 viewHolder.icon.setTag(element);
-                MyAsync task = new MyAsync(viewHolder.icon);
+                MyAsync task = new MyAsync(viewHolder.icon, viewHolder.animation);
                 task.execute(element);
                 tasks.add(task);
 
@@ -120,11 +140,13 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
         public TextView name;
         public ImageView icon;
         public ImageView subIcon;
+        public ImageView animation;
     }
 
     public class MyAsync extends AsyncTask<VideoElement, Void, VideoElement> {
 
         private final ImageView mView;
+        private final ImageView mAnimation;
 
         public Object getPath() {
             return mPath;
@@ -132,9 +154,10 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
 
         private final Object mPath;
 
-        public MyAsync(ImageView view) {
+        public MyAsync(ImageView view, ImageView animation) {
             mView = view;
             mPath = view.getTag();
+            mAnimation = animation;
         }
 
         @Override
@@ -161,6 +184,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
             if (DEBUG)
                 Log.i(TAG, "Update view " + mView + " for " + element.getName());
             mView.setImageDrawable(element.getIcon());
+            mAnimation.setVisibility(View.GONE);
         }
 
     }
