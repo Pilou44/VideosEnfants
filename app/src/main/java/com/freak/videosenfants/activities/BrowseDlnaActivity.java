@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -66,6 +67,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     private ProgressDialog mDialog;
     private int mIndex;
     private boolean mBound;
+    private Toolbar mToolbar;
 
     // Used for copy
     private Spinner mDest;
@@ -144,8 +146,8 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse_dlna);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -182,6 +184,11 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (ApplicationSingleton.getInstance(this).isParentMode())
+            mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorParent));
+        else
+            mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
         if (DEBUG)
             Log.i(TAG, "Test WiFi connexion");
@@ -237,6 +244,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.no_wifi_connexion);
             builder.setNeutralButton(R.string.ok, this);
+            builder.setCancelable(false);
             AlertDialog alert = builder.create();
             alert.show();
         }

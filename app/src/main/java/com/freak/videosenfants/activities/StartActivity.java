@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,13 +24,14 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private ImageButton mMaison;
     private ImageButton mOptions;
     private MenuItem mParentMode;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         mMaison = (ImageButton) findViewById(R.id.maison);
         mMaison.setOnClickListener(this);
@@ -102,10 +104,18 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 ApplicationSingleton.getInstance(this).setParentMode(mParentMode.isChecked());
                 if (DEBUG)
                     Log.i(TAG, "Parent mode: " + ApplicationSingleton.getInstance(this).isParentMode());
+                updateParentMode(ApplicationSingleton.getInstance(this).isParentMode());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void updateParentMode(boolean parentMode) {
+        if (parentMode)
+            mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorParent));
+        else
+            mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
     }
 
     @Override
