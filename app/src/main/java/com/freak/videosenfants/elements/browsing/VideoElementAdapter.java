@@ -58,10 +58,21 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
 
         //il ne reste plus qu'à remplir notre vue
         viewHolder.name.setText(element.getName());
+        viewHolder.icon.setTag(element.getName());
+        viewHolder.subIcon.setTag(element.getName());
         if (element.isDirectory()) {
             viewHolder.subIcon.setVisibility(View.VISIBLE);
             viewHolder.icon.setImageDrawable(convertView.getContext().getResources().getDrawable(R.drawable.dossier, null));
             if (element.getIcon() != null) {
+                final VideoElementHolder finalViewHolder = viewHolder;
+                viewHolder.animation.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        AnimationDrawable frameAnimation = (AnimationDrawable) finalViewHolder.animation.getBackground();
+                        frameAnimation.stop();
+                    }
+                });
+                viewHolder.animation.setVisibility(View.GONE);
                 viewHolder.subIcon.setImageDrawable(element.getIcon());
             }
             else {
@@ -77,10 +88,9 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
                 viewHolder.subIcon.setImageDrawable(mContext.getDrawable(R.drawable.empty));
 
                 if (DEBUG)
-                    Log.i(TAG, "Create new task for " + element.getName() +" in view " + viewHolder.subIcon);
+                    Log.i(TAG, "Create new task for " + element.getName() + " at position " + position);
 
-                viewHolder.subIcon.setTag(element);
-                MyAsync task = new MyAsync(viewHolder.subIcon, viewHolder.animation);
+                MyAsync task = new MyAsync(viewHolder.subIcon, viewHolder.animation, tasks.size());
                 task.execute(element);
                 tasks.add(task);
 
@@ -91,6 +101,15 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
         else {
             viewHolder.subIcon.setVisibility(View.GONE);
             if (element.getIcon() != null) {
+                final VideoElementHolder finalViewHolder = viewHolder;
+                viewHolder.animation.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        AnimationDrawable frameAnimation = (AnimationDrawable) finalViewHolder.animation.getBackground();
+                        frameAnimation.stop();
+                    }
+                });
+                viewHolder.animation.setVisibility(View.GONE);
                 viewHolder.icon.setImageDrawable(element.getIcon());
             }
             else {
@@ -106,10 +125,9 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
                 viewHolder.icon.setImageDrawable(mContext.getDrawable(R.drawable.fichier));
 
                 if (DEBUG)
-                    Log.i(TAG, "Create new task for " + element.getName());
+                    Log.i(TAG, "Create new task for " + element.getName() + " at position " + position);
 
-                viewHolder.icon.setTag(element);
-                MyAsync task = new MyAsync(viewHolder.icon, viewHolder.animation);
+                MyAsync task = new MyAsync(viewHolder.icon, viewHolder.animation, tasks.size());
                 task.execute(element);
                 tasks.add(task);
 
@@ -126,7 +144,10 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
         if (DEBUG)
             Log.i(TAG, "" + tasks.size() + " tasks have been launched");
         for (int i = 0 ; i < tasks.size() ; i++) {
-            if (tasks.get(i).getStatus().equals(AsyncTask.Status.RUNNING)){
+            if (!tasks.get(i).getStatus().equals(AsyncTask.Status.FINISHED)){
+                if (DEBUG) {
+                    Log.i(TAG, "Cancel task " + i);
+                }
                 tasks.get(i).cancel(true);
             }
         }
@@ -147,44 +168,48 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
 
         private final ImageView mView;
         private final ImageView mAnimation;
+        private final int mNumber;
 
-        public Object getPath() {
-            return mPath;
-        }
-
-        private final Object mPath;
-
-        public MyAsync(ImageView view, ImageView animation) {
+        public MyAsync(ImageView view, ImageView animation, int number) {
             mView = view;
-            mPath = view.getTag();
             mAnimation = animation;
+            mNumber = number;
         }
 
         @Override
         protected VideoElement doInBackground(VideoElement... element) {
             if (DEBUG)
-                Log.i(TAG, "Load image for " + element[0].getName() + " in view " + mView);
+                Log.i(TAG, "Task " + mNumber + ": Load image for " + element[0].getName());
             element[0].generateScreenshot();
             return element[0];
-            //return ThumbnailUtils.createVideoThumbnail(objectURL[0], Thumbnails.MINI_KIND);
-            //return ThumbnailUtils.extractThumbnail(ThumbnailUtils.createVideoThumbnail(objectURL[0], MediaStore.Images.Thumbnails.MINI_KIND), 100, 100);
-            //return generateScreenshot(element[0]);
         }
 
         @Override
         protected void onPostExecute(VideoElement element){
+            if (DEBUG)
+                Log.i(TAG, "Task " + mNumber + ": View tag is " + mView.getTag());
 
-            if (!mView.getTag().equals(mPath)) {
+            if (mView.getTag().equals(element.getName())) {
+                if (DEBUG)
+                    Log.i(TAG, "Task " + mNumber + ": Update view for " + element.getName());
+
+                mAnimation.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        AnimationDrawable frameAnimation = (AnimationDrawable) mAnimation.getBackground();
+                        frameAnimation.stop();
+                    }
+                });
+                mAnimation.setVisibility(View.GONE);
+                mView.setImageDrawable(element.getIcon());
+            }
+            else {
                /* The path is not same. This means that this
                   image view is handled by some other async task.
                   We don't do anything and return. */
-                return;
+                if (DEBUG)
+                    Log.i(TAG, "Task " + mNumber + ": Cancel update view for " + element.getName());
             }
-
-            if (DEBUG)
-                Log.i(TAG, "Update view " + mView + " for " + element.getName());
-            mView.setImageDrawable(element.getIcon());
-            mAnimation.setVisibility(View.GONE);
         }
 
     }
