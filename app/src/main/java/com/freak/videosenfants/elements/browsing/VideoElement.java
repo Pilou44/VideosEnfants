@@ -111,14 +111,15 @@ public class VideoElement {
     }
 
     void generateScreenshot() {
-        if (DEBUG)
-            Log.i(TAG, "Generate thumbnail for " + mName);
 
-        int pxWidth = mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_width);
-        int pxHeight = mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_height);
+       if (mIcon == null) {
+            if (DEBUG)
+                Log.i(TAG, "Generate thumbnail for " + mName);
 
-        if (mIcon == null) {
-            Bitmap bmp = getBitmapForElement();
+           int pxWidth = mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_width);
+           int pxHeight = mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_height);
+
+           Bitmap bmp = getBitmapForElement();
             if (bmp != null) {
                 int srcWidth = bmp.getWidth();
                 int srcHeight = bmp.getHeight();
