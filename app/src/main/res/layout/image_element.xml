@@ -11,7 +11,8 @@
         <ImageView
             android:id="@+id/image_1"
             android:layout_width="300dp"
-            android:layout_height="240dp" />
+            android:layout_height="240dp"
+            android:contentDescription="@string/download_image_description" />
     <!--</LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
