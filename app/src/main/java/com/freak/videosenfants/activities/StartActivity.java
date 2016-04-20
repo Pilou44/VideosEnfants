@@ -46,6 +46,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
+
+        updateParentMode(ApplicationSingleton.getInstance(this).isParentMode());
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         
         if (sharedPreferences.getBoolean(getString(R.string.key_local_switch), getResources().getBoolean(R.bool.default_switch_local))) {
