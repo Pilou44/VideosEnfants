@@ -2,13 +2,14 @@ package com.freak.videosenfants.elements.preferences;
 
 import java.io.File;
 
-public class FileElement {
+class FileElement {
 
-    private final String mName;
-    private File mFile;
+    private String mName;
+    private final File mFile;
     private boolean mExpanded;
     private int mIndent = 0;
 
+    @SuppressWarnings("WeakerAccess")
     public FileElement(File file) {
         mFile = file;
         mExpanded = false;
@@ -16,19 +17,16 @@ public class FileElement {
     }
 
     public FileElement(File file, int indent) {
-        mFile = file;
-        mExpanded = false;
-        mName = file.getName();
+        this(file);
         mIndent = indent;
     }
 
     public FileElement(File file, String name) {
-        mFile = file;
-        mExpanded = false;
+        this(file);
         mName = name;
     }
 
-    public void setExpanded(boolean expanded) {
+    public void setExpanded(@SuppressWarnings("SameParameterValue") boolean expanded) {
         mExpanded = expanded;
     }
 

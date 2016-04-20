@@ -84,7 +84,7 @@ public class BrowseLocalPreference extends BrowsePreference implements AdapterVi
 
     }
 
-    public static String[] getStorageDirectories()
+    private static String[] getStorageDirectories()
     {
         // Final set of paths
         final Set<String> rv = new HashSet<>();
@@ -124,6 +124,7 @@ public class BrowseLocalPreference extends BrowsePreference implements AdapterVi
                 boolean isDigit = false;
                 try
                 {
+                    //noinspection ResultOfMethodCallIgnored
                     Integer.valueOf(lastFolder);
                     isDigit = true;
                 }
@@ -142,7 +143,7 @@ public class BrowseLocalPreference extends BrowsePreference implements AdapterVi
         }
         // Add all secondary storages
         if(!TextUtils.isEmpty(rawSecondaryStoragesStr)) {
-            // All Secondary SD-CARDs splited into array
+            // All Secondary SD-CARDs split into array
             final String[] rawSecondaryStorages = rawSecondaryStoragesStr.split(File.pathSeparator);
             Collections.addAll(rv, rawSecondaryStorages);
         }

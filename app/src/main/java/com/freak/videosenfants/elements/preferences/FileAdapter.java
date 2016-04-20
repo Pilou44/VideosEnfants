@@ -12,7 +12,7 @@ import com.freak.videosenfants.R;
 
 import java.util.List;
 
-public class FileAdapter extends ArrayAdapter<FileElement> {
+class FileAdapter extends ArrayAdapter<FileElement> {
     private int mSelectedElement;
 
     public FileAdapter(Context context, List<FileElement> elements) {

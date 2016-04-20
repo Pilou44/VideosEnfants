@@ -26,6 +26,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
     private final Context mContext;
     private final Vector<MyAsync> tasks;
 
+    @SuppressWarnings("WeakerAccess")
     public VideoElementAdapter(Context context, List<VideoElement> elements) {
         super(context, 0, elements);
         mContext = context;
@@ -146,6 +147,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
     @Override
     public void clear() {
         for(int i = 0 ; i < getCount() ; i++) {
+            //noinspection EmptyCatchBlock
             try {
                 BitmapDrawable image = ((BitmapDrawable) getItem(i).getIcon());
                 if (image != mContext.getDrawable(R.drawable.fichier) &&
@@ -164,6 +166,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
     public void remove(VideoElement object) {
         super.remove(object);
 
+        //noinspection EmptyCatchBlock
         try {
             BitmapDrawable image = ((BitmapDrawable) object.getIcon());
             if (image != mContext.getDrawable(R.drawable.fichier) &&
@@ -182,19 +185,6 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
 
     @Override
     public void notifyDataSetChanged() {
-        /*for (int i = 0 ; i < this.getCount() ; i++) {
-            try {
-                BitmapDrawable image = ((BitmapDrawable) icon.getDrawable());
-                if (image != mContext.getDrawable(R.drawable.fichier) &&
-                        image != mContext.getDrawable(R.drawable.dossier)) {
-                    image.getBitmap().recycle();
-                    if (DEBUG)
-                        Log.i(TAG, "Bitmap has been recycled");
-                }
-            } catch (NullPointerException | ClassCastException e) {
-            }
-        }*/
-
         if (DEBUG)
             Log.i(TAG, "" + tasks.size() + " tasks have been launched");
         for (int i = 0 ; i < tasks.size() ; i++) {

@@ -6,18 +6,19 @@ import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.meta.RemoteDeviceIdentity;
 import org.fourthline.cling.model.meta.RemoteService;
 
-public class DlnaElement {
+class DlnaElement {
     private static final String TAG = DlnaElement.class.getSimpleName();
     private static final boolean DEBUG = true;
     private RemoteService mService;
-    private String mName;
-    private String mUdn;
-    private String mUrl;
-    private String mPath;
-    private int mMaxAge;
+    private final String mName;
+    private final String mUdn;
+    private final String mUrl;
+    private final String mPath;
+    private final int mMaxAge;
     private boolean mExpanded;
     private int mIndent = 0;
 
+    @SuppressWarnings("WeakerAccess")
     public DlnaElement(String udn, String url, String path, int maxAge, String name, int indent) {
         mUdn = udn;
         mUrl = url;
@@ -63,7 +64,7 @@ public class DlnaElement {
         return mExpanded;
     }
 
-    public void setExpanded(boolean expanded) {
+    public void setExpanded(@SuppressWarnings("SameParameterValue") boolean expanded) {
         mExpanded = expanded;
     }
 
