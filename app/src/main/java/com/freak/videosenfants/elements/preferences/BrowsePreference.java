@@ -22,6 +22,7 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
     private String mDefaultValue = "";
     private boolean mDeletable = false;
 
+    @SuppressWarnings("WeakerAccess")
     public BrowsePreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mContext = context;
@@ -29,6 +30,7 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
         parseAttrs(attrs);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public BrowsePreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
@@ -36,6 +38,7 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
         parseAttrs(attrs);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public BrowsePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
@@ -59,7 +62,7 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
                         mDefaultValue = mContext.getString(Integer.parseInt(temp.substring(1)));
                     }
                     catch (Exception e) {
-                        Log.w(TAG, "Error whiile decoding default value");
+                        Log.w(TAG, "Error while decoding default value");
                     }
                 }
                 else {

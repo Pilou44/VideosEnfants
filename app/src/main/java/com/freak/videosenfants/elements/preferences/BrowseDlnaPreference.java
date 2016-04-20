@@ -38,14 +38,14 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
     private static final String TAG = BrowseDlnaPreference.class.getSimpleName();
 
     private ListView mListView;
-    private Handler mHandler;
+    private final Handler mHandler;
     private DlnaElement mSelectedElement;
     private Vector<DlnaElement> mAllFiles;
     private DlnaAdapter mAdapter;
     private AndroidUpnpService mUpnpService;
-    private BrowseRegistryListener mRegistryListener = new BrowseRegistryListener();
+    private final BrowseRegistryListener mRegistryListener = new BrowseRegistryListener();
 
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             if (DEBUG)
                 Log.i(TAG, "Service connected");
@@ -69,18 +69,21 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
         }
     };
 
+    @SuppressWarnings("WeakerAccess")
     public BrowseDlnaPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         setDialogLayoutResource(R.layout.dlna_preference_dialog);
         mHandler = new Handler();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public BrowseDlnaPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setDialogLayoutResource(R.layout.dlna_preference_dialog);
         mHandler = new Handler();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public BrowseDlnaPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         setDialogLayoutResource(R.layout.dlna_preference_dialog);
@@ -178,7 +181,7 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
         mSelectedElement = element;
     }
 
-    protected class BrowseRegistryListener extends DefaultRegistryListener {
+    class BrowseRegistryListener extends DefaultRegistryListener {
 
         /* Discovery performance optimization for very slow Android devices! */
         @Override
@@ -188,7 +191,6 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
 
         @Override
         public void remoteDeviceDiscoveryFailed(Registry registry, final RemoteDevice device, final Exception ex) {
-            deviceRemoved(device);
         }
         /* End of optimization, you can remove the whole block if your Android handset is fast (>= 600 Mhz) */
 
@@ -199,7 +201,6 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
 
         @Override
         public void remoteDeviceRemoved(Registry registry, RemoteDevice device) {
-            deviceRemoved(device);
         }
 
         @Override
@@ -209,7 +210,6 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
 
         @Override
         public void localDeviceRemoved(Registry registry, LocalDevice device) {
-            deviceRemoved(device);
         }
 
         public void deviceAdded(final Device device) {
@@ -235,17 +235,5 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
                 }
             });
         }
-
-        public void deviceRemoved(final Device device) {
-            /*mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mAdapter.remove(new DlnaElement(device));
-                    mAdapter.notifyDataSetChanged();
-                }
-            });*/
-        }
     }
-
-
 }

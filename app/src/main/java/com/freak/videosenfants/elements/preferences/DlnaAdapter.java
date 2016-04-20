@@ -12,7 +12,7 @@ import com.freak.videosenfants.R;
 
 import java.util.List;
 
-public class DlnaAdapter extends ArrayAdapter<DlnaElement> {
+class DlnaAdapter extends ArrayAdapter<DlnaElement> {
 
     private int mSelectedElement;
 

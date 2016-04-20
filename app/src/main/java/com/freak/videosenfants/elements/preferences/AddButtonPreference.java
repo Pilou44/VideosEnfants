@@ -20,6 +20,7 @@ public class AddButtonPreference extends Preference implements View.OnClickListe
     private int mItemsNumber = 0;
     private SharedPreferences mSharedPref;
 
+    @SuppressWarnings("WeakerAccess")
     public AddButtonPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mContext = context;
@@ -27,6 +28,7 @@ public class AddButtonPreference extends Preference implements View.OnClickListe
         parseAttrs(attrs);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public AddButtonPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
@@ -34,6 +36,7 @@ public class AddButtonPreference extends Preference implements View.OnClickListe
         parseAttrs(attrs);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public AddButtonPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
@@ -97,8 +100,10 @@ public class AddButtonPreference extends Preference implements View.OnClickListe
                 break;
             }
         }
-        if (DEBUG && ret == -1)
-            Log.i(TAG, "No item free");
+        if (ret == -1) {
+            if (DEBUG)
+                Log.i(TAG, "No item free");
+        }
         return ret;
     }
 }
