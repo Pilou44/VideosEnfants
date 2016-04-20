@@ -35,7 +35,6 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
     private static final String TAG = BrowseSDActivity.class.getSimpleName();
 
     private ListView mListView;
-    private Vector<VideoElement> mAllFiles;
     private VideoElementAdapter mAdapter;
     private Vector<File> mRoots;
     private VideoElement mRootElement;
@@ -65,8 +64,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
 
         mRootElement = new VideoElement(true, mRoot, mRoot, null, this);
         mCurrent = mRootElement;
-        mAllFiles = new Vector<>();
-        mAdapter = new VideoElementAdapter(this, mAllFiles);
+        mAdapter = new VideoElementAdapter(this);
 
         mListView = (ListView)findViewById(R.id.listView);
         mListView.setAdapter(mAdapter);
@@ -104,7 +102,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         else
             mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
-        mAllFiles.removeAllElements();
+        mAdapter.clear();
         if (mCurrent.equals(mRootElement)) {
             addFilesToList(mRoots, mCurrent);
         }
@@ -115,45 +113,47 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
     }
 
     private void addFilesToList(Vector<File> filesVector, VideoElement parent) {
+        Vector<File> allFiles = new Vector<>();
         for (int i = 0 ; i < filesVector.size() ; i++) {
-            addFilesToList(filesVector.get(i), parent);
+            File[] files = filesVector.get(i).listFiles(new FileFilter() {
+                @Override
+                public boolean accept(File pathname) {
+                    if (pathname.isDirectory()) {
+                        return true;
+                    }
+                    else {
+                        try {
+                            String extension = pathname.getName().substring(pathname.getName().lastIndexOf(".") + 1);
+                            return mSet.contains(extension);
+                        }
+                        catch (Exception e) {
+                            return false;
+                        }
+                    }
+                }
+            });
+            allFiles.addAll(new HashSet<>(Arrays.asList(files)));
         }
-        sortFiles();
+        Vector<VideoElement> vector = sortFiles(allFiles, parent);
+        mAdapter.clear();
+        mAdapter.addAll(vector);
     }
 
     private void addFilesToList(File file, VideoElement parent) {
-        File[] files = file.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                if (pathname.isDirectory()) {
-                    return true;
-                }
-                else {
-                    try {
-                        String extension = pathname.getName().substring(pathname.getName().lastIndexOf(".") + 1);
-                        return mSet.contains(extension);
-                    }
-                    catch (Exception e) {
-                        return false;
-                    }
-                }
-            }
-        });
-        for (File file1 : files) {
-            mAllFiles.add(new VideoElement(file1, parent, this));
-        }
-        sortFiles();
+        Vector<File> fileVector = new Vector<>();
+        fileVector.add(file);
+        addFilesToList(fileVector, parent);
     }
 
-    private void sortFiles() {
+    private Vector<VideoElement> sortFiles(Vector<File> entries, VideoElement parent) {
         Vector<VideoElement> directories = new Vector<>();
         Vector<VideoElement> files = new Vector<>();
 
-        for (int i = 0; i < mAllFiles.size(); i++) {
-            if (mAllFiles.get(i).isDirectory()) {
-                directories.add(mAllFiles.get(i));
+        for (int i = 0; i < entries.size() ; i++) {
+            if (entries.get(i).isDirectory()) {
+                directories.add(new VideoElement(entries.get(i), parent, this));
             } else {
-                files.add(mAllFiles.get(i));
+                files.add(new VideoElement(entries.get(i), parent, this));
             }
         }
 
@@ -170,13 +170,14 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
             Log.i(TAG, "" + files.size() + " files after sorting");
         }
 
-        mAllFiles.removeAllElements();
+        Vector<VideoElement> allFiles = new Vector<>();
         for (int i = 0; i < directories.size(); i++) {
-            mAllFiles.add(directories.get(i));
+            allFiles.add(directories.get(i));
         }
         for (int i = 0; i < files.size(); i++) {
-            mAllFiles.add(files.get(i));
+            allFiles.add(files.get(i));
         }
+        return allFiles;
     }
 
     private void sort (Vector<VideoElement> files) {
@@ -202,9 +203,8 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        VideoElement element = mAllFiles.get(position);
+        VideoElement element = mAdapter.getItem(position);
         if (element.isDirectory()) {
-            mAllFiles.removeAllElements();
             mCurrent = element;
             addFilesToList(new File(mCurrent.getPath()), mCurrent);
             mAdapter.notifyDataSetChanged();
@@ -218,8 +218,6 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
     }
 
     protected void parseAndUpdate(VideoElement element) {
-        mAllFiles.removeAllElements();
-
         if (element.getPath().equals(mRoot)) {
             Log.i(TAG, "Parent = root");
             mCurrent = mRootElement;
@@ -229,7 +227,6 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         }
         else {
             Log.i(TAG, "Parent = " + mCurrent.getParent().getPath());
-            mAllFiles.removeAllElements();
             mCurrent = element;
             addFilesToList(new File(mCurrent.getPath()), mCurrent);
             mAdapter.notifyDataSetChanged();
@@ -246,7 +243,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final VideoElement element = mAllFiles.get(position);
+                final VideoElement element = mAdapter.getItem(position);
                 Log.i(TAG, "Delete " + element.getPath());
                 getDialog().dismiss();
                 AlertDialog.Builder builder = new AlertDialog.Builder(BrowseSDActivity.this);
@@ -257,7 +254,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
                         File file = new File(element.getPath());
                         if (!file.isDirectory() || file.listFiles().length == 0) {
                             if (file.delete()) {
-                                mAllFiles.removeElementAt(position);
+                                mAdapter.remove(element);
                                 mAdapter.notifyDataSetChanged();
                             }
                         } else {
