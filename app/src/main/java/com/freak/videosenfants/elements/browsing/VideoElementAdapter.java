@@ -2,6 +2,8 @@ package com.freak.videosenfants.elements.browsing;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,7 +64,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
         viewHolder.subIcon.setTag(element.getName());
         if (element.isDirectory()) {
             viewHolder.subIcon.setVisibility(View.VISIBLE);
-            viewHolder.icon.setImageDrawable(convertView.getContext().getResources().getDrawable(R.drawable.dossier, null));
+            setImage(viewHolder.icon, convertView.getContext().getResources().getDrawable(R.drawable.dossier, null));
             if (element.getIcon() != null) {
                 final VideoElementHolder finalViewHolder = viewHolder;
                 viewHolder.animation.post(new Runnable() {
@@ -73,7 +75,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
                     }
                 });
                 viewHolder.animation.setVisibility(View.GONE);
-                viewHolder.subIcon.setImageDrawable(element.getIcon());
+                setImage(viewHolder.subIcon, element.getIcon());
             }
             else {
                 viewHolder.animation.setVisibility(View.VISIBLE);
@@ -85,12 +87,13 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
                         frameAnimation.start();
                     }
                 });
-                viewHolder.subIcon.setImageDrawable(mContext.getDrawable(R.drawable.empty));
+                setImage(viewHolder.subIcon, mContext.getDrawable(R.drawable.empty));
 
                 if (DEBUG)
                     Log.i(TAG, "Create new task for " + element.getName() + " at position " + position);
 
                 MyAsync task = new MyAsync(viewHolder.subIcon, viewHolder.animation, tasks.size());
+                //task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, element);
                 task.execute(element);
                 tasks.add(task);
 
@@ -110,7 +113,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
                     }
                 });
                 viewHolder.animation.setVisibility(View.GONE);
-                viewHolder.icon.setImageDrawable(element.getIcon());
+                setImage(viewHolder.icon, element.getIcon());
             }
             else {
                 viewHolder.animation.setVisibility(View.VISIBLE);
@@ -122,12 +125,13 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
                         frameAnimation.start();
                     }
                 });
-                viewHolder.icon.setImageDrawable(mContext.getDrawable(R.drawable.fichier));
+                setImage(viewHolder.icon, mContext.getDrawable(R.drawable.fichier));
 
                 if (DEBUG)
                     Log.i(TAG, "Create new task for " + element.getName() + " at position " + position);
 
                 MyAsync task = new MyAsync(viewHolder.icon, viewHolder.animation, tasks.size());
+                //task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, element);
                 task.execute(element);
                 tasks.add(task);
 
@@ -140,7 +144,57 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
     }
 
     @Override
+    public void clear() {
+        for(int i = 0 ; i < getCount() ; i++) {
+            try {
+                BitmapDrawable image = ((BitmapDrawable) getItem(i).getIcon());
+                if (image != mContext.getDrawable(R.drawable.fichier) &&
+                        image != mContext.getDrawable(R.drawable.dossier)) {
+                    image.getBitmap().recycle();
+                    if (DEBUG)
+                        Log.i(TAG, "Bitmap for " + getItem(i).getName() + " has been recycled");
+                }
+            } catch (NullPointerException | ClassCastException e) {
+            }
+        }
+        super.clear();
+    }
+
+    @Override
+    public void remove(VideoElement object) {
+        super.remove(object);
+
+        try {
+            BitmapDrawable image = ((BitmapDrawable) object.getIcon());
+            if (image != mContext.getDrawable(R.drawable.fichier) &&
+                    image != mContext.getDrawable(R.drawable.dossier)) {
+                image.getBitmap().recycle();
+                if (DEBUG)
+                    Log.i(TAG, "Bitmap for " + object.getName() + " has been recycled");
+            }
+        } catch (NullPointerException | ClassCastException e) {
+        }
+    }
+
+    private void setImage(ImageView icon, Drawable drawable) {
+        icon.setImageDrawable(drawable);
+    }
+
+    @Override
     public void notifyDataSetChanged() {
+        /*for (int i = 0 ; i < this.getCount() ; i++) {
+            try {
+                BitmapDrawable image = ((BitmapDrawable) icon.getDrawable());
+                if (image != mContext.getDrawable(R.drawable.fichier) &&
+                        image != mContext.getDrawable(R.drawable.dossier)) {
+                    image.getBitmap().recycle();
+                    if (DEBUG)
+                        Log.i(TAG, "Bitmap has been recycled");
+                }
+            } catch (NullPointerException | ClassCastException e) {
+            }
+        }*/
+
         if (DEBUG)
             Log.i(TAG, "" + tasks.size() + " tasks have been launched");
         for (int i = 0 ; i < tasks.size() ; i++) {
@@ -201,7 +255,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
                     }
                 });
                 mAnimation.setVisibility(View.GONE);
-                mView.setImageDrawable(element.getIcon());
+                setImage(mView, element.getIcon());
             }
             else {
                /* The path is not same. This means that this
