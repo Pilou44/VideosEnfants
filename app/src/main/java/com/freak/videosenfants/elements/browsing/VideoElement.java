@@ -93,7 +93,7 @@ public class VideoElement {
     }
 
     private String getThumbnail() {
-        File imageFile = new File(mContext.getExternalCacheDir(), mName + ".png");
+        File imageFile = new File(mContext.getExternalCacheDir(), mName + ".jpg");
 
         if (DEBUG)
             Log.i(TAG, "Thumbnail's path: " + imageFile.getAbsolutePath());
@@ -126,13 +126,13 @@ public class VideoElement {
                 }
                 return null;
             } else {
-                int pxWidth = mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_width);
-                int pxHeight = mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_height);
+                int pxWidth = mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_width) / 2;
+                int pxHeight = mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_height) / 2;
                 bmp = ThumbnailUtils.extractThumbnail(bmp, pxWidth, pxHeight, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
                 FileOutputStream fos = null;
                 try {
                     fos = new FileOutputStream(imageFile);
-                    bmp.compress(Bitmap.CompressFormat.PNG, 80, fos);
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 30, fos);
                     fos.close();
                     bmp.recycle();
                     if (DEBUG) {
