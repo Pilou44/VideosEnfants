@@ -1,19 +1,19 @@
 package com.freak.videosenfants.elements.browsing;
 
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.services.GetThumbnailsService;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class VideoElement {
 
@@ -27,6 +27,32 @@ public class VideoElement {
     private final VideoElement mParent;
     private Long mSize;
     private String mPathFromRoot;
+    private GetThumbnailsService mService;
+    private boolean mBound;
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        public void onServiceDisconnected(ComponentName name) {
+            if (DEBUG) {
+                Log.i(TAG, "Service disconnected");
+            }
+
+            mBound = false;
+            mService = null;
+        }
+
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            if (DEBUG) {
+                Log.i(TAG, "Service connected");
+            }
+
+            mBound = true;
+            GetThumbnailsService.LocalBinder mLocalBinder = (GetThumbnailsService.LocalBinder) service;
+            mService = mLocalBinder.getService();
+            mService.enqueue(VideoElement.this);
+        }
+    };
+
 
     public VideoElement(boolean directory, String path, String name, VideoElement parent, Context context) {
         mContext = context;
@@ -82,83 +108,20 @@ public class VideoElement {
 
     public String getImageURI() {
         String uri = getBitmapURI();
-        if (uri != null) {
-            return uri;
-        }
-        else if (!mDirectory) {
-            return getThumbnail();        }
-        else {
-            return null;
-        }
-    }
-
-    private String getThumbnail() {
-        File imageFile = new File(mContext.getExternalCacheDir(), mName + ".jpg");
-
-        if (DEBUG)
-            Log.i(TAG, "Thumbnail's path: " + imageFile.getAbsolutePath());
-
-        if (imageFile.exists()) {
-            if (DEBUG)
-                Log.i(TAG, "Thumbnail exists in cache");
-            return "file://" + imageFile.getAbsolutePath();
-        }
-        else {
+        if (uri == null && !mDirectory) {
             if (DEBUG) {
-                Log.i(TAG, "Extract new thumbnail");
+                Log.i(TAG, "Try to get cached image");
             }
-
-            Bitmap bmp = null;
-            try {
-                FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
-                mmr.setDataSource(mPath);
-                bmp = mmr.getFrameAtTime(120000000); // frame at 120 seconds
-                mmr.release();
-            }
-            catch (IllegalArgumentException e) {
-                Log.e(TAG, "Error ith source (" + mPath + ")");
-                e.printStackTrace();
-            }
-
-            if (bmp == null) {
+            uri = getCachedBitmapURI();
+            if (uri == null) {
                 if (DEBUG) {
-                    Log.i(TAG, "Error extracting thumbnail");
+                    Log.i(TAG, "No cached image, bind service");
                 }
-                return null;
-            } else {
-                int pxWidth = mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_width) / 2;
-                int pxHeight = mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_height) / 2;
-                bmp = ThumbnailUtils.extractThumbnail(bmp, pxWidth, pxHeight, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(imageFile);
-                    bmp.compress(Bitmap.CompressFormat.JPEG, 30, fos);
-                    fos.close();
-                    bmp.recycle();
-                    if (DEBUG) {
-                        Log.i(TAG, "Thumbnail extracted");
-                    }
-                    return "file://" + imageFile.getAbsolutePath();
-                }
-                catch (IOException e) {
-                    if (DEBUG) {
-                        Log.i(TAG, "Error writing thumbnail");
-                    }
-                    Log.e(TAG, e.getMessage());
-                    if (fos != null) {
-                        try {
-                            fos.close();
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                    return null;
-                }
+                Intent mIntent = new Intent(mContext, GetThumbnailsService.class);
+                mContext.bindService(mIntent, mConnection, Service.BIND_AUTO_CREATE);
             }
-
-
         }
-
+        return uri;
     }
 
     public String getBitmapURI() {
@@ -199,4 +162,25 @@ public class VideoElement {
         }
         return null;
     }
-}
+
+    public String getCachedBitmapURI() {
+        File imageFile = new File(mContext.getExternalCacheDir(), mName + ".jpg");
+        if (imageFile.exists()) {
+            return "file://" + imageFile.getAbsolutePath();
+        }
+        else {
+            return null;
+        }
+    }
+
+    public void unbind() {
+        if(mBound) {
+            if (DEBUG) {
+                Log.i(TAG, "Unbind service");
+            }
+
+            mContext.unbindService(mConnection);
+            mBound = false;
+        }
+    }
+ }
