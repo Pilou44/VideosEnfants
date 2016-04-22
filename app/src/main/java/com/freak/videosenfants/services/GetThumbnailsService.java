@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.elements.ApplicationSingleton;
 import com.freak.videosenfants.elements.browsing.VideoElement;
 
 import java.io.File;
@@ -25,14 +26,13 @@ public class GetThumbnailsService extends Service {
     private IBinder mBinder = new LocalBinder();
 
     private Vector<VideoElement> mQueue;
-    private GetThumbnailsThread mThread;
     private boolean mRunning;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mQueue = new Vector<>();
-        mThread = new GetThumbnailsThread();
+        GetThumbnailsThread mThread = new GetThumbnailsThread();
         mRunning = true;
         mThread.start();
     }
@@ -77,6 +77,13 @@ public class GetThumbnailsService extends Service {
                     if (imageFile.exists()) {
                         if (DEBUG)
                             Log.i(TAG, "Thumbnail exists in cache");
+                        finishElement(element);
+                    }
+                    else if (   element.getPath().startsWith("http") &&
+                                !ApplicationSingleton.getInstance(GetThumbnailsService.this).isWiFiConnected()) {
+                        if (DEBUG) {
+                            Log.i(TAG, "Element is DLNA but WiFi is disconnected");
+                        }
                         finishElement(element);
                     }
                     else {

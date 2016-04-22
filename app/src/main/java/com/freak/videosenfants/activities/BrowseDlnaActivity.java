@@ -8,9 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,12 +25,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.freak.videosenfants.R;
-import com.freak.videosenfants.elements.browsing.RetrieveDeviceThreadListener;
-import com.freak.videosenfants.elements.browsing.RetrieveDeviceThread;
-import com.freak.videosenfants.elements.browsing.VideoElement;
-import com.freak.videosenfants.elements.browsing.VideoElementAdapter;
 import com.freak.videosenfants.elements.ApplicationSingleton;
 import com.freak.videosenfants.elements.browsing.DestSpinnerAdapter;
+import com.freak.videosenfants.elements.browsing.RetrieveDeviceThread;
+import com.freak.videosenfants.elements.browsing.RetrieveDeviceThreadListener;
+import com.freak.videosenfants.elements.browsing.VideoElement;
+import com.freak.videosenfants.elements.browsing.VideoElementAdapter;
 
 import org.fourthline.cling.android.AndroidUpnpService;
 import org.fourthline.cling.android.AndroidUpnpServiceImpl;
@@ -193,20 +190,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
         if (DEBUG)
             Log.i(TAG, "Test WiFi connexion");
 
-        boolean wiFiConnected = false;
-        ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        //NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        Network[] networks = connManager.getAllNetworks();
-        for (Network network : networks) {
-            NetworkInfo info = connManager.getNetworkInfo(network);
-            if (info.getType() == ConnectivityManager.TYPE_WIFI && info.isConnected()) {
-                wiFiConnected = true;
-                if (DEBUG)
-                    Log.i(TAG, "WiFi is connected");
-            }
-        }
-
-        if (wiFiConnected) {
+        if (ApplicationSingleton.getInstance(this).isWiFiConnected()) {
             if (mUpnpService == null || mService == null || mCurrent == null) {
                 if (DEBUG)
                     Log.i(TAG, "Bind service");
