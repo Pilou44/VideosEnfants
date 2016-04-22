@@ -1,6 +1,9 @@
 package com.freak.videosenfants.elements;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 
 import com.freak.videosenfants.R;
 
@@ -51,5 +54,18 @@ public class ApplicationSingleton {
                 }
             }
         }
+    }
+
+    public boolean isWiFiConnected(){
+        boolean wiFiConnected = false;
+        ConnectivityManager connManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        Network[] networks = connManager.getAllNetworks();
+        for (Network network : networks) {
+            NetworkInfo info = connManager.getNetworkInfo(network);
+            if (info.getType() == ConnectivityManager.TYPE_WIFI && info.isConnected()) {
+                wiFiConnected = true;
+            }
+        }
+        return wiFiConnected;
     }
 }
