@@ -70,4 +70,5 @@
     <string name="dlna_description">DLNA/UPnP browsing</string>
     <string name="local_description">Local browsing</string>
     <string name="remove_description">Remove</string>
+    <string name="thumbnails_to_retrieve">thumbnails to retrieve</string>
 </resources>

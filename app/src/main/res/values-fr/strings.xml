@@ -47,4 +47,5 @@
     <string name="dlna_description">Navigation DLNA/UPnP</string>
     <string name="local_description">Navigation locale</string>
     <string name="remove_description">Supprimer</string>
+    <string name="thumbnails_to_retrieve">vignettes &#224; charger</string>
 </resources>

@@ -1,11 +1,13 @@
 package com.freak.videosenfants.services;
 
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.freak.videosenfants.R;
@@ -27,6 +29,9 @@ public class GetThumbnailsService extends Service {
 
     private Vector<VideoElement> mQueue;
     private boolean mRunning;
+    private NotificationCompat.Builder mBuilder;
+    private int mNotificationId;
+    private NotificationManager mNotificationManager;
 
     @Override
     public void onCreate() {
@@ -35,6 +40,14 @@ public class GetThumbnailsService extends Service {
         GetThumbnailsThread mThread = new GetThumbnailsThread();
         mRunning = true;
         mThread.start();
+
+        mNotificationManager =
+                (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
+        mNotificationId = 1;
+        mBuilder = new NotificationCompat.Builder(GetThumbnailsService.this)
+                .setSmallIcon(R.drawable.ic_notif_24dp)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(mQueue.size() + " " + getString(R.string.thumbnails_to_retrieve));
     }
 
     @Override
@@ -64,6 +77,11 @@ public class GetThumbnailsService extends Service {
         public void run() {
             while (mRunning) {
                 if (mQueue.size() > 0){
+                    mBuilder.setContentText(mQueue.size() + " " + getString(R.string.thumbnails_to_retrieve));
+                    mNotificationManager.notify(
+                            mNotificationId,
+                            mBuilder.build());
+
                     VideoElement element = mQueue.get(0);
 
                     if (DEBUG)
@@ -140,6 +158,7 @@ public class GetThumbnailsService extends Service {
                     }
                 }
                 else {
+                    mNotificationManager.cancel(mNotificationId);
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
