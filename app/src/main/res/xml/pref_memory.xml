@@ -1,0 +1,12 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="@string/key_downloaded"
+        android:title="@string/pref_title_downloaded_thumbnails" />
+
+    <Preference
+        android:key="@string/key_cached"
+        android:title="@string/pref_title_cached_thumbnails" />
+
+</PreferenceScreen>

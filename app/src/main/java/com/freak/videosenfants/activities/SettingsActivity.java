@@ -3,6 +3,7 @@ package com.freak.videosenfants.activities;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -14,11 +15,13 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.elements.ApplicationSingleton;
 import com.freak.videosenfants.elements.preferences.AddButtonPreference;
 import com.freak.videosenfants.elements.preferences.BrowseDlnaPreference;
 import com.freak.videosenfants.elements.preferences.BrowseLocalPreference;
 import com.freak.videosenfants.elements.preferences.BrowsePreference;
 
+import java.io.File;
 import java.util.List;
 import java.util.Vector;
 
@@ -45,7 +48,8 @@ public class SettingsActivity extends PreferenceActivity {
         return
                 GeneralPreferenceFragment.class.getName().equals(fragmentName) ||
                 LocalPreferenceFragment.class.getName().equals(fragmentName) ||
-                DlnaPreferenceFragment.class.getName().equals(fragmentName);
+                DlnaPreferenceFragment.class.getName().equals(fragmentName) ||
+                MemoryPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     /**
@@ -193,6 +197,8 @@ public class SettingsActivity extends PreferenceActivity {
 
         }
 
+
+
         @Override
         public void onResume() {
             super.onResume();
@@ -258,4 +264,50 @@ public class SettingsActivity extends PreferenceActivity {
             addPref.setEnabled(mSwitchButton.isChecked());
         }
     }
+
+    /**
+     * This fragment shows the preferences for the memory usage header.
+     */
+    public static class MemoryPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            // Load the preferences from an XML resource
+            addPreferencesFromResource(R.xml.pref_memory);
+            int nbFiles;
+            long size;
+
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+            File downloaded = new File(sharedPref.getString("local_pictures", getActivity().getString(R.string.default_local_pictures)));
+            nbFiles = 0;
+            size = 0;
+            if (downloaded.exists() && downloaded.isDirectory()) {
+                File[] allFiles = downloaded.listFiles();
+                nbFiles = allFiles.length;
+                for (File allFile : allFiles) {
+                    size += allFile.length();
+                }
+            }
+            String textDonload = nbFiles + " " + getString(R.string.files_coma) + " " + ApplicationSingleton.getInstance(getActivity()).formatByteSize(size);
+            Preference downloadedPref = findPreference(getString(R.string.key_downloaded));
+            downloadedPref.setSummary(textDonload);
+
+            File cached = getActivity().getExternalCacheDir();
+            nbFiles = 0;
+            size = 0;
+            if (cached != null && cached.exists() && cached.isDirectory()) {
+                File[] allFiles = cached.listFiles();
+                nbFiles = allFiles.length;
+                for (File allFile : allFiles) {
+                    size += allFile.length();
+                }
+            }
+            String textCache = nbFiles + " " + getString(R.string.files_coma) + " " + ApplicationSingleton.getInstance(getActivity()).formatByteSize(size);
+            Preference cachedPref = findPreference(getString(R.string.key_cached));
+            cachedPref.setSummary(textCache);
+        }
+    }
+
 }

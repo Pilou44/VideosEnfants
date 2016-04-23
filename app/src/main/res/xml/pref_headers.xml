@@ -17,4 +17,9 @@
         android:icon="@drawable/ic_cast_connected_24dp"
         android:title="@string/pref_header_dlna" />
 
+    <header
+        android:fragment="com.freak.videosenfants.activities.SettingsActivity$MemoryPreferenceFragment"
+        android:icon="@drawable/ic_memory_24dp"
+        android:title="@string/pref_header_memory" />
+
 </preference-headers>
