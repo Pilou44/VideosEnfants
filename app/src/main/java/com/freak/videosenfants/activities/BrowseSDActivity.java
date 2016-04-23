@@ -219,14 +219,16 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
 
     protected void parseAndUpdate(VideoElement element) {
         if (element.getPath().equals(mRoot)) {
-            Log.i(TAG, "Parent = root");
+            if (DEBUG)
+                Log.i(TAG, "Going to root");
             mCurrent = mRootElement;
             for (int i = 0 ; i < mRoots.size() ; i++) {
-                addFilesToList(mRoots.get(i), mRootElement);
+                addFilesToList(mRoots, mRootElement);
             }
         }
         else {
-            Log.i(TAG, "Parent = " + mCurrent.getParent().getPath());
+            if (DEBUG)
+                Log.i(TAG, "Going to " + mCurrent.getParent().getPath());
             mCurrent = element;
             addFilesToList(new File(mCurrent.getPath()), mCurrent);
             mAdapter.notifyDataSetChanged();
@@ -244,7 +246,8 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
             @Override
             public void onClick(View v) {
                 final VideoElement element = mAdapter.getItem(position);
-                Log.i(TAG, "Delete " + element.getPath());
+                if (DEBUG)
+                    Log.i(TAG, "Delete " + element.getPath());
                 getDialog().dismiss();
                 AlertDialog.Builder builder = new AlertDialog.Builder(BrowseSDActivity.this);
                 builder.setTitle(getString(R.string.delete_title));
