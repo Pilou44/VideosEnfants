@@ -179,7 +179,12 @@ public class VideoElement {
                 Log.i(TAG, "Unbind service");
             }
 
-            mContext.unbindService(mConnection);
+            try {
+                mContext.unbindService(mConnection);
+            }
+            catch (IllegalArgumentException e){
+                Log.w(TAG, "Service not bound");
+            }
             mBound = false;
         }
     }
