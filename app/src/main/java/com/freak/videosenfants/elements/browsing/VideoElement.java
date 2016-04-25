@@ -6,12 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.services.GetThumbnailsService;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 
@@ -29,6 +33,10 @@ public class VideoElement {
     private String mPathFromRoot;
     private GetThumbnailsService mService;
     private boolean mBound;
+    private DisplayImageOptions mOptions;
+    private ImageView mView;
+    private ImageLoader mImageLoader;
+    private Handler mHandler;
 
     private ServiceConnection mConnection = new ServiceConnection() {
 
@@ -52,7 +60,6 @@ public class VideoElement {
             mService.enqueue(VideoElement.this);
         }
     };
-
 
     public VideoElement(boolean directory, String path, String name, VideoElement parent, Context context) {
         mContext = context;
@@ -188,4 +195,25 @@ public class VideoElement {
             mBound = false;
         }
     }
- }
+
+    public void update() {
+        if (mView.getTag().equals(this)) {
+            if (DEBUG)
+                Log.i(TAG, "Update image");
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mImageLoader.displayImage(getImageURI(), mView, mOptions);
+                }
+            });
+        }
+    }
+
+    public void setView(ImageView imageView, Handler handler, ImageLoader imageLoader, DisplayImageOptions options) {
+        mHandler = handler;
+        mOptions = options;
+        mImageLoader = imageLoader;
+        mView = imageView;
+        mView.setTag(this);
+    }
+}
