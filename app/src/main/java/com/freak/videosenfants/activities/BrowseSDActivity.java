@@ -51,6 +51,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         setSupportActionBar(mToolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,6 +68,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         mAdapter = new VideoElementAdapter(this);
 
         mListView = (ListView)findViewById(R.id.listView);
+        assert mListView != null;
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
         mListView.setLongClickable(true);

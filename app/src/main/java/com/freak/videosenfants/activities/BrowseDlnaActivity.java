@@ -1,6 +1,6 @@
 package com.freak.videosenfants.activities;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -147,6 +147,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
         setSupportActionBar(mToolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,6 +168,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
         mBound = false;
 
         mListView = (ListView) findViewById(R.id.listView);
+        assert mListView != null;
         mListView.setOnItemClickListener(this);
         mListView.setLongClickable(true);
         mListView.setOnItemLongClickListener(this);
@@ -416,6 +418,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                     mSelected = element.getName();
                     TextView src = (TextView) dialog.findViewById(R.id.copy_src);
                     String text = element.getName() + " (" + ApplicationSingleton.getInstance(BrowseDlnaActivity.this).formatByteSize(element.getSize()) + ")";
+                    assert src != null;
                     src.setText(text);
 
                     getDialog().dismiss();

@@ -25,6 +25,7 @@ public class AboutActivity extends AppCompatActivity {
         modules += "- httpcore (https://hc.apache.org/httpcomponents-core-ga/)\n";
         modules += "- Universal Image Loader (https://github.com/nostra13/Android-Universal-Image-Loader)\n";
 
+        assert modulesView != null;
         modulesView.setText(modules);
     }
 

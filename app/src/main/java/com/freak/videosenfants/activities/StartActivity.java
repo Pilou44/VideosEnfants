@@ -34,12 +34,15 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         setSupportActionBar(mToolbar);
 
         mMaison = (ImageButton) findViewById(R.id.maison);
+        assert mMaison != null;
         mMaison.setOnClickListener(this);
 
         mVoiture = (ImageButton) findViewById(R.id.voiture);
+        assert mVoiture != null;
         mVoiture.setOnClickListener(this);
 
         mOptions = (ImageButton) findViewById(R.id.options);
+        assert mOptions != null;
         mOptions.setOnClickListener(this);
     }
 

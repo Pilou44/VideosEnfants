@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.freak.videosenfants"
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 11
         versionName "0.11"
@@ -31,9 +31,9 @@ dependencies {
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '8.1.12.v20130726'
     compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '8.1.12.v20130726'
     compile group: 'org.eclipse.jetty', name: 'jetty-client', version: '8.1.12.v20130726'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
-    compile 'com.android.support:support-v4:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:design:23.2.1'
+    compile 'com.android.support:support-v4:23.2.1'
     compile 'org.apache.httpcomponents:httpcore:4.4.1'
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.6'
