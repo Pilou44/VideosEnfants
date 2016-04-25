@@ -2,6 +2,7 @@ package com.freak.videosenfants.activities;
 
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -53,6 +54,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
         setSupportActionBar(mToolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,6 +64,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
 
         mAdapter = new CustomSearchAdapter(this);
         ListView mListView = (ListView) findViewById(R.id.list_view);
+        assert mListView != null;
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
 
@@ -161,10 +164,30 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
     private void saveBitmapToFile(SingleImage image) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String dir = prefs.getString("local_pictures", this.getString(R.string.default_local_pictures));
-        String fileName = image.getName() + ".png";
+        String fileName = image.getName() + ".jpg";
         File imageFile = new File(dir,fileName);
 
         Bitmap bm = image.getImage1();
+
+        if (DEBUG) {
+            Log.i(TAG, "Reduce image size");
+        }
+        int pxWidth = getResources().getDimensionPixelSize(R.dimen.thumbnail_width);
+        int pxHeight = getResources().getDimensionPixelSize(R.dimen.thumbnail_height);
+        int srcWidth = bm.getWidth();
+        int srcHeight = bm.getHeight();
+        int destWidth;
+        int destHeight;
+
+        destWidth = pxWidth;
+        destHeight = (srcHeight * pxWidth) / srcWidth;
+
+        if (destHeight > pxHeight){
+            destHeight = pxHeight;
+            destWidth = (srcWidth * pxHeight) / srcHeight;
+        }
+        Bitmap bmp = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bm, destWidth, destHeight, false)).getBitmap();
+        bm.recycle();
 
         if (DEBUG) {
             Log.i(TAG, "Save file to " + imageFile.getPath());
@@ -173,9 +196,8 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(imageFile);
-            bm.compress(Bitmap.CompressFormat.PNG, 80, fos);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 50, fos);
             fos.close();
-
         }
         catch (IOException e) {
             Log.e("app", e.getMessage());
@@ -186,6 +208,9 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
                     e1.printStackTrace();
                 }
             }
+        }
+        finally {
+            bmp.recycle();
         }
     }
 }
