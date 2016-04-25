@@ -12,8 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -63,10 +63,11 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
         });
 
         mAdapter = new CustomSearchAdapter(this);
-        ListView mListView = (ListView) findViewById(R.id.list_view);
-        assert mListView != null;
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
+
+        GridView grid = (GridView) findViewById(R.id.grid_view);
+        assert grid != null;
+        grid.setAdapter(mAdapter);
+        grid.setOnItemClickListener(this);
 
         String search = getIntent().getStringExtra("search");
         String name = getIntent().getStringExtra("name");
