@@ -1,6 +1,7 @@
 package com.freak.videosenfants.elements.browsing;
 
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,13 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
     private final Context mContext;
     private final ImageLoader mImageLoader;
     private final DisplayImageOptions mDirectoryOptions, mFileOptions;
+    private final Handler mHandler;
 
     public VideoElementAdapter(Context context) {
         super(context, 0);
         mContext = context;
+
+        mHandler = new Handler();
 
         // Create global configuration and initialize ImageLoader with this config
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
@@ -77,6 +81,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
         else {
             viewHolder.subIcon.setVisibility(View.GONE);
             mImageLoader.displayImage(element.getImageURI(), viewHolder.icon, mFileOptions);
+            element.setView(viewHolder.icon, mHandler, mImageLoader, mDirectoryOptions);
         }
 
         return convertView;

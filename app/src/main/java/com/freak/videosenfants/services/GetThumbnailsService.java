@@ -138,8 +138,9 @@ public class GetThumbnailsService extends Service {
                                 fos.close();
                                 bmp.recycle();
                                 if (DEBUG) {
-                                    Log.i(TAG, "Thumbnail extracted");
+                                    Log.i(TAG, "Thumbnail extracted, update view");
                                 }
+                                element.update();
                             }
                             catch (IOException e) {
                                 if (DEBUG) {
