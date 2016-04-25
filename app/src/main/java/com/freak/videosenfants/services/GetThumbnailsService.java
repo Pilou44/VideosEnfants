@@ -42,7 +42,7 @@ public class GetThumbnailsService extends Service {
         mThread.start();
 
         mNotificationManager =
-                (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationId = 1;
         mBuilder = new NotificationCompat.Builder(GetThumbnailsService.this)
                 .setSmallIcon(R.drawable.ic_notif_24dp)
@@ -53,6 +53,7 @@ public class GetThumbnailsService extends Service {
     @Override
     public void onDestroy() {
         mRunning = false;
+        mNotificationManager.cancel(mNotificationId);
         super.onDestroy();
     }
 
