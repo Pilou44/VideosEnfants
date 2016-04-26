@@ -96,14 +96,14 @@ public class GetThumbnailsService extends Service {
                     if (imageFile.exists()) {
                         if (DEBUG)
                             Log.i(TAG, "Thumbnail exists in cache");
-                        finishElement(element);
+                        finishElement(element, true);
                     }
                     else if (   element.getPath().startsWith("http") &&
                                 !ApplicationSingleton.getInstance(GetThumbnailsService.this).isWiFiConnected()) {
                         if (DEBUG) {
                             Log.i(TAG, "Element is DLNA but WiFi is disconnected");
                         }
-                        finishElement(element);
+                        finishElement(element, false);
                     }
                     else {
                         if (DEBUG) {
@@ -119,8 +119,8 @@ public class GetThumbnailsService extends Service {
                         }
                         catch (IllegalArgumentException e) {
                             Log.e(TAG, "Error with source (" + element.getPath() + ")");
-                            finishElement(element);
                             e.printStackTrace();
+                            finishElement(element, false);
                         }
 
                         if (bmp == null) {
@@ -138,15 +138,14 @@ public class GetThumbnailsService extends Service {
                                 fos.close();
                                 bmp.recycle();
                                 if (DEBUG) {
-                                    Log.i(TAG, "Thumbnail extracted, update view");
+                                    Log.i(TAG, "Thumbnail extracted for " + element.getName() + ", update view");
                                 }
-                                element.update();
+                                finishElement(element, true);
                             }
                             catch (IOException e) {
-                                if (DEBUG) {
-                                    Log.i(TAG, "Error writing thumbnail");
-                                }
-                                Log.e(TAG, e.getMessage());
+                                Log.w(TAG, "Error writing thumbnail");
+                                Log.w(TAG, e.getMessage());
+                                e.printStackTrace();
                                 if (fos != null) {
                                     try {
                                         fos.close();
@@ -154,9 +153,9 @@ public class GetThumbnailsService extends Service {
                                         e1.printStackTrace();
                                     }
                                 }
+                                finishElement(element, false);
                             }
                         }
-                        finishElement(element);
                     }
                 }
                 else {
@@ -170,10 +169,11 @@ public class GetThumbnailsService extends Service {
             }
         }
 
-        private void finishElement(VideoElement element) {
+        private void finishElement(VideoElement element, boolean thumbnailRetrieved) {
             if (DEBUG)
                 Log.i(TAG, "Done for " + element.getName());
 
+            element.update(thumbnailRetrieved);
             element.unbind();
             mQueue.removeElement(element);
         }

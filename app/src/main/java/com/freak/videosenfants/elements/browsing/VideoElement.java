@@ -10,7 +10,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.services.GetThumbnailsService;
@@ -27,6 +29,7 @@ public class VideoElement {
     private final Context mContext;
     private final boolean mDirectory;
     private final String mPath;
+    private ListView mListView;
     private String mName;
     private final VideoElement mParent;
     private Long mSize;
@@ -34,9 +37,9 @@ public class VideoElement {
     private GetThumbnailsService mService;
     private boolean mBound;
     private DisplayImageOptions mOptions;
-    private ImageView mView;
     private ImageLoader mImageLoader;
     private Handler mHandler;
+    private int mPosition;
 
     private ServiceConnection mConnection = new ServiceConnection() {
 
@@ -79,6 +82,16 @@ public class VideoElement {
         }
         mParent = parent;
         mSize = file.length();
+    }
+
+    public VideoElement(File file, VideoElement parent, Context context, ListView listView) {
+        this(file, parent, context);
+        mListView = listView;
+    }
+
+    public VideoElement(boolean directory, String path, String name, VideoElement parent, Context context, ListView listView) {
+        this(directory, path, name, parent, context);
+        mListView = listView;
     }
 
     public boolean isDirectory() {
@@ -196,24 +209,52 @@ public class VideoElement {
         }
     }
 
-    public void update() {
-        if (mView.getTag().equals(this)) {
+    public void update(final boolean thumbnailExtracted) {
+        if (DEBUG) {
+            Log.i(TAG, "Update " + mName);
+            //Log.i(TAG, "Current element is " + ((VideoElement)mView.getTag()).getName());
+        }
+        if (mListView != null) {
             if (DEBUG)
-                Log.i(TAG, "Update image");
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mImageLoader.displayImage(getImageURI(), mView, mOptions);
-                }
-            });
+                Log.i(TAG, "list view not null");
+
+            int start = mListView.getFirstVisiblePosition();
+            int stop = mListView.getLastVisiblePosition();
+
+            if (DEBUG)
+                Log.i(TAG, "Position: " + mPosition + ", start: " + start + ", stop: " + stop);
+
+            if (mPosition >= start && mPosition <= stop) {
+                if (DEBUG)
+                    Log.i(TAG, mName + " is visible");
+
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        View v = mListView.getChildAt(mPosition - mListView.getFirstVisiblePosition());
+
+                        if(v == null)
+                            return;
+
+                        ImageView view = (ImageView) v.findViewById(R.id.icon);
+
+                        if (thumbnailExtracted) {
+                            mImageLoader.displayImage(getImageURI(), view, mOptions);
+                        }
+                        else {
+                            mImageLoader.displayImage("drawable://" + R.drawable.fichier, view, mOptions);
+                        }
+                    }
+                });
+            }
         }
     }
 
-    public void setView(ImageView imageView, Handler handler, ImageLoader imageLoader, DisplayImageOptions options) {
+    public void setPosition(int position, Handler handler, ImageLoader imageLoader, DisplayImageOptions options) {if (DEBUG)
+        Log.i(TAG, "Set position for " + mName + ": " + position);
+        mPosition = position;
         mHandler = handler;
         mOptions = options;
         mImageLoader = imageLoader;
-        mView = imageView;
-        mView.setTag(this);
     }
 }
