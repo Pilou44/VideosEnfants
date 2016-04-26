@@ -69,12 +69,12 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
         }
     };
 
-    @SuppressWarnings("WeakerAccess")
+    /*@SuppressWarnings("WeakerAccess")
     public BrowseDlnaPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         setDialogLayoutResource(R.layout.dlna_preference_dialog);
         mHandler = new Handler();
-    }
+    }*/
 
     @SuppressWarnings("WeakerAccess")
     public BrowseDlnaPreference(Context context, AttributeSet attrs, int defStyleAttr) {
