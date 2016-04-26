@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.freak.videosenfants"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 23
         versionCode 11
         versionName "0.11"
