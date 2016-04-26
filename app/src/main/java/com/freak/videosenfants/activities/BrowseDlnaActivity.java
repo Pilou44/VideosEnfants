@@ -333,7 +333,8 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                             didl.getItems().get(i).getResources().get(0).getValue(),
                             didl.getItems().get(i).getTitle(),
                             mCurrent,
-                            BrowseDlnaActivity.this);
+                            BrowseDlnaActivity.this,
+                            mListView);
                     for (final Res resource : didl.getItems().get(i).getResources()) {
                         if (resource.getSize() != null)
                             element.setSize(resource.getSize());

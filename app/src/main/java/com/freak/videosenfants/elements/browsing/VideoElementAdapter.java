@@ -45,7 +45,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
 
         mFileOptions = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.drawable.loading_animation)
-                .showImageForEmptyUri(R.drawable.fichier)
+                .showImageForEmptyUri(R.drawable.loading_animation)
                 .showImageOnFail(R.drawable.fichier)
                 .build();
     }
@@ -80,8 +80,8 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
         }
         else {
             viewHolder.subIcon.setVisibility(View.GONE);
+            element.setPosition(position, mHandler, mImageLoader, mFileOptions);
             mImageLoader.displayImage(element.getImageURI(), viewHolder.icon, mFileOptions);
-            element.setView(viewHolder.icon, mHandler, mImageLoader, mDirectoryOptions);
         }
 
         return convertView;

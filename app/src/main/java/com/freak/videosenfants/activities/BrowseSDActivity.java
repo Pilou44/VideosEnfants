@@ -155,7 +155,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
             if (entries.get(i).isDirectory()) {
                 directories.add(new VideoElement(entries.get(i), parent, this));
             } else {
-                files.add(new VideoElement(entries.get(i), parent, this));
+                files.add(new VideoElement(entries.get(i), parent, this, mListView));
             }
         }
 
