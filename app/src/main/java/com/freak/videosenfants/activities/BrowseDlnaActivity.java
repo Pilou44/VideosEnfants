@@ -264,7 +264,6 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                     String path = mCurrent.getPathFromRoot() + "/" + element.getName();
                     mCurrent = element;
                     mCurrent.setPathFromRoot(path);
-                    //mListView.setSelectionAfterHeaderView();
                 }
 
                 @Override
@@ -293,7 +292,6 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                 parseAndUpdate(didl);
                 goToTop();
                 mCurrent = element;
-                //mListView.setSelectionAfterHeaderView();
             }
 
             @Override
@@ -342,7 +340,6 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                     mAdapter.add(element);
                 }
                 mAdapter.notifyDataSetChanged();
-                //mListView.setSelectionAfterHeaderView();
             }
         });
     }
@@ -410,17 +407,35 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                             dialog.dismiss();
                         }
                     });
-                    AlertDialog dialog = builder.create();
+                    final AlertDialog dialog = builder.create();
                     dialog.show();
-                    mDest = (Spinner) dialog.findViewById(R.id.copy_dest);
-                    DestSpinnerAdapter adapter = new DestSpinnerAdapter(BrowseDlnaActivity.this, BrowseSDActivity.getLocalRoots(BrowseDlnaActivity.this));
-                    mDest.setAdapter(adapter);
+
                     mSrc = element.getPath();
                     mSelected = element.getName();
                     TextView src = (TextView) dialog.findViewById(R.id.copy_src);
-                    String text = element.getName() + " (" + ApplicationSingleton.getInstance(BrowseDlnaActivity.this).formatByteSize(element.getSize()) + ")";
+                    String text = mSelected + " (" + ApplicationSingleton.getInstance(BrowseDlnaActivity.this).formatByteSize(element.getSize()) + ")";
                     assert src != null;
                     src.setText(text);
+
+                    mDest = (Spinner) dialog.findViewById(R.id.copy_dest);
+                    DestSpinnerAdapter adapter = new DestSpinnerAdapter(BrowseDlnaActivity.this, BrowseSDActivity.getLocalRoots(BrowseDlnaActivity.this));
+                    mDest.setAdapter(adapter);
+                    mDest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if (element.getSize() > new File((String)mDest.getSelectedItem()).getFreeSpace()){
+                                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                            }
+                            else {
+                                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                            }
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
 
                     getDialog().dismiss();
                 }
