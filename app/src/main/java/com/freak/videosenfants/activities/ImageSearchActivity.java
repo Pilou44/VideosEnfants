@@ -15,16 +15,14 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.elements.ApplicationSingleton;
 import com.freak.videosenfants.elements.imagesearch.CustomSearchAdapter;
 import com.freak.videosenfants.elements.imagesearch.CustomSearchSingleton;
-import com.freak.videosenfants.elements.imagesearch.SingleImage;
+import com.freak.videosenfants.elements.imagesearch.SearchAsyncTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,18 +31,15 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
-public class ImageSearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class ImageSearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, SearchAsyncTask.Callback {
 
     private static final boolean DEBUG = true;
     private static final String TAG = ImageSearchActivity.class.getSimpleName();
-    private static final String CUSTOM_SEARCH_KEY = "AIzaSyA3A0UsXI6lgAGVxtKsT2XLAh-ahDbElTk";
-    private static final String CUSTOM_SEARCH_CX = "003716044463688473868%3A-2hh_9a9o0u";
 
     private CustomSearchAdapter mAdapter;
     private Toolbar mToolbar;
+    private String mName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +65,14 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
         grid.setOnItemClickListener(this);
 
         String search = getIntent().getStringExtra("search");
-        String name = getIntent().getStringExtra("name");
+        mName = getIntent().getStringExtra("name");
         if (DEBUG) {
             Log.i(TAG, "New search: " + search);
-            Log.i(TAG, "Name: " + name);
+            Log.i(TAG, "Name: " + mName);
         }
 
-        getImages(search, name);
+        SearchAsyncTask task = new SearchAsyncTask(search, 20, this);
+        task.execute();
     }
 
     @Override
@@ -89,94 +85,26 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
             mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
     }
 
-    private void getImages(String search, final String name) {
-        String query = "";
-        try {
-            query = URLEncoder.encode(search, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        String url = "https://www.googleapis.com/customsearch/v1?cx=" + CUSTOM_SEARCH_CX + "&searchType=image&key=" + CUSTOM_SEARCH_KEY + "&q=" + query;
-        if (DEBUG) {
-            Log.i(TAG, "URL: " + url);
-        }
-
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i(TAG, "Result: " + response.toString());
-                        try {
-                            JSONArray items = response.getJSONArray("items");
-                            if (DEBUG)
-                                Log.i(TAG, "" + items.length() + " images found");
-                            if (items.length() > 0) {
-                                for (int i = 0 ; i < items.length() ; i++) {
-                                    if (DEBUG)
-                                        Log.i(TAG, "New item: " + items.getJSONObject(i).getString("title") + ", " + items.getJSONObject(i).getString("link"));
-                                    ImageRequest request = new ImageRequest(items.getJSONObject(i).getString("link"),
-                                        new Response.Listener<Bitmap>() {
-                                            @Override
-                                            public void onResponse(Bitmap bitmap) {
-                                                SingleImage image = new SingleImage(bitmap, name);
-                                                mAdapter.add(image);
-                                                mAdapter.notifyDataSetChanged();
-                                                //mImageView.setImageBitmap(bitmap);
-                                            }
-                                        }, 0, 0, ImageView.ScaleType.CENTER_INSIDE, null,
-                                        new Response.ErrorListener() {
-                                            public void onErrorResponse(VolleyError error) {
-                                                SingleImage image = new SingleImage(null, null);
-                                                mAdapter.add(image);
-                                                mAdapter.notifyDataSetChanged();
-                                                //mImageView.setImageResource(R.drawable.image_load_error);
-                                            }
-                                        });
-                                    // Access the RequestQueue through your singleton class.
-                                    CustomSearchSingleton.getInstance(ImageSearchActivity.this).addToRequestQueue(request);
-                                }
-
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i(TAG, "Error: " + error.getMessage());
-                    }
-                });
-
-        // Access the RequestQueue through your singleton class.
-        CustomSearchSingleton.getInstance(this).addToRequestQueue(jsObjRequest);
-    }
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        SingleImage image = mAdapter.getItem(position);
+        Bitmap image = mAdapter.getItem(position);
         saveBitmapToFile(image);
         onBackPressed();
     }
 
-    private void saveBitmapToFile(SingleImage image) {
+    private void saveBitmapToFile(Bitmap image) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String dir = prefs.getString("local_pictures", this.getString(R.string.default_local_pictures));
-        String fileName = image.getName() + ".jpg";
+        String fileName = mName + ".jpg";
         File imageFile = new File(dir,fileName);
-
-        Bitmap bm = image.getImage1();
 
         if (DEBUG) {
             Log.i(TAG, "Reduce image size");
         }
         int pxWidth = getResources().getDimensionPixelSize(R.dimen.thumbnail_width);
         int pxHeight = getResources().getDimensionPixelSize(R.dimen.thumbnail_height);
-        int srcWidth = bm.getWidth();
-        int srcHeight = bm.getHeight();
+        int srcWidth = image.getWidth();
+        int srcHeight = image.getHeight();
         int destWidth;
         int destHeight;
 
@@ -187,8 +115,8 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
             destHeight = pxHeight;
             destWidth = (srcWidth * pxHeight) / srcHeight;
         }
-        Bitmap bmp = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bm, destWidth, destHeight, false)).getBitmap();
-        bm.recycle();
+        Bitmap bmp = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(image, destWidth, destHeight, false)).getBitmap();
+        image.recycle();
 
         if (DEBUG) {
             Log.i(TAG, "Save file to " + imageFile.getPath());
@@ -212,6 +140,44 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
         }
         finally {
             bmp.recycle();
+        }
+    }
+
+    @Override
+    public void onComplete(JSONObject response, Error error) {
+        if (response != null) {
+            try {
+                JSONObject d = response.getJSONObject("d");
+
+                JSONArray items = d.getJSONArray("results");
+                if (DEBUG)
+                    Log.i(TAG, "" + items.length() + " images found");
+                if (items.length() > 0) {
+                    for (int i = 0; i < items.length(); i++) {
+                        if (DEBUG)
+                            Log.i(TAG, "New item: " + items.getJSONObject(i).getString("Title") + ", " + items.getJSONObject(i).getString("MediaUrl"));
+                        ImageRequest request = new ImageRequest(items.getJSONObject(i).getString("MediaUrl"),
+                                new Response.Listener<Bitmap>() {
+                                    @Override
+                                    public void onResponse(Bitmap bitmap) {
+                                        mAdapter.add(bitmap);
+                                        mAdapter.notifyDataSetChanged();
+                                    }
+                                }, 0, 0, ImageView.ScaleType.CENTER_INSIDE, null,
+                                new Response.ErrorListener() {
+                                    public void onErrorResponse(VolleyError error) {
+                                        mAdapter.add(null);
+                                        mAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                        // Access the RequestQueue through your singleton class.
+                        CustomSearchSingleton.getInstance(ImageSearchActivity.this).addToRequestQueue(request);
+                    }
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

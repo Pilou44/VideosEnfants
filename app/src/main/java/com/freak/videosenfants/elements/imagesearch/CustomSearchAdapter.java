@@ -1,6 +1,7 @@
 package com.freak.videosenfants.elements.imagesearch;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,7 @@ import android.widget.ImageView;
 
 import com.freak.videosenfants.R;
 
-public class CustomSearchAdapter extends ArrayAdapter<SingleImage> {
+public class CustomSearchAdapter extends ArrayAdapter<Bitmap> {
 
     private final Context mContext;
 
@@ -34,8 +35,8 @@ public class CustomSearchAdapter extends ArrayAdapter<SingleImage> {
         }
 
         //getItem(position) va récupérer l'item [position] de la List<Tweet> tweets
-        final SingleImage element = getItem(position);
-        viewHolder.image1.setImageDrawable(new BitmapDrawable(mContext.getResources(), element.getImage1()));
+        final Bitmap element = getItem(position);
+        viewHolder.image1.setImageDrawable(new BitmapDrawable(mContext.getResources(), element));
 
         return convertView;
     }
