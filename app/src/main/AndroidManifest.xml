@@ -41,7 +41,8 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme" />
 
         <service android:name="org.fourthline.cling.android.AndroidUpnpServiceImpl" />
 

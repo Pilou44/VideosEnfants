@@ -6,7 +6,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -38,15 +37,19 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
     private static final String TAG = ImageSearchActivity.class.getSimpleName();
 
     private ImageSearchAdapter mAdapter;
-    private Toolbar mToolbar;
     private String mName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (ApplicationSingleton.getInstance(this).isParentMode())
+            setTheme(R.style.AppTheme_ParentMode_NoActionBar);
+        else
+            setTheme(R.style.AppTheme_NoActionBar);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_search);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
@@ -73,16 +76,6 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
 
         SearchAsyncTask task = new SearchAsyncTask(search, 20, this);
         task.execute();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (ApplicationSingleton.getInstance(this).isParentMode())
-            mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorParent));
-        else
-            mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
     }
 
     @Override

@@ -9,8 +9,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 
 import com.freak.videosenfants.R;
-import com.freak.videosenfants.elements.browsing.VideoElement;
 import com.freak.videosenfants.elements.ApplicationSingleton;
+import com.freak.videosenfants.elements.browsing.VideoElement;
 
 public abstract class BrowseActivity extends AppCompatActivity implements AdapterView.OnItemLongClickListener {
 
@@ -20,6 +20,11 @@ public abstract class BrowseActivity extends AppCompatActivity implements Adapte
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (ApplicationSingleton.getInstance(this).isParentMode())
+            setTheme(R.style.AppTheme_ParentMode_NoActionBar);
+        else
+            setTheme(R.style.AppTheme_NoActionBar);
+
         super.onCreate(savedInstanceState);
         mDialog = new Dialog(this);
         mDialog.setTitle(R.string.browse_context_menu_title);

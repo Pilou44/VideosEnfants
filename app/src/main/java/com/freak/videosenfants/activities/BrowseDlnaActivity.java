@@ -1,6 +1,5 @@
 package com.freak.videosenfants.activities;
 
-import android.support.v7.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -14,7 +13,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -64,7 +63,6 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     private ProgressDialog mDialog;
     private int mIndex;
     private boolean mBound;
-    private Toolbar mToolbar;
 
     // Used for copy
     private Spinner mDest;
@@ -143,8 +141,8 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse_dlna);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
@@ -183,11 +181,6 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (ApplicationSingleton.getInstance(this).isParentMode())
-            mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorParent));
-        else
-            mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
         if (DEBUG)
             Log.i(TAG, "Test WiFi connexion");

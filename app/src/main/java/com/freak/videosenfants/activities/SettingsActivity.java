@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.elements.ApplicationSingleton;
 import com.freak.videosenfants.elements.preferences.AddButtonPreference;
 import com.freak.videosenfants.elements.preferences.BrowseDlnaPreference;
 import com.freak.videosenfants.elements.preferences.BrowseLocalPreference;
@@ -25,6 +26,15 @@ import java.util.List;
 import java.util.Vector;
 
 public class SettingsActivity extends PreferenceActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        if (ApplicationSingleton.getInstance(this).isParentMode())
+            setTheme(R.style.AppTheme_ParentMode);
+        else
+            setTheme(R.style.AppTheme);
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

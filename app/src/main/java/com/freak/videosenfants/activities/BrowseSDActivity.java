@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +17,6 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.freak.videosenfants.R;
-import com.freak.videosenfants.elements.ApplicationSingleton;
 import com.freak.videosenfants.elements.browsing.VideoElement;
 import com.freak.videosenfants.elements.browsing.VideoElementAdapter;
 
@@ -41,14 +39,13 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
 
     private final String[] mExtensions = {"avi" , "mkv", "wmv", "mpg", "mpeg", "mp4"};
     private final Set<String> mSet = new HashSet<>(Arrays.asList(mExtensions));
-    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse_sd);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
@@ -99,11 +96,6 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
     protected void onResume() {
         super.onResume();
         
-        if (ApplicationSingleton.getInstance(this).isParentMode())
-            mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorParent));
-        else
-            mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-
         mAdapter.clear();
         if (mCurrent.equals(mRootElement)) {
             addFilesToList(mRoots, mCurrent);

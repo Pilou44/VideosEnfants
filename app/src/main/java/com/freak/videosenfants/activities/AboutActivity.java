@@ -6,11 +6,17 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.elements.ApplicationSingleton;
 
 public class AboutActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (ApplicationSingleton.getInstance(this).isParentMode())
+            setTheme(R.style.AppTheme_ParentMode_NoActionBar);
+        else
+            setTheme(R.style.AppTheme_NoActionBar);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
