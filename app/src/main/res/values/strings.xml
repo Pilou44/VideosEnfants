@@ -77,4 +77,5 @@
     <string name="remove_description">Remove</string>
     <string name="thumbnails_to_retrieve">thumbnails to retrieve</string>
     <string name="files_coma">files,</string>
+    <string name="clear">Clear</string>
 </resources>
