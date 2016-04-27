@@ -69,13 +69,6 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
         }
     };
 
-    /*@SuppressWarnings("WeakerAccess")
-    public BrowseDlnaPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        setDialogLayoutResource(R.layout.dlna_preference_dialog);
-        mHandler = new Handler();
-    }*/
-
     @SuppressWarnings("WeakerAccess")
     public BrowseDlnaPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -159,7 +152,6 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
                                 mAllFiles.insertElementAt(newElement, position + i + 1);
                             }
                             mAdapter.notifyDataSetChanged();
-                            mListView.setSelectionAfterHeaderView();
                         }
                     });
                 }
