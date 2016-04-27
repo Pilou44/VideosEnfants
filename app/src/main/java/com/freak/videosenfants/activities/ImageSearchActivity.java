@@ -20,8 +20,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.elements.ApplicationSingleton;
-import com.freak.videosenfants.elements.imagesearch.CustomSearchAdapter;
-import com.freak.videosenfants.elements.imagesearch.CustomSearchSingleton;
+import com.freak.videosenfants.elements.imagesearch.ImageSearchAdapter;
+import com.freak.videosenfants.elements.imagesearch.ImageSearchSingleton;
 import com.freak.videosenfants.elements.imagesearch.SearchAsyncTask;
 
 import org.json.JSONArray;
@@ -37,7 +37,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
     private static final boolean DEBUG = true;
     private static final String TAG = ImageSearchActivity.class.getSimpleName();
 
-    private CustomSearchAdapter mAdapter;
+    private ImageSearchAdapter mAdapter;
     private Toolbar mToolbar;
     private String mName;
 
@@ -57,7 +57,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
-        mAdapter = new CustomSearchAdapter(this);
+        mAdapter = new ImageSearchAdapter(this);
 
         GridView grid = (GridView) findViewById(R.id.grid_view);
         assert grid != null;
@@ -171,7 +171,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
                                     }
                                 });
                         // Access the RequestQueue through your singleton class.
-                        CustomSearchSingleton.getInstance(ImageSearchActivity.this).addToRequestQueue(request);
+                        ImageSearchSingleton.getInstance(ImageSearchActivity.this).addToRequestQueue(request);
                     }
 
                 }
