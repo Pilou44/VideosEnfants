@@ -423,7 +423,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                     mDest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            if (element.getSize() > new File((String)mDest.getSelectedItem()).getFreeSpace()){
+                            if (element.getSize() > ((File)mDest.getSelectedItem()).getFreeSpace()){
                                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                             }
                             else {
