@@ -25,7 +25,7 @@ public class GetThumbnailsService extends Service {
     private static final boolean DEBUG = true;
     private static final String TAG = GetThumbnailsThread.class.getSimpleName();
 
-    private IBinder mBinder = new LocalBinder();
+    private final IBinder mBinder = new LocalBinder();
 
     private Vector<VideoElement> mQueue;
     private boolean mRunning;

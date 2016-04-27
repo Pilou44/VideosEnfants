@@ -51,6 +51,7 @@ public class MemoryPreference extends Preference{
                 if (mDirectory != null && mDirectory.exists() && mDirectory.isDirectory()) {
                     File[] allFiles = mDirectory.listFiles();
                     for (File allFile : allFiles) {
+                        //noinspection ResultOfMethodCallIgnored
                         allFile.delete();
                     }
 

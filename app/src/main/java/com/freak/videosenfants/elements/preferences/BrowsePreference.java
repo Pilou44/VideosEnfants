@@ -22,14 +22,6 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
     private String mDefaultValue = "";
     private boolean mDeletable = false;
 
-    /*@SuppressWarnings("WeakerAccess")
-    public BrowsePreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        mContext = context;
-        setLayoutResource(R.layout.preference_browse);
-        parseAttrs(attrs);
-    }*/
-
     @SuppressWarnings("WeakerAccess")
     public BrowsePreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
