@@ -6,20 +6,20 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-public class CustomSearchSingleton {
+public class ImageSearchSingleton {
 
-    private static CustomSearchSingleton mInstance;
+    private static ImageSearchSingleton mInstance;
     private RequestQueue mRequestQueue;
     private static Context mCtx;
 
-    private CustomSearchSingleton(Context context) {
+    private ImageSearchSingleton(Context context) {
         mCtx = context;
         mRequestQueue = getRequestQueue();
     }
 
-    public static synchronized CustomSearchSingleton getInstance(Context context) {
+    public static synchronized ImageSearchSingleton getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new CustomSearchSingleton(context);
+            mInstance = new ImageSearchSingleton(context);
         }
         return mInstance;
     }

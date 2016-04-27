@@ -11,11 +11,11 @@ import android.widget.ImageView;
 
 import com.freak.videosenfants.R;
 
-public class CustomSearchAdapter extends ArrayAdapter<Bitmap> {
+public class ImageSearchAdapter extends ArrayAdapter<Bitmap> {
 
     private final Context mContext;
 
-    public CustomSearchAdapter(Context context) {
+    public ImageSearchAdapter(Context context) {
         super(context, 0);
         mContext = context;
     }
