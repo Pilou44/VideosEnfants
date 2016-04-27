@@ -59,10 +59,19 @@ public class ApplicationSingleton {
     public boolean isWiFiConnected(){
         boolean wiFiConnected = false;
         ConnectivityManager connManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        Network[] networks = connManager.getAllNetworks();
-        for (Network network : networks) {
-            NetworkInfo info = connManager.getNetworkInfo(network);
-            if (info.getType() == ConnectivityManager.TYPE_WIFI && info.isConnected()) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            Network[] networks = connManager.getAllNetworks();
+            for (Network network : networks) {
+                NetworkInfo info = connManager.getNetworkInfo(network);
+                if (info.getType() == ConnectivityManager.TYPE_WIFI && info.isConnected()) {
+                    wiFiConnected = true;
+                }
+            }
+        }
+        else {
+            //noinspection deprecation
+            NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (mWifi.isConnected()) {
                 wiFiConnected = true;
             }
         }
