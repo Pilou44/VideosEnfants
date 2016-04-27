@@ -274,8 +274,6 @@ public class SettingsActivity extends PreferenceActivity {
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.pref_memory);
-            int nbFiles;
-            long size;
 
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 

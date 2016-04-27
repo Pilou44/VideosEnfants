@@ -33,11 +33,6 @@ public class BrowseLocalPreference extends BrowsePreference implements AdapterVi
     private FileAdapter mAdapter;
     private FileElement mSelectedElement;
 
-    /*public BrowseLocalPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        setDialogLayoutResource(R.layout.local_preference_dialog);
-    }*/
-
     public BrowseLocalPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setDialogLayoutResource(R.layout.local_preference_dialog);

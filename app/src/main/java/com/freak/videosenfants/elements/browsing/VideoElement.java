@@ -41,7 +41,7 @@ public class VideoElement {
     private Handler mHandler;
     private int mPosition;
 
-    private ServiceConnection mConnection = new ServiceConnection() {
+    private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceDisconnected(ComponentName name) {
             if (DEBUG) {
@@ -89,7 +89,7 @@ public class VideoElement {
         mListView = listView;
     }
 
-    public VideoElement(boolean directory, String path, String name, VideoElement parent, Context context, ListView listView) {
+    public VideoElement(@SuppressWarnings("SameParameterValue") boolean directory, String path, String name, VideoElement parent, Context context, ListView listView) {
         this(directory, path, name, parent, context);
         mListView = listView;
     }
@@ -144,7 +144,7 @@ public class VideoElement {
         return uri;
     }
 
-    public String getBitmapURI() {
+    private String getBitmapURI() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
         File picturesLocation = new File(sharedPref.getString("local_pictures", mContext.getString(R.string.default_local_pictures)));
@@ -183,7 +183,7 @@ public class VideoElement {
         return null;
     }
 
-    public String getCachedBitmapURI() {
+    private String getCachedBitmapURI() {
         File imageFile = new File(mContext.getExternalCacheDir(), mName + ".jpg");
         if (imageFile.exists()) {
             return "file://" + imageFile.getAbsolutePath();

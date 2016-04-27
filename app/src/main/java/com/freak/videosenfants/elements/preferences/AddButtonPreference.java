@@ -20,14 +20,6 @@ public class AddButtonPreference extends Preference implements View.OnClickListe
     private int mItemsNumber = 0;
     private SharedPreferences mSharedPref;
 
-    /*@SuppressWarnings("WeakerAccess")
-    public AddButtonPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        mContext = context;
-        setLayoutResource(R.layout.preference_add);
-        parseAttrs(attrs);
-    }*/
-
     @SuppressWarnings("WeakerAccess")
     public AddButtonPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);

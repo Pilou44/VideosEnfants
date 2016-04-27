@@ -69,7 +69,6 @@
     <string name="select_directory">Select a directory:</string>
     <string name="file_description">File</string>
     <string name="directory_description">Directory</string>
-    <string name="animation_description">Loading animation</string>
     <string name="download_image_description">Downloadable image</string>
     <string name="settings_description">Settings</string>
     <string name="dlna_description">DLNA/UPnP browsing</string>

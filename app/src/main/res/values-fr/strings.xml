@@ -44,7 +44,6 @@
     <string name="select_directory">S&#233;lectionnez un dossier :</string>
     <string name="file_description">Fichier</string>
     <string name="directory_description">Dossier</string>
-    <string name="animation_description">Animation de chargement</string>
     <string name="download_image_description">Image t&#233;l&#233;chargeable</string>
     <string name="settings_description">Param&#232;tres</string>
     <string name="dlna_description">Navigation DLNA/UPnP</string>
