@@ -1,11 +1,11 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Preference
+    <com.freak.videosenfants.elements.preferences.MemoryPreference
         android:key="@string/key_downloaded"
         android:title="@string/pref_title_downloaded_thumbnails" />
 
-    <Preference
+    <com.freak.videosenfants.elements.preferences.MemoryPreference
         android:key="@string/key_cached"
         android:title="@string/pref_title_cached_thumbnails" />
 
