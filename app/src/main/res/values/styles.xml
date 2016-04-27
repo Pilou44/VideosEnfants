@@ -8,7 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.ParentMode">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorParent</item>
+        <item name="colorPrimaryDark">@color/colorParentDark</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.ParentMode.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
