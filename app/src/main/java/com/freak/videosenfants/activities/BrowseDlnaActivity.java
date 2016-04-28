@@ -248,26 +248,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
         if (element.isDirectory()) {
             if (DEBUG)
                 Log.i(TAG, "Directory clicked");
-            mUpnpService.getControlPoint().execute(new Browse(mService, element.getPath(), BrowseFlag.DIRECT_CHILDREN) {
-                @Override
-                public void received(ActionInvocation arg0,
-                                     DIDLContent didl) {
-                    parseAndUpdate(didl);
-                    goToTop();
-                    String path = mCurrent.getPathFromRoot() + "/" + element.getName();
-                    mCurrent = element;
-                    mCurrent.setPathFromRoot(path);
-                }
-
-                @Override
-                public void updateStatus(Status status) {
-
-                }
-
-                @Override
-                public void failure(ActionInvocation arg0, UpnpResponse arg1, String arg2) {
-                }
-            });
+            parseAndUpdate(element);
         }
         else {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(element.getPath()));
@@ -276,14 +257,18 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
         }
     }
 
-    /* Called by onBackPressed() */
     protected void parseAndUpdate(final VideoElement element) {
+
+        mDialog = ProgressDialog.show(this, getString(R.string.dlna_progress_dialog_files_title), getString(R.string.dlna_progress_dialog_text), true, true, this);
+        mDialog.setCanceledOnTouchOutside(false);
+
         mUpnpService.getControlPoint().execute(new Browse(mService, element.getPath(), BrowseFlag.DIRECT_CHILDREN) {
             @Override
             public void received(ActionInvocation arg0,
                                  DIDLContent didl) {
                 parseAndUpdate(didl);
                 goToTop();
+                mDialog.dismiss();
                 mCurrent = element;
             }
 
@@ -313,6 +298,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                             didl.getContainers().get(i).getTitle(),
                             mCurrent,
                             BrowseDlnaActivity.this);
+                    element.setPathFromRoot(mCurrent.getPathFromRoot() + "/" + element.getName());
                     mAdapter.add(element);
                 }
 
@@ -326,6 +312,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                             mCurrent,
                             BrowseDlnaActivity.this,
                             mListView);
+                    element.setPathFromRoot(mCurrent.getPathFromRoot() + "/" + element.getName());
                     for (final Res resource : didl.getItems().get(i).getResources()) {
                         if (resource.getSize() != null)
                             element.setSize(resource.getSize());
