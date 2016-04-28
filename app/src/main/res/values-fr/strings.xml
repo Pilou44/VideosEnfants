@@ -53,4 +53,87 @@
     <string name="thumbnails_to_retrieve">vignettes &#224; charger</string>
     <string name="files_coma">fichiers,</string>
     <string name="clear">Effacer</string>
+    <string name="first_launch_dialog_title">Premier d&#233;marrage</string>
+    <string name="first_launch_dialog_message">Voulez-vous de l\'aide pour configurer et savoir comment utiliser cette application ?</string>
+    <string name="dont_show">Ne plus afficher</string>
+    <string name="action_help">Aide</string>
+    <string name="configure_local">Configurer des dossiers locaux</string>
+
+    <string name="configure_local_text">
+        - Allez dans "Param&#232;tres" en utilisant le menu en haut &#224; droite de l\'&#233;cran de d&#233;marrage.\n
+        - Cliquez sur "Navigation locale".\n
+        - Activez "Fichiers locaux".\n
+        - Cliquez sur "Ajouter un dossier"\n
+        - Cliquez sur la ligne ajout&#233;e pour parcourir les dossiers et en s&#233;lectionner un.\n
+        \n
+        Vous pouvez ensuite parcourir ces dossiers en cliquant sur la voiture sur l\&#233;cran de d&#233;marrage.\n
+        \n
+        Vous pouvez configurer jusqu\'&#224; 3 dossiers au cas o&#249; vous auriez plusieurs supports ou plusieurs dossiers de vid&#233;os.\n
+        Vou pouvez retirer un dossier en cliquant sur la croix rouge.
+    </string>
+
+    <string name="configure_upnp">Configurer un dossier UPnP</string>
+
+    <string name="configure_upnp_text">
+        - Allez dans "Param&#232;tres" en utilisant le menu en haut &#224; droite de l\'&#233;cran de d&#233;marrage.\n
+        - Cliquez sur "Navigation UPnP/DLNA".\n
+        - Activez "UPnP/DLNA".\n
+        - Cliquez sur  "Ajouter un serveur UPnP/DLNA"\n
+        - Cliquez sur la ligne ajout&#233;e pour parcourir les dossiers et en s&#233;lectionner un.\n
+        \n
+        Vous pouvez ensuite parcourir ces dossiers en cliquant sur la maison sur l\&#233;cran de d&#233;marrage.\n
+        \n
+        Vous pouvez configurer jusqu\'&#224; 3 serveurs mais vous ne pouvez acc&#233;der qu\'&#224; un seul &#224; la fois. L\'application se connectera au premier serveur disponible.\n
+        Vou pouvez retirer un serveur en cliquant sur la croix rouge.
+   </string>
+
+    <string name="copy_to_local">Copier un fichier d\'un serveur UPnP vers un dossier local</string>
+
+    <string name="copy_to_local_text">
+        - Passez en "Mode parent" en utilisant le menu en haut &#224; droite de l\'&#233;cran de d&#233;marrage.\n
+        - Parcourez les fichiers UPnP jusqu\'&#224; atteindre celui que vous voulez copier.\n
+        - Faites un appui long sur le fichier.\n
+        - Dans la pop_up cliquez sur "Copier en local".\n
+        - Dans la nouvelle pop-up s&#233;lectionnez la destination puis cliquez sur "Oui".\n
+        - Le fichier est t&#233;l&#233;charg&#233;. Vous le trouverez dans la destination au m&#234;me chemin d\'acc&#232;s que sur le serveur.
+    </string>
+
+    <string name="find_thumbnail">Trouver une nouvelle vignette</string>
+
+    <string name="find_thumbnail_text">
+        Pour configurer le dossier o&#249; les vignettes sont sauvegard&#233;es :
+        - Allez dans "Param&#232;tres" en utilisant le menu en haut &#224; droite de l\'&#233;cran de d&#233;marrage.\n
+        - Cliquez sur "G&#233;n&#233;ral".\n
+        - Cliquez sur "Vignettes" puis parcourez et s&#233;lectionnez un dossier\n
+        \n
+        Pour chercher et assigner une nouvelle vignette &#224; un fichier o&#249; un dossier : \n
+        - Passez en "Mode parent" en utilisant le menu en haut &#224; droite de l\'&#233;cran de d&#233;marrage.\n
+        - Parcourez les fichiers locaux ou UPnP jusqu\'&#224; atteindre celui dont vous voulez changer la vignette.\n
+        - Faites un appui long sur le fichier.\n
+        - Dans la pop_up cliquez sur "Rechercher une vignette".\n
+        - Sur le nouvel &#233;cran choisissez l\'image que vous voulez utiliser.
+    </string>
+
+    <string name="delete_local">Supprimer un fichier ou un dossier local</string>
+
+    <string name="delete_local_text">
+        - Passez en "Mode parent" en utilisant le menu en haut &#224; droite de l\'&#233;cran de d&#233;marrage.\n
+        - Parcourez les fichiers locaux jusqu\'&#224; atteindre celui que vous voulez supprimer.\n
+        - Faites un appui long sur le fichier.\n
+        - Dans la pop_up cliquez sur "Supprimer".\n
+        - Dans la nouvelle pop_up cliquez sur "Oui".\n
+        \n
+        Pour supprimer un dossier vous devez d\'abord supprimer tous les fichiers qu\il contient.
+    </string>
+
+    <string name="go_parent_mode">Passer en mode parent</string>
+
+    <string name="go_parent_mode_text">
+        Le mode parent est un mode o&#249; plus d\'actions sont possibles. Il ne peut &#234;tre activ&#233; que depuis l\'&#233;cran de d&#233;marrage.
+        Quand il est activ&#233;, la barre de titre de l\'application devient rouge. Une fois activ&#233; l\'application reste
+        en mode parent jusqu\'&#224; ce qu\'il soit d&#233;sactiv&#233;.\n
+        \n
+        Pour activer ou d&#233;sactiver le mode parent, cliquez sur "Mode parent" dans le menu en haut &#224; droite de l\'&#233;cran de d&#233;marrage.\n
+    </string>
+
 </resources>

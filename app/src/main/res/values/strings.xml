@@ -20,6 +20,8 @@
     <string name="key_last_used_dlna" translatable="false">last_used_dlna</string>
     <string name="key_cached" translatable="false">cached</string>
     <string name="key_downloaded" translatable="false">downloaded</string>
+    <string name="key_dont_ask" translatable="false">dont_ask</string>
+    <string name="key_id" translatable="false">id</string>
 
     <!-- Not translatable strings -->
     <string name="default_local_pictures" translatable="false">/sdcard/VideosForKids/</string>
@@ -47,7 +49,7 @@
     <string name="no_wifi_connexion">No WiFi connexion detected</string>
     <string name="ok">OK</string>
     <string name="parent_mode">Parent mode</string>
-    <string name="set_image">Set thumbnail</string>
+    <string name="set_image">Search for a thumbnail</string>
     <string name="copy">Copy to local</string>
     <string name="browse_context_menu_title">Select an option</string>
     <string name="delete">Delete</string>
@@ -78,4 +80,87 @@
     <string name="thumbnails_to_retrieve">thumbnails to retrieve</string>
     <string name="files_coma">files,</string>
     <string name="clear">Clear</string>
+    <string name="first_launch_dialog_title">First launch</string>
+    <string name="first_launch_dialog_message">Do you want help to configure and know how to use this application?</string>
+    <string name="dont_show">Don\'t show again</string>
+    <string name="action_help">Help</string>
+    <string name="configure_local">Configure local directories</string>
+
+    <string name="configure_local_text">
+        - Go to "Settings" using start screen\'s top right menu.\n
+        - Click on "Local browsing".\n
+        - Switch on "Local files".\n
+        - Click on "Add a root directory"\n
+        - Click on the added line then browse and select a directory.\n
+        \n
+        You can now browse this directory by clicking on the car on the start screen.\n
+        \n
+        You can configure up to 3 directories in case you\'d have several storage device and / or video directories.\n
+        You can remove a directory by clicking the red cross.
+    </string>
+
+    <string name="configure_upnp">Configure a UPnP directory</string>
+
+    <string name="configure_upnp_text">
+        - Go to "Settings" using start screen\'s top right menu.\n
+        - Click on "UPnP/DLNA browsing".\n
+        - Switch on "UPnP/DLNA".\n
+        - Click on "Add a UPnP/DLNA server"\n
+        - Click on the added line then browse and select a directory.\n
+        \n
+        You can now browse this directory by clicking on the car on the start screen.\n
+        \n
+        You can configure up to 3 servers but you can access only one at a time. The application will connect to the first available server.\n
+        You can remove a server by clicking the red cross.
+    </string>
+
+    <string name="copy_to_local">Copy a file from UPnP server to local directory</string>
+
+    <string name="copy_to_local_text">
+        - Go to "Parent mode" using start screen\'s top right menu.\n
+        - Browse UPnP files until you reach the one you want to copy.\n
+        - Long press the file.\n
+        - In the new pop-up select "Copy to local".\n
+        - In the new pop_up select the destination then click "Yes".\n
+        - The file is downloaded. You\'ll find it in the destination directory with the same path as on the server.
+    </string>
+
+    <string name="find_thumbnail">Find a new thumbnail</string>
+
+    <string name="find_thumbnail_text">
+        To configure the directory where thumbnails will be saved:
+        - Go to "Settings" using start screen\'s top right menu.\n
+        - Click on "General".\n
+        - Click on "Thumbnails" then browse and select a directory.\n
+        \n
+        To find and assign a thumbnail to a file or a directory: \n
+        - Go to "Parent mode" using start screen\'s top right menu.\n
+        - Browse local or UPnP files until you reach the one you want to assign a new thumbnail.\n
+        - Long press the file.\n
+        - In the new pop-up select "Search for a thumbnail".\n
+        - On the new screen click the thumbnail you want to use.
+    </string>
+
+    <string name="delete_local">Delete a local file or directory</string>
+
+    <string name="delete_local_text">
+        - Go to "Parent mode" using top right menu.\n
+        - Browse local files until you reach the one you want to copy.\n
+        - Long press the file.\n
+        - In the new pop-up select "Delete".\n
+        - In the new pop_up click "Yes".\n
+        \n
+        To delete a directory you have to delete all the contained files first.
+    </string>
+
+    <string name="go_parent_mode">Go to parent mode</string>
+
+    <string name="go_parent_mode_text">
+        Parent mode is a mode where more actions are possible. It can only be activated from the start screen.
+        When turned on, the application title bar will be red. Once turned on the application stays in this state
+        until the parent mode is turned off.\n
+        \n
+        To turn on or off parent mode, click "Parent mode" in the start screen\'s top right menu.
+    </string>
+
 </resources>

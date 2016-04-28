@@ -1,5 +1,7 @@
 package com.freak.videosenfants.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 
 import com.freak.videosenfants.R;
@@ -54,8 +57,43 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (!sharedPreferences.getBoolean(getString(R.string.key_dont_ask), false)) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.first_launch_dialog_title);
+            View view = View.inflate(this, R.layout.first_launch_dialog, null);
+            final CheckBox check = (CheckBox) view.findViewById(R.id.check_box);
+            builder.setView(view);
+            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (check.isChecked()) {
+                        SharedPreferences.Editor edit = sharedPreferences.edit();
+                        edit.putBoolean(getString(R.string.key_dont_ask), true);
+                        edit.apply();
+                    }
+                    Intent intent = new Intent(StartActivity.this, FaqActivity.class);
+                    startActivity(intent);
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (check.isChecked()) {
+                        SharedPreferences.Editor edit = sharedPreferences.edit();
+                        edit.putBoolean(getString(R.string.key_dont_ask), true);
+                        edit.apply();
+                    }
+                    dialog.dismiss();
+                }
+            });
+            builder.setCancelable(false);
+            builder.create().show();
+        }
+
         if (sharedPreferences.getBoolean(getString(R.string.key_local_switch), getResources().getBoolean(R.bool.default_switch_local))) {
             mVoiture.setVisibility(View.VISIBLE);
         }
@@ -105,6 +143,10 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 return true;
             case R.id.action_about:
                 intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_help:
+                intent = new Intent(this, FaqActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.parent_mode:

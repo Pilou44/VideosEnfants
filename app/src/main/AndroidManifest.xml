@@ -60,7 +60,23 @@
         <service
             android:name=".services.GetThumbnailsService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.FaqActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.HelpActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape"
+            android:parentActivityName=".activities.FaqActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.freak.videosenfants.activities.FaqActivity" />
+        </activity>
     </application>
 
 </manifest>
