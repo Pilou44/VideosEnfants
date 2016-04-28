@@ -17,6 +17,7 @@
     <string name="pref_dlna_add">Serveur UPnP/DLNA</string>
     <string name="pref_dlna_add_button">Ajouter un serveur UPnP/DLNA</string>
     <string name="dlna_progress_dialog_title">Connexion &#224; un serveur en cours</string>
+    <string name="dlna_progress_dialog_files_title">R&#233;ception des fichiers</string>
     <string name="dlna_progress_dialog_text">Merci de patienter&#8230;</string>
     <string name="no_wifi_connexion">Aucune connection WiFi d&#233;tect&#233;e</string>
     <string name="ok">OK</string>
