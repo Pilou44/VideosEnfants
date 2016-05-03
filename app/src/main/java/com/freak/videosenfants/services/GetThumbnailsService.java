@@ -39,7 +39,6 @@ public class GetThumbnailsService extends Service {
         mQueue = new Vector<>();
         GetThumbnailsThread mThread = new GetThumbnailsThread();
         mRunning = true;
-        mThread.start();
 
         mNotificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -48,6 +47,8 @@ public class GetThumbnailsService extends Service {
                 .setSmallIcon(R.drawable.ic_notif_24dp)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(mQueue.size() + " " + getString(R.string.thumbnails_to_retrieve));
+
+        mThread.start();
     }
 
     @Override
