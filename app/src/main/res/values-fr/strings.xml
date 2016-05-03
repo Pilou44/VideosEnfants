@@ -53,7 +53,7 @@
     <string name="thumbnails_to_retrieve">vignettes &#224; charger</string>
     <string name="files_coma">fichiers,</string>
     <string name="clear">Effacer</string>
-    <string name="first_launch_dialog_title">Premier d&#233;marrage</string>
+    <string name="first_launch_dialog_title">Besoin d\'aide ?</string>
     <string name="first_launch_dialog_message">Voulez-vous de l\'aide pour configurer et savoir comment utiliser cette application ?</string>
     <string name="dont_show">Ne plus afficher</string>
     <string name="action_help">Aide</string>

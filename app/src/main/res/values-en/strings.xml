@@ -53,7 +53,7 @@
     <string name="thumbnails_to_retrieve">thumbnails to retrieve</string>
     <string name="files_coma">files,</string>
     <string name="clear">Clear</string>
-    <string name="first_launch_dialog_title">First launch</string>
+    <string name="first_launch_dialog_title">Need help?</string>
     <string name="first_launch_dialog_message">Do you want help to configure and know how to use this application?</string>
     <string name="dont_show">Don\'t show again</string>
     <string name="action_help">Help</string>
