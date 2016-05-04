@@ -74,7 +74,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
             Log.i(TAG, "Name: " + mName);
         }
 
-        SearchAsyncTask task = new SearchAsyncTask(search, 20, this);
+        SearchAsyncTask task = new SearchAsyncTask(search, this);
         task.execute();
     }
 
@@ -140,16 +140,17 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
     public void onComplete(JSONObject response, Error error) {
         if (response != null) {
             try {
-                JSONObject d = response.getJSONObject("d");
+                JSONObject data = response.getJSONObject("data");
+                JSONObject result = data.getJSONObject("result");
 
-                JSONArray items = d.getJSONArray("results");
+                JSONArray items = result.getJSONArray("items");
                 if (DEBUG)
                     Log.i(TAG, "" + items.length() + " images found");
                 if (items.length() > 0) {
                     for (int i = 0; i < items.length(); i++) {
                         if (DEBUG)
-                            Log.i(TAG, "New item: " + items.getJSONObject(i).getString("Title") + ", " + items.getJSONObject(i).getString("MediaUrl"));
-                        ImageRequest request = new ImageRequest(items.getJSONObject(i).getString("MediaUrl"),
+                            Log.i(TAG, "New item: " + items.getJSONObject(i).getString("title") + ", " + items.getJSONObject(i).getString("media"));
+                        ImageRequest request = new ImageRequest(items.getJSONObject(i).getString("media"),
                                 new Response.Listener<Bitmap>() {
                                     @Override
                                     public void onResponse(Bitmap bitmap) {

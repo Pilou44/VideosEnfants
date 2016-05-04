@@ -1,7 +1,6 @@
 package com.freak.videosenfants.elements.imagesearch;
 
 import android.os.AsyncTask;
-import android.util.Base64;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -17,16 +16,13 @@ import java.net.URLEncoder;
 public class SearchAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 
     private static final String TAG = SearchAsyncTask.class.getSimpleName();
-    private static final String BING_SEARCH_KEY = "K7C+ztgxDK5SMDqHMqu3nedw+uz7BsoO4bLH8P0K9eU=";
 
     private final String mSearchStr;
-    private final int mNumOfResults;
     private final Callback mCallback;
     private Error mError;
 
-    public SearchAsyncTask(String searchStr, @SuppressWarnings("SameParameterValue") int numOfResults, Callback callback) {
+    public SearchAsyncTask(String searchStr, Callback callback) {
         mSearchStr = searchStr;
-        mNumOfResults = numOfResults;
         mCallback = callback;
     }
 
@@ -35,15 +31,11 @@ public class SearchAsyncTask extends AsyncTask<Void, Void, JSONObject> {
         JSONObject mainObject = null;
         try {
             String searchStr = URLEncoder.encode(mSearchStr, "utf-8");
-            String numOfResultsStr = mNumOfResults <= 0 ? "" : "&$top=" + mNumOfResults;
-            String bingUrl = "https://api.datamarket.azure.com/Bing/Search/Image?Query=%27" + searchStr + "%27" + numOfResultsStr + "&$format=json";
-            byte[] accountKeyBytes = Base64.encode((BING_SEARCH_KEY + ":" + BING_SEARCH_KEY).getBytes(), Base64.NO_WRAP);
-            String accountKeyEnc = new String(accountKeyBytes);
+            String qwantUrl = "https://api.qwant.com/egp/search/images?count=30&q=" + searchStr;
 
-            URL url = new URL(bingUrl);
+            URL url = new URL(qwantUrl);
 
             URLConnection urlConnection = url.openConnection();
-            urlConnection.setRequestProperty("Authorization", "Basic " + accountKeyEnc);
             InputStream response = urlConnection.getInputStream();
             String res = readStream(response);
 
