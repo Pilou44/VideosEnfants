@@ -1,9 +1,11 @@
 package com.freak.videosenfants.elements;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 
 import com.freak.videosenfants.R;
 
@@ -26,7 +28,8 @@ public class ApplicationSingleton {
     }
 
     public boolean isParentMode() {
-        return mParentMode;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        return (prefs.getBoolean(mContext.getString(R.string.key_permanent_parent_mode), mContext.getResources().getBoolean(R.bool.default_permanent_parent_mode)) || mParentMode);
     }
 
     public void setParentMode(boolean mParentMode) {

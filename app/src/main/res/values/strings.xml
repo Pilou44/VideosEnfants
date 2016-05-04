@@ -22,6 +22,7 @@
     <string name="key_downloaded" translatable="false">downloaded</string>
     <string name="key_dont_ask" translatable="false">dont_ask</string>
     <string name="key_id" translatable="false">id</string>
+    <string name="key_permanent_parent_mode" translatable="false">permanent_parent_mode</string>
 
     <!-- Not translatable strings -->
     <string name="default_local_pictures" translatable="false">/sdcard/VideosForKids/</string>
@@ -163,5 +164,7 @@
         \n
         To turn on or off parent mode, click "Parent mode" in the start screen\'s top right menu.
     </string>
+    <string name="permanent_parent_mode_title">Permanent parent mode</string>
+    <string name="permanent_parent_mode_summary">Always stay in parent mode</string>
 
 </resources>
