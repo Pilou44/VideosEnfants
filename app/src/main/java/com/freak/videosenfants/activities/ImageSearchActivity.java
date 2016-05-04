@@ -1,5 +1,7 @@
 package com.freak.videosenfants.activities;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -31,13 +33,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class ImageSearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, SearchAsyncTask.Callback {
+public class ImageSearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, SearchAsyncTask.Callback, DialogInterface.OnCancelListener {
 
     private static final boolean DEBUG = true;
     private static final String TAG = ImageSearchActivity.class.getSimpleName();
 
     private ImageSearchAdapter mAdapter;
     private String mName;
+    private ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,9 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
 
         SearchAsyncTask task = new SearchAsyncTask(search, this);
         task.execute();
+
+        mDialog = ProgressDialog.show(this, getString(R.string.image_search_progress_dialog_title), getString(R.string.progress_dialog_text), true, true, this);
+        mDialog.setCanceledOnTouchOutside(false);
     }
 
     @Override
@@ -138,6 +144,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onComplete(JSONObject response, Error error) {
+        mDialog.dismiss();
         if (response != null) {
             try {
                 JSONObject data = response.getJSONObject("data");
@@ -173,5 +180,10 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        finish();
     }
 }
