@@ -93,7 +93,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
 
     private void saveBitmapToFile(Bitmap image) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String dir = prefs.getString("local_pictures", this.getString(R.string.default_local_pictures));
+        String dir = prefs.getString(getString(R.string.key_local_pictures), getString(R.string.default_local_pictures));
         String fileName = mName + ".jpg";
         File imageFile = new File(dir,fileName);
 

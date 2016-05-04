@@ -3,7 +3,7 @@
 
     <com.freak.videosenfants.elements.preferences.BrowseLocalPreference
         android:defaultValue="@string/default_local_pictures"
-        android:key="local_pictures"
+        android:key="@string/key_local_pictures"
         android:summary="@string/pref_description_local_pictures"
         android:title="@string/pref_title_local_pictures" />
     <CheckBoxPreference
