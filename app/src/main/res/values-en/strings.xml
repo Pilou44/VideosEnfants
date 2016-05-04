@@ -136,4 +136,6 @@
         \n
         To turn on or off parent mode, click "Parent mode" in the start screen\'s top right menu.
     </string>
+    <string name="permanent_parent_mode_title">Permanent parent mode</string>
+    <string name="permanent_parent_mode_summary">Always stay in parent mode</string>
 </resources>

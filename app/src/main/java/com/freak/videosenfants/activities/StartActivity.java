@@ -27,6 +27,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private ImageButton mMaison;
     private ImageButton mOptions;
     private MenuItem mParentMode;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +53,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         assert mOptions != null;
         mOptions.setOnClickListener(this);
 
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!sharedPreferences.getBoolean(getString(R.string.key_dont_ask), false)) {
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!mSharedPreferences.getBoolean(getString(R.string.key_dont_ask), false)) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.first_launch_dialog_title);
@@ -64,7 +65,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (check.isChecked()) {
-                        SharedPreferences.Editor edit = sharedPreferences.edit();
+                        SharedPreferences.Editor edit = mSharedPreferences.edit();
                         edit.putBoolean(getString(R.string.key_dont_ask), true);
                         edit.apply();
                     }
@@ -77,7 +78,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (check.isChecked()) {
-                        SharedPreferences.Editor edit = sharedPreferences.edit();
+                        SharedPreferences.Editor edit = mSharedPreferences.edit();
                         edit.putBoolean(getString(R.string.key_dont_ask), true);
                         edit.apply();
                     }
@@ -94,16 +95,14 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
 
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        if (sharedPreferences.getBoolean(getString(R.string.key_local_switch), getResources().getBoolean(R.bool.default_switch_local))) {
+        if (mSharedPreferences.getBoolean(getString(R.string.key_local_switch), getResources().getBoolean(R.bool.default_switch_local))) {
             mVoiture.setVisibility(View.VISIBLE);
         }
         else {
             mVoiture.setVisibility(View.GONE);
         }
 
-        if (sharedPreferences.getBoolean(getString(R.string.key_dlna_switch), getResources().getBoolean(R.bool.default_switch_dlna))) {
+        if (mSharedPreferences.getBoolean(getString(R.string.key_dlna_switch), getResources().getBoolean(R.bool.default_switch_dlna))) {
             mMaison.setVisibility(View.VISIBLE);
         }
         else {
@@ -122,10 +121,15 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_start, menu);
-        mParentMode = menu.findItem(R.id.parent_mode);
-        if (DEBUG)
-            Log.i(TAG, "Parent mode: " + ApplicationSingleton.getInstance(this).isParentMode());
-        mParentMode.setChecked(ApplicationSingleton.getInstance(this).isParentMode());
+        if (mSharedPreferences.getBoolean(getString(R.string.key_permanent_parent_mode), getResources().getBoolean(R.bool.default_permanent_parent_mode))) {
+            menu.removeItem(R.id.parent_mode);
+        }
+        else {
+            mParentMode = menu.findItem(R.id.parent_mode);
+            if (DEBUG)
+                Log.i(TAG, "Parent mode: " + ApplicationSingleton.getInstance(this).isParentMode());
+            mParentMode.setChecked(ApplicationSingleton.getInstance(this).isParentMode());
+        }
         return true;
     }
 

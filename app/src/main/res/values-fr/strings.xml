@@ -136,5 +136,7 @@
         \n
         Pour activer ou d&#233;sactiver le mode parent, cliquez sur "Mode parent" dans le menu en haut &#224; droite de l\'&#233;cran de d&#233;marrage.\n
     </string>
+    <string name="permanent_parent_mode_title">Mode parent permanent</string>
+    <string name="permanent_parent_mode_summary">Toujours rester en mode parent</string>
 
 </resources>
