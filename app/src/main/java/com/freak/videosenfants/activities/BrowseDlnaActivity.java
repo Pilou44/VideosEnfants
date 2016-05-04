@@ -198,7 +198,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                 );
                 mBound = true;
 
-                mDialog = ProgressDialog.show(this, getString(R.string.dlna_progress_dialog_title), getString(R.string.dlna_progress_dialog_text), true, true, this);
+                mDialog = ProgressDialog.show(this, getString(R.string.dlna_progress_dialog_title), getString(R.string.progress_dialog_text), true, true, this);
                 mDialog.setCanceledOnTouchOutside(false);
             } else {
                 mUpnpService.getControlPoint().execute(new Browse(mService, mCurrent.getPath(), BrowseFlag.DIRECT_CHILDREN) {
@@ -259,7 +259,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
 
     protected void parseAndUpdate(final VideoElement element) {
 
-        mDialog = ProgressDialog.show(this, getString(R.string.dlna_progress_dialog_files_title), getString(R.string.dlna_progress_dialog_text), true, true, this);
+        mDialog = ProgressDialog.show(this, getString(R.string.dlna_progress_dialog_files_title), getString(R.string.progress_dialog_text), true, true, this);
         mDialog.setCanceledOnTouchOutside(false);
 
         mUpnpService.getControlPoint().execute(new Browse(mService, element.getPath(), BrowseFlag.DIRECT_CHILDREN) {
