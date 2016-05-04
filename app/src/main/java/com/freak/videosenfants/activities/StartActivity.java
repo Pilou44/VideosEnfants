@@ -51,14 +51,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         mOptions = (ImageButton) findViewById(R.id.options);
         assert mOptions != null;
         mOptions.setOnClickListener(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         if (!sharedPreferences.getBoolean(getString(R.string.key_dont_ask), false)) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -93,6 +87,14 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             builder.setCancelable(false);
             builder.create().show();
         }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         if (sharedPreferences.getBoolean(getString(R.string.key_local_switch), getResources().getBoolean(R.bool.default_switch_local))) {
             mVoiture.setVisibility(View.VISIBLE);
