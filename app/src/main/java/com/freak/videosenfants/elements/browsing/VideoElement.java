@@ -147,7 +147,7 @@ public class VideoElement {
     private String getBitmapURI() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-        File picturesLocation = new File(sharedPref.getString("local_pictures", mContext.getString(R.string.default_local_pictures)));
+        File picturesLocation = new File(sharedPref.getString(mContext.getString(R.string.key_local_pictures), mContext.getString(R.string.default_local_pictures)));
         boolean locationExists = picturesLocation.exists();
         if (!locationExists) {
             if (DEBUG) {

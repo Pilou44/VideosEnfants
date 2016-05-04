@@ -23,6 +23,7 @@
     <string name="key_dont_ask" translatable="false">dont_ask</string>
     <string name="key_id" translatable="false">id</string>
     <string name="key_permanent_parent_mode" translatable="false">permanent_parent_mode</string>
+    <string name="key_local_pictures" translatable="false">local_pictures</string>
 
     <!-- Not translatable strings -->
     <string name="default_local_pictures" translatable="false">/sdcard/VideosForKids/</string>

@@ -287,7 +287,7 @@ public class SettingsActivity extends PreferenceActivity {
 
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-            File downloaded = new File(sharedPref.getString("local_pictures", getActivity().getString(R.string.default_local_pictures)));
+            File downloaded = new File(sharedPref.getString(getActivity().getString(R.string.key_local_pictures), getActivity().getString(R.string.default_local_pictures)));
             MemoryPreference downloadedPref = (MemoryPreference) findPreference(getString(R.string.key_downloaded));
             downloadedPref.setDirectory(downloaded);
 
