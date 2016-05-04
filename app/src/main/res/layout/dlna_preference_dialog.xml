@@ -13,8 +13,8 @@
 
     <ListView
         android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:background="#11000000" />
 
 </LinearLayout>
