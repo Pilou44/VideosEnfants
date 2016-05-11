@@ -1,13 +1,17 @@
 package com.freak.videosenfants.elements.preferences;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -79,20 +83,11 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
     @Override
     protected void onBindView(View view) {
         super.onBindView(view);
+
         ImageButton removeButton = (ImageButton) view.findViewById(R.id.remove_button);
-        TextView titleView = (TextView) view.findViewById(R.id.title);
-        TextView summaryView = (TextView) view.findViewById(R.id.summary);
         TextView valueView = (TextView) view.findViewById(R.id.value);
 
-        titleView.setText(this.getTitle());
         valueView.setText(mSharedPref.getString(this.getKey(), mDefaultValue));
-        if (getSummary() != null && getSummary().length() > 0) {
-            summaryView.setVisibility(View.VISIBLE);
-            summaryView.setText(getSummary());
-        }
-        else {
-            summaryView.setVisibility(View.GONE);
-        }
         if (mDeletable) {
             removeButton.setVisibility(View.VISIBLE);
             removeButton.setOnClickListener(this);
@@ -118,4 +113,42 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
     public Context getContext() {
         return mContext;
     }
+
+    @Override
+    protected void showDialog(Bundle state) {
+        final Dialog dialog = new Dialog(mContext);
+
+        dialog.setTitle(getDialogTitle());
+        View contentView = dialog.getLayoutInflater().inflate(getDialogLayoutResource(), null);
+        dialog.setContentView(contentView);
+
+        onBindDialogView(contentView);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        dialog.getWindow().setAttributes(lp);
+
+        Button ok = (Button) dialog.findViewById(R.id.button1);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                onDialogClosed(true);
+            }
+        });
+
+        Button cancel = (Button) dialog.findViewById(R.id.button2);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                onDialogClosed(false);
+            }
+        });
+
+        dialog.setOnDismissListener(this);
+        dialog.show();
+    }
+
 }
