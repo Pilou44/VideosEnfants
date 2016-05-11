@@ -22,6 +22,7 @@
     <string name="progress_dialog_text">Merci de patienter&#8230;</string>
     <string name="no_wifi_connexion">Aucune connection WiFi d&#233;tect&#233;e</string>
     <string name="ok">OK</string>
+    <string name="cancel">Annuler</string>
     <string name="parent_mode">Mode parent</string>
     <string name="set_image">Rechercher une vignette</string>
     <string name="copy">Copier en local</string>

@@ -9,12 +9,59 @@
         android:id="@+id/summary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/select_directory" />
+        android:text="@string/select_directory"
+        android:layout_weight="2"/>
 
     <ListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#11000000"/>
+        android:background="#11000000"
+        android:layout_weight="100"/>
 
+    <LinearLayout android:id="@+id/buttonPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="54dip"
+        android:orientation="vertical"
+        android:layout_weight="1" >
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="4dip"
+            android:paddingStart="2dip"
+            android:paddingEnd="2dip"
+            android:measureWithLargestChild="true">
+            <LinearLayout android:id="@+id/leftSpacer"
+                android:layout_weight="0.25"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone" />
+            <Button android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                style="?android:attr/buttonBarButtonStyle"
+                android:maxLines="2"
+                android:text="@string/ok"/>
+            <Button android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                style="?android:attr/buttonBarButtonStyle"
+                android:maxLines="2"
+                android:text="@string/cancel" />
+            <LinearLayout android:id="@+id/rightSpacer"
+                android:layout_width="0dip"
+                android:layout_weight="0.25"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
