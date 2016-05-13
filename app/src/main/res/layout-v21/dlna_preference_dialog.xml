@@ -47,8 +47,7 @@
                 android:layout_weight="1"
                 style="?android:attr/buttonBarButtonStyle"
                 android:maxLines="2"
-                android:text="@string/cancel"
-                android:textColor="#ff009688"/>
+                android:text="@string/cancel"/>
             <Button android:id="@+id/button1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,8 +55,7 @@
                 android:layout_weight="1"
                 style="?android:attr/buttonBarButtonStyle"
                 android:maxLines="2"
-                android:text="@string/ok"
-                android:textColor="#ff009688"/>
+                android:text="@string/ok"/>
             <LinearLayout android:id="@+id/rightSpacer"
                 android:layout_width="0dip"
                 android:layout_weight="0.25"
