@@ -16,7 +16,7 @@
         android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#11000000"
+        android:background="@color/list_dialog_background"
         android:layout_weight="100"/>
 
     <LinearLayout android:id="@+id/buttonPanel"
@@ -48,7 +48,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:maxLines="2"
                 android:text="@string/cancel"
-                android:textColor="#ff009688"/>
+                android:textColor="@color/colorAccent"/>
             <Button android:id="@+id/button1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:maxLines="2"
                 android:text="@string/ok"
-                android:textColor="#ff009688"/>
+                android:textColor="@color/colorAccent"/>
             <LinearLayout android:id="@+id/rightSpacer"
                 android:layout_width="0dip"
                 android:layout_weight="0.25"
