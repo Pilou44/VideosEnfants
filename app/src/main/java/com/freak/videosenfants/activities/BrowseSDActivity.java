@@ -1,14 +1,18 @@
 package com.freak.videosenfants.activities;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +21,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.elements.ApplicationSingleton;
 import com.freak.videosenfants.elements.browsing.VideoElement;
 import com.freak.videosenfants.elements.browsing.VideoElementAdapter;
 
@@ -239,6 +244,16 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(BrowseSDActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    ActivityCompat.requestPermissions(BrowseSDActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            ApplicationSingleton.MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
+
+                }
+
                 final VideoElement element = mAdapter.getItem(position);
                 if (DEBUG)
                     Log.i(TAG, "Delete " + element.getPath());
