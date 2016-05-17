@@ -16,7 +16,7 @@
         android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#11000000"
+        android:background="@color/list_dialog_background"
         android:layout_weight="100"/>
 
     <LinearLayout android:id="@+id/buttonPanel"
