@@ -1,5 +1,6 @@
 package com.freak.videosenfants.activities;
 
+import android.Manifest;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -7,12 +8,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -371,6 +375,16 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
             copyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (ContextCompat.checkSelfPermission(BrowseDlnaActivity.this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+
+                        ActivityCompat.requestPermissions(BrowseDlnaActivity.this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                ApplicationSingleton.MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
+
+                    }
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(BrowseDlnaActivity.this);
                     builder.setTitle(R.string.copy);
                     builder.setView(R.layout.copy_dialog_layout);

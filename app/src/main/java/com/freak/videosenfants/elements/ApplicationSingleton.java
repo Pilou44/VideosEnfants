@@ -11,6 +11,8 @@ import com.freak.videosenfants.R;
 
 public class ApplicationSingleton {
 
+    public static final int MY_PERMISSIONS_REQUEST_READ_STORAGE = 0;
+    public static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 1;
     private static ApplicationSingleton mInstance;
     private final Context mContext;
     private boolean mParentMode;
