@@ -93,7 +93,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
     private void saveBitmapToFile(Bitmap image) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String dir = prefs.getString(getString(R.string.key_local_pictures), getString(R.string.default_local_pictures));
-        String fileName = mName + ".jpg";
+        String fileName = mName + ".png";
         File imageFile = new File(dir,fileName);
 
         if (DEBUG) {
@@ -103,7 +103,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(imageFile);
-            image.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+            image.compress(Bitmap.CompressFormat.PNG, 50, fos);
             fos.close();
         }
         catch (IOException e) {
