@@ -8,8 +8,8 @@ android {
         applicationId "com.freak.videosenfants"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 15
-        versionName "0.99.02"
+        versionCode 16
+        versionName "0.99.03"
     }
     buildTypes {
         release {
