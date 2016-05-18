@@ -139,4 +139,5 @@
     </string>
     <string name="permanent_parent_mode_title">Permanent parent mode</string>
     <string name="permanent_parent_mode_summary">Always stay in parent mode</string>
+    <string name="images_source">Icons made by</string>
 </resources>

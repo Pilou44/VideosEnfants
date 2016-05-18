@@ -50,8 +50,8 @@
     </RelativeLayout>
     <ImageButton
         android:id="@+id/remove_button"
-        android:layout_width="21dp"
-        android:layout_height="21dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:src="@drawable/supprimer"
         android:backgroundTint="@color/transparent"
         android:background="@null"

@@ -17,11 +17,14 @@
         android:layout_height="@dimen/thumbnail_height"
         android:layout_alignBottom="@+id/icon"
         android:layout_alignStart="@+id/icon"
-        android:padding="10dp">
+        android:paddingTop="53dp"
+        android:paddingBottom="30dp"
+        android:paddingStart="18dp"
+        android:paddingEnd="17dp">
         <ImageView
             android:id="@+id/sub_icon"
-            android:layout_width="280dp"
-            android:layout_height="170dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:visibility="gone"

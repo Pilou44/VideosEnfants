@@ -139,5 +139,6 @@
     </string>
     <string name="permanent_parent_mode_title">Mode parent permanent</string>
     <string name="permanent_parent_mode_summary">Toujours rester en mode parent</string>
+    <string name="images_source">Ic&#244;nes cr&#233;&#233;es par</string>
 
 </resources>

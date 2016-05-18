@@ -30,6 +30,8 @@ public class AboutActivity extends AppCompatActivity {
         modules += "- FFmpegMediaMetadataRetriever (https://github.com/wseemann/FFmpegMediaMetadataRetriever)\n";
         modules += "- httpcore (https://hc.apache.org/httpcomponents-core-ga/)\n";
         modules += "- Universal Image Loader (https://github.com/nostra13/Android-Universal-Image-Loader)\n";
+        modules += "\n";
+        modules += getString(R.string.images_source) + " Freepik (http://www.freepik.com)";
 
         assert modulesView != null;
         modulesView.setText(modules);
