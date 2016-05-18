@@ -127,6 +127,7 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialog.getWindow().getAttributes());
         lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         dialog.getWindow().setAttributes(lp);
 
         Button ok = (Button) dialog.findViewById(R.id.button1);
