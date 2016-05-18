@@ -1,13 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/com.freak.videosenfants">
 
-    <!-- A 'parent' preference, which enables/disables child preferences (below)
-         when checked/unchecked. -->
-    <SwitchPreference
-        android:defaultValue="@bool/default_switch_dlna"
-        android:key="@string/key_dlna_switch"
-        android:title="@string/pref_title_dlna_switch" />
-
     <com.freak.videosenfants.elements.preferences.AddButtonPreference
         android:key="@string/key_dlna_browse"
         android:title="@string/pref_dlna_add_button"

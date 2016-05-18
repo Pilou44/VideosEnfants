@@ -1,11 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/com.freak.videosenfants">
 
-    <SwitchPreference
-        android:defaultValue="@bool/default_switch_local"
-        android:key="@string/key_local_switch"
-        android:title="@string/pref_title_local_switch" />
-
     <com.freak.videosenfants.elements.preferences.AddButtonPreference
         android:key="@string/key_local_browse"
         android:title="@string/pref_local_add_button"

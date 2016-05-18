@@ -95,14 +95,16 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
 
-        if (mSharedPreferences.getBoolean(getString(R.string.key_local_switch), getResources().getBoolean(R.bool.default_switch_local))) {
+        //if (mSharedPreferences.getBoolean(getString(R.string.key_local_switch), getResources().getBoolean(R.bool.default_switch_local))) {
+        if (isCarVisible()) {
             mVoiture.setVisibility(View.VISIBLE);
         }
         else {
             mVoiture.setVisibility(View.GONE);
         }
 
-        if (mSharedPreferences.getBoolean(getString(R.string.key_dlna_switch), getResources().getBoolean(R.bool.default_switch_dlna))) {
+        //if (mSharedPreferences.getBoolean(getString(R.string.key_dlna_switch), getResources().getBoolean(R.bool.default_switch_dlna))) {
+        if (isHouseVisible()) {
             mMaison.setVisibility(View.VISIBLE);
         }
         else {
@@ -115,6 +117,32 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         else {
             mOptions.setVisibility(View.GONE);
         }
+    }
+
+    private boolean isCarVisible() {
+        boolean carVisible = false;
+        int nbRoots = getResources().getInteger(R.integer.local_roots_number);
+        for (int i = 0 ; i < nbRoots ; i++){
+            boolean visible = mSharedPreferences.getBoolean(getString(R.string.key_local_browse) + "_" + i + getString(R.string.key_visible), false);
+            boolean empty = mSharedPreferences.getString(getString(R.string.key_local_browse) + "_" + i, "").length() == 0;
+            if (visible && !empty) {
+                carVisible |= true;
+            }
+        }
+        return carVisible;
+    }
+
+    private boolean isHouseVisible() {
+        int nbServers = 0;
+        int maxNbServers = getResources().getInteger(R.integer.dlna_servers_number);
+        for (int i = 0 ; i < maxNbServers ; i++){
+            boolean visible = mSharedPreferences.getBoolean(getString(R.string.key_dlna_browse) + "_" + i + getString(R.string.key_visible), false);
+            boolean empty = mSharedPreferences.getString(getString(R.string.key_dlna_browse) + "_" + i, "").length() == 0;
+            if (visible && !empty) {
+                nbServers++;
+            }
+        }
+        return nbServers > 0;
     }
 
     @Override
@@ -181,4 +209,5 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         }
         startActivity(intent);
     }
+
 }

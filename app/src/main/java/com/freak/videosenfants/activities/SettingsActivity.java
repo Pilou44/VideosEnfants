@@ -9,7 +9,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.preference.SwitchPreference;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,9 +18,6 @@ import android.widget.LinearLayout;
 
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.elements.ApplicationSingleton;
-import com.freak.videosenfants.elements.preferences.AddButtonPreference;
-import com.freak.videosenfants.elements.preferences.BrowseDlnaPreference;
-import com.freak.videosenfants.elements.preferences.BrowseLocalPreference;
 import com.freak.videosenfants.elements.preferences.BrowsePreference;
 import com.freak.videosenfants.elements.preferences.MemoryPreference;
 
@@ -95,7 +91,6 @@ public class SettingsActivity extends PreferenceActivity {
     public static class LocalPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
         private static final String TAG = LocalPreferenceFragment.class.getSimpleName();
         private static final boolean DEBUG = true;
-        private SwitchPreference mSwitchButton;
         private Vector<BrowsePreference> mBrowsePrefs;
         private PreferenceScreen mScreen;
 
@@ -105,7 +100,6 @@ public class SettingsActivity extends PreferenceActivity {
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.pref_local);
-            mSwitchButton = (SwitchPreference) findPreference(getString(R.string.key_local_switch));
 
             mBrowsePrefs = new Vector<>();
             mScreen = getPreferenceScreen();
@@ -125,7 +119,6 @@ public class SettingsActivity extends PreferenceActivity {
         public void onResume() {
             super.onResume();
             PreferenceManager.getDefaultSharedPreferences(this.getActivity()).registerOnSharedPreferenceChangeListener(this);
-            setEnabled();
         }
 
         @Override
@@ -158,10 +151,7 @@ public class SettingsActivity extends PreferenceActivity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.equals(getString(R.string.key_local_switch))) {
-                setEnabled();
-            }
-            else if (key.startsWith(getString(R.string.key_local_browse)) && key.endsWith(getString(R.string.key_visible))){
+            if (key.startsWith(getString(R.string.key_local_browse)) && key.endsWith(getString(R.string.key_visible))){
                 String indexString = key.substring(getString(R.string.key_local_browse).length() + 1 , key.lastIndexOf(getString(R.string.key_visible)));
                 int index = Integer.parseInt(indexString);
                 if (sharedPreferences.getBoolean(key, false)) {
@@ -172,19 +162,6 @@ public class SettingsActivity extends PreferenceActivity {
                 }
             }
         }
-
-        private void setEnabled() {
-            int nbRoots = getResources().getInteger(R.integer.local_roots_number);
-            for (int i = 0 ; i < nbRoots ; i++) {
-                String prefKey = getString(R.string.key_local_browse) + "_" + i;
-                BrowseLocalPreference pref = (BrowseLocalPreference) findPreference(prefKey);
-                if (pref != null) {
-                    pref.setEnabled(mSwitchButton.isChecked());
-                }
-            }
-            AddButtonPreference addPref = (AddButtonPreference) findPreference(getString(R.string.key_local_browse));
-            addPref.setEnabled(mSwitchButton.isChecked());
-        }
     }
 
     /**
@@ -193,7 +170,6 @@ public class SettingsActivity extends PreferenceActivity {
     public static class DlnaPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
         private static final boolean DEBUG = true;
         private static final String TAG = DlnaPreferenceFragment.class.getSimpleName();
-        private SwitchPreference mSwitchButton;
         private Vector<BrowsePreference> mBrowsePrefs;
         private PreferenceScreen mScreen;
 
@@ -203,8 +179,6 @@ public class SettingsActivity extends PreferenceActivity {
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.pref_dlna);
-            mSwitchButton = (SwitchPreference) findPreference(getString(R.string.key_dlna_switch));
-
 
             mBrowsePrefs = new Vector<>();
             mScreen = getPreferenceScreen();
@@ -227,7 +201,6 @@ public class SettingsActivity extends PreferenceActivity {
         public void onResume() {
             super.onResume();
             PreferenceManager.getDefaultSharedPreferences(this.getActivity()).registerOnSharedPreferenceChangeListener(this);
-            setEnabled();
         }
 
         @Override
@@ -260,10 +233,7 @@ public class SettingsActivity extends PreferenceActivity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.equals(getString(R.string.key_dlna_switch))) {
-                setEnabled();
-            }
-            else if (key.startsWith(getString(R.string.key_dlna_browse)) && key.endsWith(getString(R.string.key_visible))){
+            if (key.startsWith(getString(R.string.key_dlna_browse)) && key.endsWith(getString(R.string.key_visible))){
                 String indexString = key.substring(getString(R.string.key_dlna_browse).length() + 1 , key.lastIndexOf(getString(R.string.key_visible)));
                 int index = Integer.parseInt(indexString);
                 if (sharedPreferences.getBoolean(key, false)) {
@@ -273,19 +243,6 @@ public class SettingsActivity extends PreferenceActivity {
                     mScreen.removePreference(mBrowsePrefs.get(index));
                 }
             }
-        }
-
-        private void setEnabled() {
-            int nbRoots = getResources().getInteger(R.integer.dlna_servers_number);
-            for (int i = 0 ; i < nbRoots ; i++) {
-                String prefKey = getString(R.string.key_dlna_browse) + "_" + i;
-                BrowseDlnaPreference pref = (BrowseDlnaPreference) findPreference(prefKey);
-                if (pref != null) {
-                    pref.setEnabled(mSwitchButton.isChecked());
-                }
-            }
-            AddButtonPreference addPref = (AddButtonPreference) findPreference(getString(R.string.key_dlna_browse));
-            addPref.setEnabled(mSwitchButton.isChecked());
         }
     }
 
