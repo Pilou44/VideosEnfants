@@ -82,10 +82,10 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int nbRoots = context.getResources().getInteger(R.integer.local_roots_number);
         for (int i = 0 ; i < nbRoots ; i++){
-            boolean visible = prefs.getBoolean("local_browse_" + i + "_visible", false);
-            boolean empty = prefs.getString("local_browse_" + i, "").length() == 0;
+            boolean visible = prefs.getBoolean(context.getString(R.string.key_local_browse) + "_" + i + context.getString(R.string.key_visible), false);
+            boolean empty = prefs.getString(context.getString(R.string.key_local_browse) + "_" + i, "").length() == 0;
             if (visible && !empty) {
-                File childrenFolder = new File(prefs.getString("local_browse_" + i, ""));
+                File childrenFolder = new File(prefs.getString(context.getString(R.string.key_local_browse) + "_" + i, ""));
                 if (childrenFolder.exists() && childrenFolder.isDirectory()) {
                     if (DEBUG) {
                         Log.i(TAG, "New root found: " + childrenFolder.getAbsolutePath());
