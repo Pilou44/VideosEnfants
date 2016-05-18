@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -98,33 +97,13 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
         File imageFile = new File(dir,fileName);
 
         if (DEBUG) {
-            Log.i(TAG, "Reduce image size");
-        }
-        int pxWidth = getResources().getDimensionPixelSize(R.dimen.thumbnail_width);
-        int pxHeight = getResources().getDimensionPixelSize(R.dimen.thumbnail_height);
-        int srcWidth = image.getWidth();
-        int srcHeight = image.getHeight();
-        int destWidth;
-        int destHeight;
-
-        destWidth = pxWidth;
-        destHeight = (srcHeight * pxWidth) / srcWidth;
-
-        if (destHeight > pxHeight){
-            destHeight = pxHeight;
-            destWidth = (srcWidth * pxHeight) / srcHeight;
-        }
-        Bitmap bmp = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(image, destWidth, destHeight, false)).getBitmap();
-        image.recycle();
-
-        if (DEBUG) {
             Log.i(TAG, "Save file to " + imageFile.getPath());
         }
 
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(imageFile);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+            image.compress(Bitmap.CompressFormat.JPEG, 50, fos);
             fos.close();
         }
         catch (IOException e) {
@@ -136,9 +115,6 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
                     e1.printStackTrace();
                 }
             }
-        }
-        finally {
-            bmp.recycle();
         }
     }
 
@@ -164,7 +140,10 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
                                         mAdapter.add(bitmap);
                                         mAdapter.notifyDataSetChanged();
                                     }
-                                }, 0, 0, ImageView.ScaleType.CENTER_INSIDE, null,
+                                },
+                                getResources().getDimensionPixelSize(R.dimen.thumbnail_width),
+                                getResources().getDimensionPixelSize(R.dimen.thumbnail_height),
+                                ImageView.ScaleType.CENTER_INSIDE, null,
                                 new Response.ErrorListener() {
                                     public void onErrorResponse(VolleyError error) {
                                         mAdapter.add(null);
