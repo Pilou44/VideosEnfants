@@ -100,7 +100,7 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.remove_button) {
-            String key = getKey() + "_visible";
+            String key = getKey() + mContext.getString(R.string.key_visible);
             SharedPreferences.Editor editor = mSharedPref.edit();
             editor.putBoolean(key, false);
             editor.apply();
