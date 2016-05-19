@@ -68,7 +68,8 @@ public class ApplicationSingleton {
             Network[] networks = connManager.getAllNetworks();
             for (Network network : networks) {
                 NetworkInfo info = connManager.getNetworkInfo(network);
-                if (info.getType() == ConnectivityManager.TYPE_WIFI && info.isConnected()) {
+                if ((info.getType() == ConnectivityManager.TYPE_WIFI || info.getType() == ConnectivityManager.TYPE_ETHERNET)
+                        && info.isConnected()) {
                     wiFiConnected = true;
                 }
             }

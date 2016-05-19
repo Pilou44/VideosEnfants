@@ -20,7 +20,7 @@
     <string name="image_search_progress_dialog_title">En attente de résultats</string>
     <string name="dlna_progress_dialog_files_title">R&#233;ception des fichiers</string>
     <string name="progress_dialog_text">Merci de patienter&#8230;</string>
-    <string name="no_wifi_connexion">Aucune connection WiFi d&#233;tect&#233;e</string>
+    <string name="no_wifi_connexion">Aucune connection WiFi ou ethernet d&#233;tect&#233;e</string>
     <string name="ok">OK</string>
     <string name="cancel">Annuler</string>
     <string name="parent_mode">Mode parent</string>
