@@ -41,7 +41,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:visibility="gone" />
-            <Button android:id="@+id/button2"
+            <Button android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                style="?android:attr/buttonBarButtonStyle"
+                android:maxLines="2"
+                android:text="@string/delete"
+                android:visibility="gone"
+                tools:ignore="ButtonOrder" />
+            <Button android:id="@+id/cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
@@ -50,7 +60,7 @@
                 android:maxLines="2"
                 android:text="@string/cancel"
                 tools:ignore="ButtonOrder" />
-            <Button android:id="@+id/button1"
+            <Button android:id="@+id/ok"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

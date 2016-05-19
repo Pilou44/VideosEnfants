@@ -8,16 +8,15 @@ import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.freak.videosenfants.R;
 
-public class BrowsePreference extends DialogPreference implements View.OnClickListener {
+public class BrowsePreference extends DialogPreference implements View.OnKeyListener {
 
     private static final boolean DEBUG = true;
     private static final String TAG = BrowsePreference.class.getSimpleName();
@@ -74,40 +73,11 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
     }
 
     @Override
-    protected View onCreateView(ViewGroup parent) {
-        View preferenceView = super.onCreateView(parent);
-        preferenceView.setOnClickListener(this);
-        return preferenceView;
-    }
-
-    @Override
     protected void onBindView(View view) {
         super.onBindView(view);
 
-        ImageButton removeButton = (ImageButton) view.findViewById(R.id.remove_button);
         TextView valueView = (TextView) view.findViewById(R.id.value);
-
         valueView.setText(mSharedPref.getString(this.getKey(), mDefaultValue));
-        if (mDeletable) {
-            removeButton.setVisibility(View.VISIBLE);
-            removeButton.setOnClickListener(this);
-        }
-        else {
-            removeButton.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.remove_button) {
-            String key = getKey() + mContext.getString(R.string.key_visible);
-            SharedPreferences.Editor editor = mSharedPref.edit();
-            editor.putBoolean(key, false);
-            editor.apply();
-        }
-        else {
-            super.onClick();
-        }
     }
 
     public Context getContext() {
@@ -130,7 +100,7 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         dialog.getWindow().setAttributes(lp);
 
-        Button ok = (Button) dialog.findViewById(R.id.button1);
+        Button ok = (Button) dialog.findViewById(R.id.ok);
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,7 +109,7 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
             }
         });
 
-        Button cancel = (Button) dialog.findViewById(R.id.button2);
+        Button cancel = (Button) dialog.findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,8 +118,37 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
             }
         });
 
+        Button delete = (Button) dialog.findViewById(R.id.delete);
+        if (mDeletable) {
+            delete.setVisibility(View.VISIBLE);
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    onDialogClosed(false);
+
+                    String key = getKey() + mContext.getString(R.string.key_visible);
+                    SharedPreferences.Editor editor = mSharedPref.edit();
+                    editor.putBoolean(key, false);
+                    editor.apply();
+                }
+            });
+        }
+        else {
+            delete.setVisibility(View.GONE);
+        }
+
         dialog.setOnDismissListener(this);
         dialog.show();
     }
 
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {if ((keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) && event.getAction() == KeyEvent.ACTION_DOWN){
+            super.onClick();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }

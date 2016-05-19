@@ -48,13 +48,4 @@
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"/>
     </RelativeLayout>
-    <ImageButton
-        android:id="@+id/remove_button"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        android:src="@drawable/supprimer"
-        android:backgroundTint="@color/transparent"
-        android:background="@null"
-        android:visibility="gone"
-        android:contentDescription="@string/remove_description" />
 </LinearLayout>
