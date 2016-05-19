@@ -6,12 +6,13 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
 import com.freak.videosenfants.R;
 
-public class AddButtonPreference extends Preference implements View.OnClickListener {
+public class AddButtonPreference extends Preference implements View.OnClickListener, View.OnKeyListener {
 
     private static final boolean DEBUG = true;
     private static final String TAG = AddButtonPreference.class.getSimpleName();
@@ -98,4 +99,17 @@ public class AddButtonPreference extends Preference implements View.OnClickListe
         }
         return ret;
     }
+
+    @Override
+    public boolean onKey(View view, int keyCode, KeyEvent event) {
+        if (event.getAction() ==  KeyEvent.ACTION_DOWN &&
+                (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER)) {
+            onClick(view);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }
