@@ -10,10 +10,8 @@
     <string name="pref_title_cached_thumbnails">Vignettes en cache</string>
     <string name="pref_description_local_pictures">Chemin vers le dossier de vignettes</string>
     <string name="pref_title_local_pictures">Vignettes</string>
-    <string name="pref_title_local_switch">Fichiers locaux</string>
     <string name="pref_local_add">Dossier racine pour des fichiers locaux</string>
     <string name="pref_local_add_button">Ajouter un dossier</string>
-    <string name="pref_title_dlna_switch">UPnP/DLNA</string>
     <string name="pref_dlna_add">Serveur UPnP/DLNA</string>
     <string name="pref_dlna_add_button">Ajouter un serveur UPnP/DLNA</string>
     <string name="dlna_progress_dialog_title">Connexion &#224; un serveur en cours</string>

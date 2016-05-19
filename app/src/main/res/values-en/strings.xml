@@ -10,10 +10,8 @@
     <string name="pref_title_cached_thumbnails">Cached thumbnails</string>
     <string name="pref_description_local_pictures">Path to thumbnails directory</string>
     <string name="pref_title_local_pictures">Thumbnails</string>
-    <string name="pref_title_local_switch">Local files</string>
     <string name="pref_local_add">Root directory for local files</string>
     <string name="pref_local_add_button">Add a root directory</string>
-    <string name="pref_title_dlna_switch">UPnP/DLNA</string>
     <string name="pref_dlna_add">UPnP/DLNA server</string>
     <string name="pref_dlna_add_button">Add a UPnP/DLNA server</string>
     <string name="dlna_progress_dialog_title">Trying to connect to a server</string>
