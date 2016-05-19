@@ -1,8 +1,10 @@
 package com.freak.videosenfants.activities;
 
 import android.app.ProgressDialog;
+import android.app.UiModeManager;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -55,12 +57,17 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ImageSearchActivity.this.onBackPressed();
-            }
-        });
+        UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
+        if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {
+            fab.setVisibility(View.GONE);
+        } else {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ImageSearchActivity.this.onBackPressed();
+                }
+            });
+        }
 
         mAdapter = new ImageSearchAdapter(this);
 

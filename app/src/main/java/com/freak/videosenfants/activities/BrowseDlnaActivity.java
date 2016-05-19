@@ -3,12 +3,14 @@ package com.freak.videosenfants.activities;
 import android.Manifest;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.app.UiModeManager;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -150,12 +152,17 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BrowseDlnaActivity.this.onBackPressed();
-            }
-        });
+        UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
+        if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {
+            fab.setVisibility(View.GONE);
+        } else {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    BrowseDlnaActivity.this.onBackPressed();
+                }
+            });
+        }
 
         getDialog().setContentView(R.layout.browse_dlna_context_menu_layout);
 
