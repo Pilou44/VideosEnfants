@@ -11,7 +11,7 @@
 
     <ImageButton
         android:id="@+id/options"
-        android:layout_width="160dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:scaleType="fitCenter"
         android:src="@drawable/options"
@@ -21,8 +21,8 @@
 
     <ImageButton
         android:id="@+id/maison"
-        android:layout_width="175dp"
-        android:layout_height="221dp"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
         android:scaleType="fitCenter"
         android:src="@drawable/maison"
         android:background="@null"
@@ -30,8 +30,8 @@
 
     <ImageButton
         android:id="@+id/voiture"
-        android:layout_width="175dp"
-        android:layout_height="110dp"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
         android:layout_toEndOf="@id/maison"
         android:layout_alignBottom="@id/maison"
         android:scaleType="fitCenter"
