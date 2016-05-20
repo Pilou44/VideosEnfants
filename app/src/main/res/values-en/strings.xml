@@ -140,4 +140,5 @@
     <string name="permanent_parent_mode_title">Permanent parent mode</string>
     <string name="permanent_parent_mode_summary">Always stay in parent mode</string>
     <string name="images_source">Icons made by</string>
+    <string name="memory_pref_message">Do you want to delete these files?</string>
 </resources>

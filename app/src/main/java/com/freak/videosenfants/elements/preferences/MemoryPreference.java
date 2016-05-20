@@ -1,28 +1,35 @@
 package com.freak.videosenfants.elements.preferences;
 
 import android.content.Context;
-import android.preference.Preference;
+import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Button;
 
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.elements.ApplicationSingleton;
 
 import java.io.File;
 
-public class MemoryPreference extends Preference{
+public class MemoryPreference extends DialogPreference {
     private File mDirectory;
 
     public MemoryPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setLayoutResource(R.layout.preference_memory);
+        setDialogTitle(getTitle());
+        setDialogMessage(R.string.memory_pref_message);
+        setPositiveButtonText(R.string.yes);
+        setNegativeButtonText(R.string.no);
         parseAttrs(attrs);
     }
 
     public MemoryPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         setLayoutResource(R.layout.preference_memory);
+        setDialogTitle(getTitle());
+        setDialogMessage(R.string.memory_pref_message);
+        setPositiveButtonText(R.string.yes);
+        setNegativeButtonText(R.string.no);
         parseAttrs(attrs);
     }
 
@@ -44,7 +51,7 @@ public class MemoryPreference extends Preference{
 
         updateSummary();
 
-        Button clearButton = (Button) view.findViewById(R.id.clear_button);
+        /*Button clearButton = (Button) view.findViewById(R.id.clear_button);
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +65,7 @@ public class MemoryPreference extends Preference{
                     updateSummary();
                 }
             }
-        });
+        });*/
     }
 
     private void updateSummary() {
@@ -75,9 +82,24 @@ public class MemoryPreference extends Preference{
         setSummary(text);
     }
 
-
     public void setDirectory(File directory) {
         mDirectory = directory;
         updateSummary();
+    }
+
+    @Override
+    protected void onDialogClosed(boolean positiveResult) {
+        super.onDialogClosed(positiveResult);
+        if (positiveResult) {
+            if (mDirectory != null && mDirectory.exists() && mDirectory.isDirectory()) {
+                File[] allFiles = mDirectory.listFiles();
+                for (File allFile : allFiles) {
+                    //noinspection ResultOfMethodCallIgnored
+                    allFile.delete();
+                }
+
+                updateSummary();
+            }
+        }
     }
 }
