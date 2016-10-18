@@ -14,7 +14,7 @@ public class FaqActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (ApplicationSingleton.getInstance(this).isParentMode())
+        if (ApplicationSingleton.getInstance().isParentMode(this))
             setTheme(R.style.AppTheme_ParentMode_NoActionBar);
         else
             setTheme(R.style.AppTheme_NoActionBar);

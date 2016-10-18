@@ -43,7 +43,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (ApplicationSingleton.getInstance(this).isParentMode())
+        if (ApplicationSingleton.getInstance().isParentMode(this))
             setTheme(R.style.AppTheme_ParentMode_NoActionBar);
         else
             setTheme(R.style.AppTheme_NoActionBar);
@@ -151,7 +151,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
                                     }
                                 });
                         // Access the RequestQueue through your singleton class.
-                        ImageSearchSingleton.getInstance(ImageSearchActivity.this).addToRequestQueue(request);
+                        ImageSearchSingleton.getInstance().addToRequestQueue(ImageSearchActivity.this, request);
                     }
 
                 }

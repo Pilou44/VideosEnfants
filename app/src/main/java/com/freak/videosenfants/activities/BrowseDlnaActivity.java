@@ -189,7 +189,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
         if (DEBUG)
             Log.i(TAG, "Test WiFi connexion");
 
-        if (ApplicationSingleton.getInstance(this).isWiFiConnected()) {
+        if (ApplicationSingleton.getInstance().isWiFiConnected(this)) {
             if (mUpnpService == null || mService == null || mCurrent == null) {
                 if (DEBUG)
                     Log.i(TAG, "Bind service");
@@ -407,7 +407,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                     mSrc = element.getPath();
                     mSelected = element.getName();
                     TextView src = (TextView) dialog.findViewById(R.id.copy_src);
-                    String text = mSelected + " (" + ApplicationSingleton.getInstance(BrowseDlnaActivity.this).formatByteSize(element.getSize()) + ")";
+                    String text = mSelected + " (" + ApplicationSingleton.getInstance().formatByteSize(BrowseDlnaActivity.this, element.getSize()) + ")";
                     assert src != null;
                     src.setText(text);
 

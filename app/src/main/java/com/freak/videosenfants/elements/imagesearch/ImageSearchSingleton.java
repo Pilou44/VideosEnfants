@@ -8,33 +8,30 @@ import com.android.volley.toolbox.Volley;
 
 public class ImageSearchSingleton {
 
-    private static ImageSearchSingleton mInstance;
-    private RequestQueue mRequestQueue;
-    private static Context mCtx;
+    private static ImageSearchSingleton mInstance = new ImageSearchSingleton();
+    //private RequestQueue mRequestQueue;
+    //private Context mCtx;
 
-    private ImageSearchSingleton(Context context) {
-        mCtx = context;
-        mRequestQueue = getRequestQueue();
+    private ImageSearchSingleton() {
+        //mCtx = context;
+        //mRequestQueue = getRequestQueue();
     }
 
-    public static synchronized ImageSearchSingleton getInstance(Context context) {
-        if (mInstance == null) {
-            mInstance = new ImageSearchSingleton(context);
-        }
+    public static synchronized ImageSearchSingleton getInstance() {
         return mInstance;
     }
 
-    private RequestQueue getRequestQueue() {
-        if (mRequestQueue == null) {
+    private RequestQueue getRequestQueue(Context context) {
+        /*if (mRequestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
             // Activity or BroadcastReceiver if someone passes one in.
             mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
-        }
-        return mRequestQueue;
+        }*/
+        return Volley.newRequestQueue(context.getApplicationContext());
     }
 
-    public <T> void addToRequestQueue(Request<T> req) {
-        getRequestQueue().add(req);
+    public <T> void addToRequestQueue(Context context, Request<T> req) {
+        getRequestQueue(context).add(req);
     }
 
 }

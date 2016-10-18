@@ -29,7 +29,7 @@ public class SettingsActivity extends PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (ApplicationSingleton.getInstance(this).isParentMode())
+        if (ApplicationSingleton.getInstance().isParentMode(this))
             setTheme(R.style.AppTheme_ParentMode);
         else
             setTheme(R.style.AppTheme);

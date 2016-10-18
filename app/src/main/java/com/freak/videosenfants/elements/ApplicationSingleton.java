@@ -13,57 +13,55 @@ public class ApplicationSingleton {
 
     public static final int MY_PERMISSIONS_REQUEST_READ_STORAGE = 0;
     public static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 1;
-    private static ApplicationSingleton mInstance;
-    private final Context mContext;
+    private static ApplicationSingleton mInstance = new ApplicationSingleton();
     private boolean mParentMode;
 
-    private ApplicationSingleton(Context context) {
+    private ApplicationSingleton() {
         mParentMode = false;
-        mContext = context;
     }
 
-    public static synchronized ApplicationSingleton getInstance(Context context) {
-        if (mInstance == null) {
+    public static synchronized ApplicationSingleton getInstance() {
+        /*if (mInstance == null) {
             mInstance = new ApplicationSingleton(context);
-        }
+        }*/
         return mInstance;
     }
 
-    public boolean isParentMode() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        return (prefs.getBoolean(mContext.getString(R.string.key_permanent_parent_mode), mContext.getResources().getBoolean(R.bool.default_permanent_parent_mode)) || mParentMode);
+    public boolean isParentMode(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        return (prefs.getBoolean(context.getApplicationContext().getString(R.string.key_permanent_parent_mode), context.getApplicationContext().getResources().getBoolean(R.bool.default_permanent_parent_mode)) || mParentMode);
     }
 
     public void setParentMode(boolean mParentMode) {
         this.mParentMode = mParentMode;
     }
 
-    public String formatByteSize(long freeSpace) {
+    public String formatByteSize(Context context, long freeSpace) {
         if (freeSpace < 1024) {
-            return freeSpace + " " + mContext.getString(R.string.bytes);
+            return freeSpace + " " + context.getApplicationContext().getString(R.string.bytes);
         }
         else {
             freeSpace = freeSpace / 1024;
             if (freeSpace < 1024) {
-                return freeSpace + " " + mContext.getString(R.string.kilo_bytes);
+                return freeSpace + " " + context.getApplicationContext().getString(R.string.kilo_bytes);
             }
             else {
                 freeSpace = freeSpace / 1024;
                 if (freeSpace < 1024) {
-                    return freeSpace + " " + mContext.getString(R.string.mega_bytes);
+                    return freeSpace + " " + context.getApplicationContext().getString(R.string.mega_bytes);
                 }
                 else {
                     freeSpace = freeSpace / 1024;
-                    return freeSpace + " " + mContext.getString(R.string.giga_bytes);
+                    return freeSpace + " " + context.getApplicationContext().getString(R.string.giga_bytes);
 
                 }
             }
         }
     }
 
-    public boolean isWiFiConnected(){
+    public boolean isWiFiConnected(Context context){
         boolean wiFiConnected = false;
-        ConnectivityManager connManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connManager = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             Network[] networks = connManager.getAllNetworks();
             for (Network network : networks) {

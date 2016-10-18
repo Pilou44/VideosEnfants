@@ -24,7 +24,7 @@ public abstract class BrowseActivity extends AppCompatActivity implements Adapte
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (ApplicationSingleton.getInstance(this).isParentMode())
+        if (ApplicationSingleton.getInstance().isParentMode(this))
             setTheme(R.style.AppTheme_ParentMode_NoActionBar);
         else
             setTheme(R.style.AppTheme_NoActionBar);
@@ -58,7 +58,7 @@ public abstract class BrowseActivity extends AppCompatActivity implements Adapte
 
     @Override
     public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id){
-        if (ApplicationSingleton.getInstance(this).isParentMode()) {
+        if (ApplicationSingleton.getInstance().isParentMode(this)) {
             prepareContextMenu(parent, position);
             mDialog.show();
             return true;

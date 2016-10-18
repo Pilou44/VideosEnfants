@@ -71,7 +71,7 @@ public class MemoryPreference extends Preference{
                 size += allFile.length();
             }
         }
-        String text = nbFiles + " " + getContext().getString(R.string.files_coma) + " " + ApplicationSingleton.getInstance(getContext()).formatByteSize(size);
+        String text = nbFiles + " " + getContext().getString(R.string.files_coma) + " " + ApplicationSingleton.getInstance().formatByteSize(getContext(), size);
         setSummary(text);
     }
 

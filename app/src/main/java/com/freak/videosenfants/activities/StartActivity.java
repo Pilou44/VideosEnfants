@@ -31,7 +31,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (ApplicationSingleton.getInstance(this).isParentMode())
+        if (ApplicationSingleton.getInstance().isParentMode(this))
             setTheme(R.style.AppTheme_ParentMode_NoActionBar);
         else
             setTheme(R.style.AppTheme_NoActionBar);
@@ -155,8 +155,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         else {
             mParentMode = menu.findItem(R.id.parent_mode);
             if (DEBUG)
-                Log.i(TAG, "Parent mode: " + ApplicationSingleton.getInstance(this).isParentMode());
-            mParentMode.setChecked(ApplicationSingleton.getInstance(this).isParentMode());
+                Log.i(TAG, "Parent mode: " + ApplicationSingleton.getInstance().isParentMode(this));
+            mParentMode.setChecked(ApplicationSingleton.getInstance().isParentMode(this));
         }
         return true;
     }
@@ -185,9 +185,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 return true;
             case R.id.parent_mode:
                 mParentMode.setChecked(!mParentMode.isChecked());
-                ApplicationSingleton.getInstance(this).setParentMode(mParentMode.isChecked());
+                ApplicationSingleton.getInstance().setParentMode(mParentMode.isChecked());
                 if (DEBUG)
-                    Log.i(TAG, "Parent mode: " + ApplicationSingleton.getInstance(this).isParentMode());
+                    Log.i(TAG, "Parent mode: " + ApplicationSingleton.getInstance().isParentMode(this));
                 Utils.restart(this);
                 return true;
             default:

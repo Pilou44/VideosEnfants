@@ -100,7 +100,7 @@ public class GetThumbnailsService extends Service {
                         finishElement(element, true);
                     }
                     else if (   element.getPath().startsWith("http") &&
-                                !ApplicationSingleton.getInstance(GetThumbnailsService.this).isWiFiConnected()) {
+                                !ApplicationSingleton.getInstance().isWiFiConnected(GetThumbnailsService.this)) {
                         if (DEBUG) {
                             Log.i(TAG, "Element is DLNA but WiFi is disconnected");
                         }
