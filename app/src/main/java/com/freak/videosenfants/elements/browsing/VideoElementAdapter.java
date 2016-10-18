@@ -2,6 +2,7 @@ package com.freak.videosenfants.elements.browsing;
 
 import android.content.Context;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,21 +17,19 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
 
-    private final Context mContext;
     private final ImageLoader mImageLoader;
     private final DisplayImageOptions mDirectoryOptions, mFileOptions;
     private final Handler mHandler;
 
     public VideoElementAdapter(Context context) {
         super(context, 0);
-        mContext = context;
 
         mHandler = new Handler();
 
         // Create global configuration and initialize ImageLoader with this config
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-                .memoryCacheExtraOptions(mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_width), mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_height)) // default = device screen dimensions
-                .diskCacheExtraOptions(mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_width), mContext.getResources().getDimensionPixelSize(R.dimen.thumbnail_height), null)
+                .memoryCacheExtraOptions(context.getResources().getDimensionPixelSize(R.dimen.thumbnail_width), context.getResources().getDimensionPixelSize(R.dimen.thumbnail_height)) // default = device screen dimensions
+                .diskCacheExtraOptions(context.getResources().getDimensionPixelSize(R.dimen.thumbnail_width), context.getResources().getDimensionPixelSize(R.dimen.thumbnail_height), null)
                 .build();
         ImageLoader.getInstance().init(config);
 
@@ -50,8 +49,9 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
                 .build();
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.video_element,parent, false);
@@ -68,6 +68,7 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
 
         //getItem(position) va récupérer l'item [position] de la List<Tweet> tweets
         VideoElement element = getItem(position);
+        assert element != null;
 
         //il ne reste plus qu'à remplir notre vue
         viewHolder.name.setText(element.getName());
@@ -88,8 +89,8 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
     }
 
     private class VideoElementHolder{
-        public TextView name;
-        public ImageView icon;
-        public ImageView subIcon;
+        TextView name;
+        ImageView icon;
+        ImageView subIcon;
     }
 }

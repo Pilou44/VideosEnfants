@@ -1,6 +1,7 @@
 package com.freak.videosenfants.elements.browsing;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,9 @@ public class DestSpinnerAdapter extends ArrayAdapter<File> {
         super(context, android.R.layout.simple_spinner_item, list);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_item,parent, false);
@@ -44,7 +46,7 @@ public class DestSpinnerAdapter extends ArrayAdapter<File> {
     }
 
     @Override
-    public View getDropDownView (int position, View convertView, ViewGroup parent){
+    public View getDropDownView (int position, View convertView, @NonNull ViewGroup parent){
 
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_dropdown_item,parent, false);
