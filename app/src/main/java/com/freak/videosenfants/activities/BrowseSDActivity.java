@@ -86,9 +86,12 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
             boolean empty = prefs.getString(context.getString(R.string.key_local_browse) + "_" + i, "").length() == 0;
             if (visible && !empty) {
                 File childrenFolder = new File(prefs.getString(context.getString(R.string.key_local_browse) + "_" + i, ""));
+                if (DEBUG) {
+                    Log.i(TAG, "New root found: " + childrenFolder.getAbsolutePath());
+                }
                 if (childrenFolder.exists() && childrenFolder.isDirectory()) {
                     if (DEBUG) {
-                        Log.i(TAG, "New root found: " + childrenFolder.getAbsolutePath());
+                        Log.i(TAG, "New root added: " + childrenFolder.getAbsolutePath());
                     }
                     result.add(childrenFolder);
                 }
@@ -122,7 +125,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
                     }
                     else {
                         try {
-                            String extension = pathname.getName().substring(pathname.getName().lastIndexOf(".") + 1);
+                            String extension = pathname.getName().substring(pathname.getName().lastIndexOf(".") + 1).toLowerCase();
                             return mSet.contains(extension);
                         }
                         catch (Exception e) {
