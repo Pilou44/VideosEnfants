@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -157,6 +158,7 @@ public class ImageSearchActivity extends AppCompatActivity implements AdapterVie
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+                Toast.makeText(this, getText(R.string.no_image_found_toast), Toast.LENGTH_LONG).show();
             }
         }
     }
