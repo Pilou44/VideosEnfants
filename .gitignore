@@ -32,11 +32,9 @@ proguard/
 captures/
 
 # Android Studio .gitignore
-#*.iml
-.gradle
+*.iml
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
+.idea/
 .DS_Store
 /build
 /captures
