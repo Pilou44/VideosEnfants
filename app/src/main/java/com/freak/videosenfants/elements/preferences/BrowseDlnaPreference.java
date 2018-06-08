@@ -205,6 +205,9 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
         }
 
         public void deviceAdded(final Device device) {
+            String url = device.getDetails().getBaseURL().toString();
+            String name = device.getDetails().getFriendlyName();
+            Log.d(TAG, "Add device " + name + " @ " + url);
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
