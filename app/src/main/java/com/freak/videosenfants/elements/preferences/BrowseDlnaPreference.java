@@ -65,6 +65,8 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
         }
 
         public void onServiceDisconnected(ComponentName className) {
+            if (DEBUG)
+                Log.i(TAG, "Service disconnected");
             mUpnpService = null;
         }
     };
@@ -205,7 +207,12 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
         }
 
         public void deviceAdded(final Device device) {
-            String url = device.getDetails().getBaseURL().toString();
+            String url;
+            if (device.getDetails().getPresentationURI() != null) {
+                url = device.getDetails().getPresentationURI().getAuthority();
+            } else {
+                url = "null";
+            }
             String name = device.getDetails().getFriendlyName();
             Log.d(TAG, "Add device " + name + " @ " + url);
             mHandler.post(new Runnable() {
