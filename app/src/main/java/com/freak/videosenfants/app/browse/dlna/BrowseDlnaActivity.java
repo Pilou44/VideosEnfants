@@ -413,7 +413,8 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                     assert src != null;
                     src.setText(text);
 
-                    mDest = (Spinner) dialog.findViewById(R.id.copy_dest);
+                    // ToDo refactor
+                    /*mDest = (Spinner) dialog.findViewById(R.id.copy_dest);
                     DestSpinnerAdapter adapter = new DestSpinnerAdapter(BrowseDlnaActivity.this, BrowseLocalActivity.getLocalRoots(BrowseDlnaActivity.this));
                     mDest.setAdapter(adapter);
                     mDest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -431,7 +432,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                         public void onNothingSelected(AdapterView<?> parent) {
 
                         }
-                    });
+                    });*/
 
                     getDialog().dismiss();
                 }

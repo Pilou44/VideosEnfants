@@ -13,4 +13,9 @@ public class BrowseLocalRouter extends BaseRouter implements BrowseLocalContract
         intent.setDataAndType(videoUri, "video/*");
         getActivity(view).startActivity(intent);
     }
+
+    @Override
+    public void goStartActivity(BrowseLocalContract.View view) {
+        getActivity(view).finish();
+    }
 }

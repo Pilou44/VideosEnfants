@@ -1,11 +1,13 @@
 package com.freak.videosenfants.app.core;
 
+import android.content.Context;
 import android.os.Bundle;
 
 public interface BaseContract {
 
     interface View {
 
+        Context getContext();
     }
 
     interface Presenter {

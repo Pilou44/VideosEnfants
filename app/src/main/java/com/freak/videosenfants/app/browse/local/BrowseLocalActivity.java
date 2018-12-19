@@ -1,53 +1,34 @@
 package com.freak.videosenfants.app.browse.local;
 
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.app.browse.BrowseActivity;
-import com.freak.videosenfants.elements.ApplicationSingleton;
+import com.freak.videosenfants.app.browse.BrowseAdapter;
 import com.freak.videosenfants.elements.browsing.VideoElement;
-import com.freak.videosenfants.app.browse.VideoElementAdapter;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Vector;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 
-public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalContract.View, AdapterView.OnItemClickListener {
+public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalContract.View {
 
-    private static final boolean DEBUG = true;
-    private static final String TAG = BrowseLocalActivity.class.getSimpleName();
+    //private static final String TAG = BrowseLocalActivity.class.getSimpleName();
 
-    private ListView mListView;
-    private VideoElementAdapter mAdapter;
-    private Vector<File> mRoots;
-    private VideoElement mRootElement;
+    @BindView(R.id.video_list)
+    RecyclerView mListView;
 
-    private final String[] mExtensions = {"avi" , "mkv", "wmv", "mpg", "mpeg", "mp4"};
-    private final Set<String> mSet = new HashSet<>(Arrays.asList(mExtensions));
+    private BrowseAdapter mAdapter;
+    //private Vector<File> mRoots;
+    //private VideoElement mRootElement;
+
+    //private final String[] mExtensions = {"avi" , "mkv", "wmv", "mpg", "mpeg", "mp4"};
+    //private final Set<String> mSet = new HashSet<>(Arrays.asList(mExtensions));
 
     @Inject
     BrowseLocalContract.Presenter mPresenter;
@@ -55,14 +36,12 @@ public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalCo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_browse_sd);
+        setContentView(R.layout.activity_browse_local);
 
         AndroidInjection.inject(this);
+        ButterKnife.bind(this);
 
         mPresenter.subscribe(this);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         assert fab != null;
@@ -70,18 +49,14 @@ public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalCo
 
         getDialog().setContentView(R.layout.browse_sd_context_menu_layout);
 
-        mRoots = getLocalRoots(this);
+        //mRootElement = new VideoElement(true, mRoot, mRoot, null, this);
+        //mCurrent = mRootElement;
+        mAdapter = new BrowseAdapter(mPresenter);
 
-        mRootElement = new VideoElement(true, mRoot, mRoot, null, this);
-        mCurrent = mRootElement;
-        mAdapter = new VideoElementAdapter(this);
-
-        mListView = findViewById(R.id.listView);
-        assert mListView != null;
+        mListView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        mListView.setLayoutManager(layoutManager);
         mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
-        mListView.setLongClickable(true);
-        mListView.setOnItemLongClickListener(this);
     }
 
     @Override
@@ -90,44 +65,36 @@ public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalCo
         mPresenter.unsubscribe(this);
     }
 
-    public static Vector<File> getLocalRoots(Context context) {
-        Vector<File> result = new Vector<>();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int nbRoots = context.getResources().getInteger(R.integer.local_roots_number);
-        for (int i = 0 ; i < nbRoots ; i++){
-            boolean visible = prefs.getBoolean(context.getString(R.string.key_local_browse) + "_" + i + context.getString(R.string.key_visible), false);
-            boolean empty = prefs.getString(context.getString(R.string.key_local_browse) + "_" + i, "").length() == 0;
-            if (visible && !empty) {
-                File childrenFolder = new File(prefs.getString(context.getString(R.string.key_local_browse) + "_" + i, ""));
-                if (DEBUG) {
-                    Log.i(TAG, "New root found: " + childrenFolder.getAbsolutePath());
-                }
-                if (childrenFolder.exists() && childrenFolder.isDirectory()) {
-                    if (DEBUG) {
-                        Log.i(TAG, "New root added: " + childrenFolder.getAbsolutePath());
-                    }
-                    result.add(childrenFolder);
-                }
-            }
-        }
-        return result;
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
         
-        mAdapter.clear();
+        /*mAdapter.clear();
         if (mCurrent.equals(mRootElement)) {
             addFilesToList(mRoots, mCurrent);
         }
         else {
             addFilesToList(new File(mCurrent.getPath()), mCurrent);
         }
+        mAdapter.notifyDataSetChanged();*/
+    }
+
+    @Override
+    public void onBackPressed() {
+        mPresenter.goBack();
+    }
+
+    @Override
+    protected void parseAndUpdate(VideoElement parent) {
+        // ToDO delete method
+    }
+
+    @Override
+    public void notifyElementsUpdated() {
         mAdapter.notifyDataSetChanged();
     }
 
-    private void addFilesToList(Vector<File> filesVector, VideoElement parent) {
+    /*private void addFilesToList(Vector<File> filesVector, VideoElement parent) {
         Vector<File> allFiles = new Vector<>();
         for (int i = 0 ; i < filesVector.size() ; i++) {
             File[] files = filesVector.get(i).listFiles(new FileFilter() {
@@ -152,9 +119,9 @@ public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalCo
         Vector<VideoElement> vector = sortFiles(allFiles, parent);
         mAdapter.clear();
         mAdapter.addAll(vector);
-    }
+    }*/
 
-    private void addFilesToList(File file, VideoElement parent) {
+    /*private void addFilesToList(File file, VideoElement parent) {
         Vector<File> fileVector = new Vector<>();
         fileVector.add(file);
         addFilesToList(fileVector, parent);
@@ -172,18 +139,14 @@ public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalCo
             }
         }
 
-        if (DEBUG) {
-            Log.i(TAG, "" + directories.size() + " directories found");
-            Log.i(TAG, "" + files.size() + " files found");
-        }
+        Log.i(TAG, "" + directories.size() + " directories found");
+        Log.i(TAG, "" + files.size() + " files found");
 
         sort(directories);
         sort(files);
 
-        if (DEBUG) {
-            Log.i(TAG, "" + directories.size() + " directories after sorting");
-            Log.i(TAG, "" + files.size() + " files after sorting");
-        }
+        Log.i(TAG, "" + directories.size() + " directories after sorting");
+        Log.i(TAG, "" + files.size() + " files after sorting");
 
         Vector<VideoElement> allFiles = new Vector<>();
         for (int i = 0; i < directories.size(); i++) {
@@ -214,9 +177,9 @@ public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalCo
                 }
             }
         } while (permut);
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         VideoElement element = mAdapter.getItem(position);
         if (element.isDirectory()) {
@@ -228,20 +191,18 @@ public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalCo
         else {
             mPresenter.playVideo(Uri.parse(element.getPath()));
         }
-    }
+    }*/
 
-    protected void parseAndUpdate(VideoElement element) {
+    /*protected void parseAndUpdate(VideoElement element) {
         if (element.getPath().equals(mRoot)) {
-            if (DEBUG)
-                Log.i(TAG, "Going to root");
+            Log.i(TAG, "Going to root");
             mCurrent = mRootElement;
             for (int i = 0 ; i < mRoots.size() ; i++) {
                 addFilesToList(mRoots, mRootElement);
             }
         }
         else {
-            if (DEBUG)
-                Log.i(TAG, "Going to " + mCurrent.getParent().getPath());
+            Log.i(TAG, "Going to " + mCurrent.getParent().getPath());
             mCurrent = element;
             addFilesToList(new File(mCurrent.getPath()), mCurrent);
             mAdapter.notifyDataSetChanged();
@@ -249,9 +210,9 @@ public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalCo
         }
         mAdapter.notifyDataSetChanged();
         mListView.setSelectionAfterHeaderView();
-    }
+    }*/
 
-    @Override
+    /*@Override
     protected void prepareContextMenu(final AdapterView<?> parent, final int position) {
         super.prepareContextMenu(parent, position);
         Button deleteButton = (Button) getDialog().findViewById(R.id.delete_button);
@@ -269,8 +230,7 @@ public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalCo
                 }
 
                 final VideoElement element = mAdapter.getItem(position);
-                if (DEBUG)
-                    Log.i(TAG, "Delete " + element.getPath());
+                Log.i(TAG, "Delete " + element.getPath());
                 getDialog().dismiss();
                 AlertDialog.Builder builder = new AlertDialog.Builder(BrowseLocalActivity.this);
                 builder.setTitle(getString(R.string.delete_title));
@@ -306,6 +266,6 @@ public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalCo
                 builder.create().show();
             }
         });
-    }
+    }*/
 
 }
