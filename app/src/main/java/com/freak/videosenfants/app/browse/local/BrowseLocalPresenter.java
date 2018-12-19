@@ -68,25 +68,8 @@ public class BrowseLocalPresenter extends BasePresenter implements BrowseLocalCo
     public void browseLocal(VideoElement element) {
         if (element.isDirectory()) {
             mCurrent = element;
-            File[] subFiles = new File(element.getPath()).listFiles(pathname -> {
-                if (pathname.isDirectory()) {
-                    return true;
-                }
-                else {
-                    try {
-                        String extension = pathname.getName().substring(pathname.getName().lastIndexOf(".") + 1).toLowerCase();
-                        return EXTENSIONS.contains(extension);
-                    }
-                    catch (Exception e) {
-                        return false;
-                    }
-                }
-            });
             mItems.clear();
-            for (File file: subFiles) {
-                mItems.add(new VideoElement(file.isDirectory(), file.getAbsolutePath(), file.getName(), element, null));
-            }
-            sortItems();
+            mItems.addAll(getContent(element, element));
             mView.notifyElementsUpdated();
         }
     }
@@ -105,24 +88,24 @@ public class BrowseLocalPresenter extends BasePresenter implements BrowseLocalCo
         }
     }
 
-    private void sortItems() {
+    private List<VideoElement> sortItems(File[] files, VideoElement parent) {
         ArrayList<VideoElement> directories = new ArrayList<>();
-        ArrayList<VideoElement> files = new ArrayList<>();
+        ArrayList<VideoElement> videos = new ArrayList<>();
 
-        for (int i = 0; i < mItems.size() ; i++) {
-            if (mItems.get(i).isDirectory()) {
-                directories.add(mItems.get(i));
+        for (File file : files) {
+            if (file.isDirectory()) {
+                directories.add(new VideoElement(file, parent));
             } else {
-                files.add(mItems.get(i));
+                videos.add(new VideoElement(file, parent));
             }
         }
 
-        mItems.clear();
-
         sort(directories);
-        mItems.addAll(directories);
-        sort(files);
-        mItems.addAll(files);
+        ArrayList<VideoElement> result = new ArrayList<>(directories);
+        sort(videos);
+        result.addAll(videos);
+
+        return result;
     }
 
     private void sort (ArrayList<VideoElement> files) {
@@ -148,9 +131,18 @@ public class BrowseLocalPresenter extends BasePresenter implements BrowseLocalCo
 
     private class GetLocalRootsSubscriber extends ResourceObserver<List<VideoElement>> {
         @Override
-        public void onNext(List<VideoElement> videoElements) {
-            mRoots = videoElements;
+        public void onNext(List<VideoElement> elements) {
+            if (elements.size() == 1) {
+                VideoElement element = elements.get(0);
+                mRoots = getContent(element, null);
+            } else {
+                mRoots = elements;
+            }
             mItems.addAll(mRoots);
+
+            if (mView != null) {
+                mView.notifyElementsUpdated();
+            }
         }
 
         @Override
@@ -162,5 +154,23 @@ public class BrowseLocalPresenter extends BasePresenter implements BrowseLocalCo
         public void onComplete() {
             // Nothing to do
         }
+    }
+
+    private List<VideoElement> getContent(VideoElement element, VideoElement parent) {
+        File[] subFiles = new File(element.getPath()).listFiles(pathname -> {
+            if (pathname.isDirectory()) {
+                return true;
+            }
+            else {
+                try {
+                    String extension = pathname.getName().substring(pathname.getName().lastIndexOf(".") + 1).toLowerCase();
+                    return EXTENSIONS.contains(extension);
+                }
+                catch (Exception e) {
+                    return false;
+                }
+            }
+        });
+        return sortItems(subFiles, parent);
     }
 }

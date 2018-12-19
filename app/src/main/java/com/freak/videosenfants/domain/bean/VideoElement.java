@@ -31,7 +31,7 @@ public class VideoElement {
     private final String mPath;
     private ListView mListView;
     private String mName;
-    private final VideoElement mParent;
+    private VideoElement mParent;
     private Long mSize;
     private String mPathFromRoot;
     private GetThumbnailsService mService;
@@ -268,5 +268,9 @@ public class VideoElement {
         mHandler = handler;
         mOptions = options;
         mImageLoader = imageLoader;
+    }
+
+    public void setParent(VideoElement parent) {
+        mParent = parent;
     }
 }
