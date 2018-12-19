@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.app.browse.BrowseActivity;
 import com.freak.videosenfants.app.browse.BrowseAdapter;
-import com.freak.videosenfants.elements.browsing.VideoElement;
+import com.freak.videosenfants.domain.bean.VideoElement;
 
 import javax.inject.Inject;
 

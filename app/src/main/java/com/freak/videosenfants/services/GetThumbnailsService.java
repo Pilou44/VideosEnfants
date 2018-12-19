@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.elements.ApplicationSingleton;
-import com.freak.videosenfants.elements.browsing.VideoElement;
+import com.freak.videosenfants.domain.bean.VideoElement;
 
 import java.io.File;
 import java.io.FileOutputStream;

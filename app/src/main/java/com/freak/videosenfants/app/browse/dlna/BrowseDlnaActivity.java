@@ -29,12 +29,10 @@ import android.widget.TextView;
 
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.app.browse.BrowseActivity;
-import com.freak.videosenfants.app.browse.local.BrowseLocalActivity;
 import com.freak.videosenfants.elements.ApplicationSingleton;
-import com.freak.videosenfants.elements.browsing.DestSpinnerAdapter;
 import com.freak.videosenfants.elements.browsing.RetrieveDeviceThread;
 import com.freak.videosenfants.elements.browsing.RetrieveDeviceThreadListener;
-import com.freak.videosenfants.elements.browsing.VideoElement;
+import com.freak.videosenfants.domain.bean.VideoElement;
 import com.freak.videosenfants.app.browse.VideoElementAdapter;
 
 import org.fourthline.cling.android.AndroidUpnpService;

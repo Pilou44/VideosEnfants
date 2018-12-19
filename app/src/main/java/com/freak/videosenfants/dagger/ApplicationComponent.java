@@ -14,6 +14,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
 @Singleton
 @Component(modules = {
         AndroidSupportInjectionModule.class,
+        ApplicationModule.class,
         ActivityBuilder.class
 })
 public interface ApplicationComponent extends AndroidInjector<DaggerApplication> {
@@ -22,6 +23,7 @@ public interface ApplicationComponent extends AndroidInjector<DaggerApplication>
     interface Builder {
         @BindsInstance
         Builder application(Application application);
+        Builder applicationModule(ApplicationModule applicationModule);
 
         ApplicationComponent build();
     }
@@ -35,6 +37,7 @@ public interface ApplicationComponent extends AndroidInjector<DaggerApplication>
         public static ApplicationComponent init(Application application) {
             return DaggerApplicationComponent.builder()
                     .application(application)
+                    .applicationModule(new ApplicationModule(application))
                     .build();
         }
     }

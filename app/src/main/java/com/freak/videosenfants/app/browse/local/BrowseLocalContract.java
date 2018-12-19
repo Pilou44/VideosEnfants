@@ -3,7 +3,7 @@ package com.freak.videosenfants.app.browse.local;
 import android.net.Uri;
 
 import com.freak.videosenfants.app.core.BaseContract;
-import com.freak.videosenfants.elements.browsing.VideoElement;
+import com.freak.videosenfants.domain.bean.VideoElement;
 
 import java.util.List;
 

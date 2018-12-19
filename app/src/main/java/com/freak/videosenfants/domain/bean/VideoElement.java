@@ -1,4 +1,4 @@
-package com.freak.videosenfants.elements.browsing;
+package com.freak.videosenfants.domain.bean;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -74,6 +74,18 @@ public class VideoElement {
 
     public VideoElement(File file, VideoElement parent, Context context){
         mContext = context;
+        mDirectory = file.isDirectory();
+        mPath = file.getAbsolutePath();
+        mName = file.getName();
+        if (!mDirectory){
+            mName = mName.substring(0, mName.lastIndexOf("."));
+        }
+        mParent = parent;
+        mSize = file.length();
+    }
+
+    public VideoElement(File file, VideoElement parent){
+        mContext = null;
         mDirectory = file.isDirectory();
         mPath = file.getAbsolutePath();
         mName = file.getName();

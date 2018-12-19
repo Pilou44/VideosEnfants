@@ -15,7 +15,7 @@ import com.freak.videosenfants.R;
 import com.freak.videosenfants.activities.ImageSearchActivity;
 import com.freak.videosenfants.app.core.BaseActivity;
 import com.freak.videosenfants.elements.ApplicationSingleton;
-import com.freak.videosenfants.elements.browsing.VideoElement;
+import com.freak.videosenfants.domain.bean.VideoElement;
 
 public abstract class BrowseActivity extends BaseActivity implements AdapterView.OnItemLongClickListener {
 

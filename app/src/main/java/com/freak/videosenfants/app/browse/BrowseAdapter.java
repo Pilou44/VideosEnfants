@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.app.browse.local.BrowseLocalContract;
-import com.freak.videosenfants.elements.browsing.VideoElement;
+import com.freak.videosenfants.domain.bean.VideoElement;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

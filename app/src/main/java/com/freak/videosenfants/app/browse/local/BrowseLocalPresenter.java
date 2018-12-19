@@ -1,15 +1,11 @@
 package com.freak.videosenfants.app.browse.local;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
-import com.freak.videosenfants.R;
 import com.freak.videosenfants.app.core.BaseContract;
 import com.freak.videosenfants.app.core.BasePresenter;
-import com.freak.videosenfants.elements.browsing.VideoElement;
+import com.freak.videosenfants.domain.bean.VideoElement;
+import com.freak.videosenfants.domain.useCase.GetLocalRootsUseCase;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,6 +13,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import io.reactivex.observers.ResourceObserver;
 
 public class BrowseLocalPresenter extends BasePresenter implements BrowseLocalContract.Presenter {
     private static final String TAG = BrowseLocalPresenter.class.getSimpleName();
@@ -27,21 +25,21 @@ public class BrowseLocalPresenter extends BasePresenter implements BrowseLocalCo
     private final BrowseLocalContract.Router mRouter;
     private final ArrayList<VideoElement> mItems;
 
-    private ArrayList<VideoElement> mRoots;
+    private List<VideoElement> mRoots;
     private BrowseLocalContract.View mView;
     private VideoElement mCurrent;
 
-    public BrowseLocalPresenter(BrowseLocalContract.Router router) {
+    public BrowseLocalPresenter(GetLocalRootsUseCase getLocalRootsUseCase, BrowseLocalContract.Router router) {
         mRouter = router;
 
         mItems = new ArrayList<>();
+
+        getLocalRootsUseCase.execute(new GetLocalRootsSubscriber());
     }
 
     @Override
     public void subscribe(BaseContract.View view) {
         mView = (BrowseLocalContract.View) view;
-        mRoots = getLocalRoots(mView);
-        mItems.addAll(mRoots);
     }
 
     @Override
@@ -107,27 +105,6 @@ public class BrowseLocalPresenter extends BasePresenter implements BrowseLocalCo
         }
     }
 
-    private static ArrayList<VideoElement> getLocalRoots(BrowseLocalContract.View view) {
-        // ToDo to refactor
-        Context context = view.getContext();
-        ArrayList<VideoElement> result = new ArrayList<>();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int nbRoots = context.getResources().getInteger(R.integer.local_roots_number);
-        for (int i = 0 ; i < nbRoots ; i++){
-            boolean visible = prefs.getBoolean(context.getString(R.string.key_local_browse) + "_" + i + context.getString(R.string.key_visible), false);
-            boolean empty = prefs.getString(context.getString(R.string.key_local_browse) + "_" + i, "").length() == 0;
-            if (visible && !empty) {
-                File childrenFolder = new File(prefs.getString(context.getString(R.string.key_local_browse) + "_" + i, ""));
-                Log.i(TAG, "New root found: " + childrenFolder.getAbsolutePath());
-                if (childrenFolder.exists() && childrenFolder.isDirectory()) {
-                    Log.i(TAG, "New root added: " + childrenFolder.getAbsolutePath());
-                    result.add(new VideoElement(true, childrenFolder.getAbsolutePath(), childrenFolder.getName(), null, context));
-                }
-            }
-        }
-        return result;
-    }
-
     private void sortItems() {
         ArrayList<VideoElement> directories = new ArrayList<>();
         ArrayList<VideoElement> files = new ArrayList<>();
@@ -167,5 +144,23 @@ public class BrowseLocalPresenter extends BasePresenter implements BrowseLocalCo
                 }
             }
         } while (permut);
+    }
+
+    private class GetLocalRootsSubscriber extends ResourceObserver<List<VideoElement>> {
+        @Override
+        public void onNext(List<VideoElement> videoElements) {
+            mRoots = videoElements;
+            mItems.addAll(mRoots);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            // ToDo
+        }
+
+        @Override
+        public void onComplete() {
+            // Nothing to do
+        }
     }
 }

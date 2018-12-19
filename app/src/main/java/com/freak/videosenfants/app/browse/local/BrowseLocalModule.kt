@@ -1,6 +1,7 @@
 package com.freak.videosenfants.app.browse.local
 
 import com.freak.videosenfants.dagger.scope.PerActivity
+import com.freak.videosenfants.domain.useCase.GetLocalRootsUseCase
 import dagger.Module
 import dagger.Provides
 
@@ -9,8 +10,8 @@ class BrowseLocalModule {
 
     @Provides
     @PerActivity
-    fun provideBrowseLocalPresenter(router: BrowseLocalContract.Router): BrowseLocalContract.Presenter {
-        return BrowseLocalPresenter(router)
+    fun provideBrowseLocalPresenter(getLocalRootsUseCase: GetLocalRootsUseCase, router: BrowseLocalContract.Router): BrowseLocalContract.Presenter {
+        return BrowseLocalPresenter(getLocalRootsUseCase, router)
     }
 
     @Provides

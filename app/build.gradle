@@ -81,6 +81,10 @@ dependencies {
     // EXO PLAYER
     implementation 'com.google.android.exoplayer:exoplayer:2.9.1'           // https://github.com/google/ExoPlayer/releases
 
+    // RXJAVA
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.3'
+
     testImplementation 'junit:junit:4.12'
     implementation group: 'org.eclipse.jetty', name: 'jetty-server', version: '8.2.0.v20160908'
     implementation group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '8.2.0.v20160908'
