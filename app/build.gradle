@@ -1,14 +1,28 @@
 apply plugin: 'com.android.application'
 
+def getAppVersionCode = {
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-list', '--first-parent', '--count', 'origin/master'
+            standardOutput = stdout
+        }
+        return 2000 + Integer.parseInt(stdout.toString().trim())
+    }
+    catch (ignored) {
+        return 1
+    }
+}
+
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         applicationId "com.freak.videosenfants"
-        minSdkVersion 17
-        targetSdkVersion 23
-        versionCode 102
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode getAppVersionCode()
         versionName "1.0.2"
     }
     buildTypes {
@@ -19,27 +33,26 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
-
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
-    compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '8.2.0.v20160908'
-    compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '8.2.0.v20160908'
-    compile group: 'org.eclipse.jetty', name: 'jetty-client', version: '8.2.0.v20160908'
-    compile 'com.android.support:appcompat-v7:27.1.1'
-    compile 'com.android.support:design:27.1.1'
-    compile 'com.android.support:support-v4:27.1.1'
-    compile 'org.apache.httpcomponents:httpcore:4.4.9'
-    compile 'com.android.volley:volley:1.1.0'
-    compile 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-    compile files('libs/cling-core-2.1.1.jar')
-    compile files('libs/cling-support-2.1.1.jar')
-    compile files('libs/seamless-http-1.1.1.jar')
-    compile files('libs/seamless-util-1.1.1.jar')
-    compile files('libs/seamless-xml-1.1.1.jar')
+    testImplementation 'junit:junit:4.12'
+    implementation group: 'org.eclipse.jetty', name: 'jetty-server', version: '8.2.0.v20160908'
+    implementation group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '8.2.0.v20160908'
+    implementation group: 'org.eclipse.jetty', name: 'jetty-client', version: '8.2.0.v20160908'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'org.apache.httpcomponents:httpcore:4.4.9'
+    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    implementation files('libs/cling-core-2.1.1.jar')
+    implementation files('libs/cling-support-2.1.1.jar')
+    implementation files('libs/seamless-http-1.1.1.jar')
+    implementation files('libs/seamless-util-1.1.1.jar')
+    implementation files('libs/seamless-xml-1.1.1.jar')
 }
