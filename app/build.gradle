@@ -1,4 +1,22 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+ext {
+    kotlin_version = '1.3.0'
+
+    androidSupportLibVersion = '28.0.0'
+    retrofitVersion = '2.5.0'
+    butterknifeVersion = '8.8.1'
+    daggerVersion = '2.19'
+    stethoVersion = '1.5.0'
+    icepickVersion = '3.2.0'
+    mockitoVersion = '2.19.0'
+
+    androidSupportTestVersion = '1.0.0'
+    espressoVersion = '3.0.0'
+}
 
 def getAppVersionCode = {
     try {
@@ -39,13 +57,34 @@ android {
 }
 
 dependencies {
+
+    // BUTTERKNIFE
+    implementation "com.jakewharton:butterknife:$butterknifeVersion"
+    kapt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+
+    // DAGGER
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+
+    // ANDROID
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation "com.android.support.constraint:constraint-layout:1.1.3"
+
+    // ICE PICK
+    implementation "frankiesardo:icepick:$icepickVersion"
+    kapt "frankiesardo:icepick-processor:$icepickVersion"
+
+    // EXO PLAYER
+    implementation 'com.google.android.exoplayer:exoplayer:2.9.1'           // https://github.com/google/ExoPlayer/releases
+
     testImplementation 'junit:junit:4.12'
     implementation group: 'org.eclipse.jetty', name: 'jetty-server', version: '8.2.0.v20160908'
     implementation group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '8.2.0.v20160908'
     implementation group: 'org.eclipse.jetty', name: 'jetty-client', version: '8.2.0.v20160908'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
     implementation 'org.apache.httpcomponents:httpcore:4.4.9'
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
