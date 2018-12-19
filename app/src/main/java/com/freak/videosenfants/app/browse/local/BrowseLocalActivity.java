@@ -1,10 +1,9 @@
-package com.freak.videosenfants.activities;
+package com.freak.videosenfants.app.browse.local;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -21,9 +20,10 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.app.browse.BrowseActivity;
 import com.freak.videosenfants.elements.ApplicationSingleton;
 import com.freak.videosenfants.elements.browsing.VideoElement;
-import com.freak.videosenfants.elements.browsing.VideoElementAdapter;
+import com.freak.videosenfants.app.browse.VideoElementAdapter;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -32,10 +32,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
-public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnItemClickListener {
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+
+public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalContract.View, AdapterView.OnItemClickListener {
 
     private static final boolean DEBUG = true;
-    private static final String TAG = BrowseSDActivity.class.getSimpleName();
+    private static final String TAG = BrowseLocalActivity.class.getSimpleName();
 
     private ListView mListView;
     private VideoElementAdapter mAdapter;
@@ -45,21 +49,24 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
     private final String[] mExtensions = {"avi" , "mkv", "wmv", "mpg", "mpeg", "mp4"};
     private final Set<String> mSet = new HashSet<>(Arrays.asList(mExtensions));
 
+    @Inject
+    BrowseLocalContract.Presenter mPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse_sd);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        AndroidInjection.inject(this);
+
+        mPresenter.subscribe(this);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         assert fab != null;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BrowseSDActivity.this.onBackPressed();
-            }
-        });
+        fab.setOnClickListener(view -> BrowseLocalActivity.this.onBackPressed());
 
         getDialog().setContentView(R.layout.browse_sd_context_menu_layout);
 
@@ -69,12 +76,18 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         mCurrent = mRootElement;
         mAdapter = new VideoElementAdapter(this);
 
-        mListView = (ListView)findViewById(R.id.listView);
+        mListView = findViewById(R.id.listView);
         assert mListView != null;
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
         mListView.setLongClickable(true);
         mListView.setOnItemLongClickListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.unsubscribe(this);
     }
 
     public static Vector<File> getLocalRoots(Context context) {
@@ -213,9 +226,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
             mListView.setSelectionAfterHeaderView();
         }
         else {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(element.getPath()));
-            intent.setDataAndType(Uri.parse(element.getPath()), "video/*");
-            startActivity(intent);
+            mPresenter.playVideo(Uri.parse(element.getPath()));
         }
     }
 
@@ -247,11 +258,11 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(BrowseSDActivity.this,
+                if (ContextCompat.checkSelfPermission(BrowseLocalActivity.this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
 
-                    ActivityCompat.requestPermissions(BrowseSDActivity.this,
+                    ActivityCompat.requestPermissions(BrowseLocalActivity.this,
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             ApplicationSingleton.MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
 
@@ -261,7 +272,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
                 if (DEBUG)
                     Log.i(TAG, "Delete " + element.getPath());
                 getDialog().dismiss();
-                AlertDialog.Builder builder = new AlertDialog.Builder(BrowseSDActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(BrowseLocalActivity.this);
                 builder.setTitle(getString(R.string.delete_title));
                 builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
@@ -273,7 +284,7 @@ public class BrowseSDActivity extends BrowseActivity implements AdapterView.OnIt
                                 mAdapter.notifyDataSetChanged();
                             }
                         } else {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(BrowseSDActivity.this);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(BrowseLocalActivity.this);
                             builder.setTitle(getString(R.string.delete_dir_title));
                             builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override

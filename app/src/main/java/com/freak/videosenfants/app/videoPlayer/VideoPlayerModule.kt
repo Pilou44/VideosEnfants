@@ -1,7 +1,5 @@
-package com.viadeo.phoenix.android.modules.videoPlayer
+package com.freak.videosenfants.app.videoPlayer
 
-import com.freak.videosenfants.app.videoPlayer.VideoPlayerContract
-import com.freak.videosenfants.app.videoPlayer.VideoPlayerPresenter
 import com.freak.videosenfants.dagger.scope.PerActivity
 import dagger.Module
 import dagger.Provides

@@ -19,9 +19,6 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
-import java.util.Formatter;
-import java.util.Locale;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -48,14 +45,6 @@ public class VideoPlayerActivity extends BaseActivity implements VideoPlayerCont
     TextView mDuration;
 
     private SimpleExoPlayer mPlayer;
-    private final StringBuilder mFormatBuilder;
-    private final Formatter mFormatter;
-
-    public VideoPlayerActivity() {
-        super();
-        mFormatBuilder = new StringBuilder();
-        mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

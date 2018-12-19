@@ -1,4 +1,4 @@
-package com.freak.videosenfants.activities;
+package com.freak.videosenfants.app.browse;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -7,19 +7,20 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.activities.ImageSearchActivity;
+import com.freak.videosenfants.app.core.BaseActivity;
 import com.freak.videosenfants.elements.ApplicationSingleton;
 import com.freak.videosenfants.elements.browsing.VideoElement;
 
-public abstract class BrowseActivity extends AppCompatActivity implements AdapterView.OnItemLongClickListener {
+public abstract class BrowseActivity extends BaseActivity implements AdapterView.OnItemLongClickListener {
 
-    VideoElement mCurrent;
-    String mRoot = "root";
+    protected VideoElement mCurrent;
+    protected String mRoot = "root";
     private Dialog mDialog;
 
     @Override
@@ -30,6 +31,7 @@ public abstract class BrowseActivity extends AppCompatActivity implements Adapte
             setTheme(R.style.AppTheme_NoActionBar);
 
         super.onCreate(savedInstanceState);
+
         mDialog = new Dialog(this);
         mDialog.setTitle(R.string.browse_context_menu_title);
         mDialog.setContentView(R.layout.browse_context_menu_layout);
@@ -68,7 +70,7 @@ public abstract class BrowseActivity extends AppCompatActivity implements Adapte
         }
     }
 
-    void prepareContextMenu(final AdapterView<?> parent, final int position) {
+    protected void prepareContextMenu(final AdapterView<?> parent, final int position) {
         Button imageButton = (Button) mDialog.findViewById(R.id.image_button);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +101,7 @@ public abstract class BrowseActivity extends AppCompatActivity implements Adapte
         });
     }
 
-    Dialog getDialog() {
+    protected Dialog getDialog() {
         return mDialog;
     }
 

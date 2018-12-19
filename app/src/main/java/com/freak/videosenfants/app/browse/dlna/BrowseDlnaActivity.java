@@ -1,4 +1,4 @@
-package com.freak.videosenfants.activities;
+package com.freak.videosenfants.app.browse.dlna;
 
 import android.Manifest;
 import android.app.DownloadManager;
@@ -28,12 +28,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.app.browse.BrowseActivity;
+import com.freak.videosenfants.app.browse.local.BrowseLocalActivity;
 import com.freak.videosenfants.elements.ApplicationSingleton;
 import com.freak.videosenfants.elements.browsing.DestSpinnerAdapter;
 import com.freak.videosenfants.elements.browsing.RetrieveDeviceThread;
 import com.freak.videosenfants.elements.browsing.RetrieveDeviceThreadListener;
 import com.freak.videosenfants.elements.browsing.VideoElement;
-import com.freak.videosenfants.elements.browsing.VideoElementAdapter;
+import com.freak.videosenfants.app.browse.VideoElementAdapter;
 
 import org.fourthline.cling.android.AndroidUpnpService;
 import org.fourthline.cling.android.AndroidUpnpServiceImpl;
@@ -412,7 +414,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                     src.setText(text);
 
                     mDest = (Spinner) dialog.findViewById(R.id.copy_dest);
-                    DestSpinnerAdapter adapter = new DestSpinnerAdapter(BrowseDlnaActivity.this, BrowseSDActivity.getLocalRoots(BrowseDlnaActivity.this));
+                    DestSpinnerAdapter adapter = new DestSpinnerAdapter(BrowseDlnaActivity.this, BrowseLocalActivity.getLocalRoots(BrowseDlnaActivity.this));
                     mDest.setAdapter(adapter);
                     mDest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override

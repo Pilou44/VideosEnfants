@@ -1,4 +1,4 @@
-package com.freak.videosenfants.elements.browsing;
+package com.freak.videosenfants.app.browse;
 
 import android.content.Context;
 import android.os.Handler;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.elements.browsing.VideoElement;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;

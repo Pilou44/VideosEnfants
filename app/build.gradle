@@ -94,4 +94,8 @@ dependencies {
     implementation files('libs/seamless-http-1.1.1.jar')
     implementation files('libs/seamless-util-1.1.1.jar')
     implementation files('libs/seamless-xml-1.1.1.jar')
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

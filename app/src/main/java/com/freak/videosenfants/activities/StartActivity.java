@@ -16,6 +16,8 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.app.browse.dlna.BrowseDlnaActivity;
+import com.freak.videosenfants.app.browse.local.BrowseLocalActivity;
 import com.freak.videosenfants.elements.ApplicationSingleton;
 import com.freak.videosenfants.elements.Utils;
 
@@ -199,7 +201,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         Intent intent = new Intent();
         if (view.getId() == R.id.voiture){
-            intent = new Intent(this, BrowseSDActivity.class);
+            intent = new Intent(this, BrowseLocalActivity.class);
         }
         else if (view.getId() == R.id.maison){
             intent = new Intent(this, BrowseDlnaActivity.class);
