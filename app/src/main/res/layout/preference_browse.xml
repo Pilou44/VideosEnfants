@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="?android:attr/textColorSecondary"
+            android:textColor="?android:attr/textColorPrimary"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"/>
         <TextView
@@ -53,6 +53,7 @@
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:src="@drawable/supprimer"
+        android:backgroundTint="@color/transparent"
         android:background="@null"
         android:visibility="gone"
         android:contentDescription="@string/remove_description" />
