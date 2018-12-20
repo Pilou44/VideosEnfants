@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.app.browse.dlna.BrowseDlnaActivity;
 import com.freak.videosenfants.app.browse.local.BrowseLocalActivity;
+import com.freak.videosenfants.app.settings.SettingsActivity;
 import com.freak.videosenfants.elements.ApplicationSingleton;
 import com.freak.videosenfants.elements.Utils;
 

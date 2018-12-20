@@ -39,7 +39,7 @@
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.SettingsActivity"
+            android:name=".app.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
