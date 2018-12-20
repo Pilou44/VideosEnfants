@@ -12,6 +12,8 @@ public interface BrowseLocalContract {
     interface View extends BaseContract.View {
 
         void notifyElementsUpdated();
+
+        void showElementThumbnail(VideoElement element, Uri uri);
     }
 
     interface Presenter extends BaseContract.Presenter {
@@ -25,6 +27,8 @@ public interface BrowseLocalContract {
         void browseLocal(VideoElement element);
 
         void goBack();
+
+        void getImageUri(VideoElement element);
     }
 
     interface Router extends BaseContract.Router {

@@ -2,7 +2,6 @@ package com.freak.videosenfants.domain.bean;
 
 import android.app.Service;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -26,7 +25,7 @@ public class VideoElement {
     private static final boolean DEBUG = true;
     private static final String TAG = VideoElement.class.getSimpleName();
 
-    private final Context mContext;
+    //private final Context mContext;
     private final boolean mDirectory;
     private final String mPath;
     private ListView mListView;
@@ -41,7 +40,7 @@ public class VideoElement {
     private Handler mHandler;
     private int mPosition;
 
-    private final ServiceConnection mConnection = new ServiceConnection() {
+    /*private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceDisconnected(ComponentName name) {
             if (DEBUG) {
@@ -62,30 +61,16 @@ public class VideoElement {
             mService = mLocalBinder.getService();
             mService.enqueue(VideoElement.this);
         }
-    };
+    };*/
 
-    public VideoElement(boolean directory, String path, String name, VideoElement parent, Context context) {
-        mContext = context;
+    public VideoElement(boolean directory, String path, String name, VideoElement parent) {
         mDirectory = directory;
         mPath = path;
         mName = name;
         mParent = parent;
     }
 
-    public VideoElement(File file, VideoElement parent, Context context){
-        mContext = context;
-        mDirectory = file.isDirectory();
-        mPath = file.getAbsolutePath();
-        mName = file.getName();
-        if (!mDirectory){
-            mName = mName.substring(0, mName.lastIndexOf("."));
-        }
-        mParent = parent;
-        mSize = file.length();
-    }
-
     public VideoElement(File file, VideoElement parent){
-        mContext = null;
         mDirectory = file.isDirectory();
         mPath = file.getAbsolutePath();
         mName = file.getName();
@@ -96,13 +81,13 @@ public class VideoElement {
         mSize = file.length();
     }
 
-    public VideoElement(File file, VideoElement parent, Context context, ListView listView) {
-        this(file, parent, context);
+    public VideoElement(File file, VideoElement parent, ListView listView) {
+        this(file, parent);
         mListView = listView;
     }
 
-    public VideoElement(@SuppressWarnings("SameParameterValue") boolean directory, String path, String name, VideoElement parent, Context context, ListView listView) {
-        this(directory, path, name, parent, context);
+    public VideoElement(@SuppressWarnings("SameParameterValue") boolean directory, String path, String name, VideoElement parent, ListView listView) {
+        this(directory, path, name, parent);
         mListView = listView;
     }
 
@@ -138,7 +123,7 @@ public class VideoElement {
         return mPathFromRoot;
     }
 
-    public String getImageURI() {
+    /*public String getImageURI() {
         String uri = getBitmapURI();
         if (uri == null && !mDirectory) {
             if (DEBUG) {
@@ -154,9 +139,9 @@ public class VideoElement {
             }
         }
         return uri;
-    }
+    }*/
 
-    private String getBitmapURI() {
+    /*private String getBitmapURI() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
         File picturesLocation = new File(sharedPref.getString(mContext.getString(R.string.key_local_pictures), mContext.getString(R.string.default_local_pictures)));
@@ -193,9 +178,9 @@ public class VideoElement {
             }
         }
         return null;
-    }
+    }*/
 
-    private String getCachedBitmapURI() {
+    /*private String getCachedBitmapURI() {
         File imageFile = new File(mContext.getExternalCacheDir(), mName + ".jpg");
         if (imageFile.exists()) {
             return "file://" + imageFile.getAbsolutePath();
@@ -203,9 +188,9 @@ public class VideoElement {
         else {
             return null;
         }
-    }
+    }*/
 
-    public void unbind() {
+    /*public void unbind() {
         if(mBound) {
             if (DEBUG) {
                 Log.i(TAG, "Unbind service");
@@ -219,9 +204,9 @@ public class VideoElement {
             }
             mBound = false;
         }
-    }
+    }*/
 
-    public void update(final boolean thumbnailExtracted) {
+    /*public void update(final boolean thumbnailExtracted) {
         if (DEBUG) {
             Log.i(TAG, "Update " + mName);
             //Log.i(TAG, "Current element is " + ((VideoElement)mView.getTag()).getName());
@@ -260,7 +245,7 @@ public class VideoElement {
                 });
             }
         }
-    }
+    }*/
 
     public void setPosition(int position, Handler handler, ImageLoader imageLoader, DisplayImageOptions options) {if (DEBUG)
         Log.i(TAG, "Set position for " + mName + ": " + position);

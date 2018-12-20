@@ -300,8 +300,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                             true,
                             didl.getContainers().get(i).getId(),
                             didl.getContainers().get(i).getTitle(),
-                            mCurrent,
-                            BrowseDlnaActivity.this);
+                            mCurrent);
                     element.setPathFromRoot(mCurrent.getPathFromRoot() + "/" + element.getName());
                     mAdapter.add(element);
                 }
@@ -314,7 +313,6 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                             didl.getItems().get(i).getResources().get(0).getValue(),
                             didl.getItems().get(i).getTitle(),
                             mCurrent,
-                            BrowseDlnaActivity.this,
                             mListView);
                     element.setPathFromRoot(mCurrent.getPathFromRoot() + "/" + element.getName());
                     for (final Res resource : didl.getItems().get(i).getResources()) {
@@ -567,7 +565,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
                                         @Override
                                         public void received(ActionInvocation arg0,
                                                              DIDLContent didl) {
-                                            mCurrent = new VideoElement(true, mRoot, "Root", null, BrowseDlnaActivity.this);
+                                            mCurrent = new VideoElement(true, mRoot, "Root", null);
                                             mCurrent.setPathFromRoot("");
                                             parseAndUpdate(didl);
                                             goToTop();

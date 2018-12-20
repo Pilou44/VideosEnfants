@@ -174,8 +174,8 @@ public class GetThumbnailsService extends Service {
             if (DEBUG)
                 Log.i(TAG, "Done for " + element.getName());
 
-            element.update(thumbnailRetrieved);
-            element.unbind();
+            //element.update(thumbnailRetrieved);
+            //element.unbind();
             mQueue.removeElement(element);
         }
     }

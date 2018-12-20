@@ -1,11 +1,13 @@
 package com.freak.videosenfants.app.browse.local;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.freak.videosenfants.app.core.BaseContract;
 import com.freak.videosenfants.app.core.BasePresenter;
 import com.freak.videosenfants.domain.bean.VideoElement;
 import com.freak.videosenfants.domain.useCase.GetLocalRootsUseCase;
+import com.freak.videosenfants.domain.useCase.GetThumbnailUseCase;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,12 +26,16 @@ public class BrowseLocalPresenter extends BasePresenter implements BrowseLocalCo
 
     private final BrowseLocalContract.Router mRouter;
     private final ArrayList<VideoElement> mItems;
+    private final GetThumbnailUseCase mGetThumbnailUseCase;
 
     private List<VideoElement> mRoots;
     private BrowseLocalContract.View mView;
     private VideoElement mCurrent;
 
-    public BrowseLocalPresenter(GetLocalRootsUseCase getLocalRootsUseCase, BrowseLocalContract.Router router) {
+    public BrowseLocalPresenter(GetLocalRootsUseCase getLocalRootsUseCase,
+                                GetThumbnailUseCase getThumbnailUseCase,
+                                BrowseLocalContract.Router router) {
+        mGetThumbnailUseCase = getThumbnailUseCase;
         mRouter = router;
 
         mItems = new ArrayList<>();
@@ -86,6 +92,12 @@ public class BrowseLocalPresenter extends BasePresenter implements BrowseLocalCo
         } else {
             browseLocal(mCurrent.getParent());
         }
+    }
+
+    @Override
+    public void getImageUri(VideoElement element) {
+        mGetThumbnailUseCase.execute(new GetThumbnailSubscriber(element), element);
+
     }
 
     private List<VideoElement> sortItems(File[] files, VideoElement parent) {
@@ -172,5 +184,33 @@ public class BrowseLocalPresenter extends BasePresenter implements BrowseLocalCo
             }
         });
         return sortItems(subFiles, parent);
+    }
+
+    private class GetThumbnailSubscriber extends ResourceObserver<Uri> {
+        private final VideoElement mElement;
+
+        private GetThumbnailSubscriber(VideoElement element) {
+            mElement = element;
+        }
+
+        @Override
+        public void onNext(Uri uri) {
+            if (mView != null) {
+                mView.showElementThumbnail(mElement, uri);
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Log.e(TAG, "Error getting thumbnail", new Exception(e));
+            if (mView != null) {
+                mView.showElementThumbnail(mElement, null);
+            }
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
     }
 }

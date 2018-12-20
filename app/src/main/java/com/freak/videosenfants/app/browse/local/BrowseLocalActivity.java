@@ -1,5 +1,6 @@
 package com.freak.videosenfants.app.browse.local;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -91,7 +92,12 @@ public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalCo
 
     @Override
     public void notifyElementsUpdated() {
-        mAdapter.notifyDataSetChanged();
+        mAdapter.update();
+    }
+
+    @Override
+    public void showElementThumbnail(VideoElement element, Uri uri) {
+        mAdapter.updateThumbnail(element, uri);
     }
 
     /*private void addFilesToList(Vector<File> filesVector, VideoElement parent) {

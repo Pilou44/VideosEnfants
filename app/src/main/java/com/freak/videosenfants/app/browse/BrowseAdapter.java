@@ -12,16 +12,19 @@ import android.widget.TextView;
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.app.browse.local.BrowseLocalContract;
 import com.freak.videosenfants.domain.bean.VideoElement;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.VideoElementHolder> {
     private final BrowseLocalContract.Presenter mPresenter;
+    private Object[] mThumbnails;
 
     public BrowseAdapter(BrowseLocalContract.Presenter presenter) {
         super();
         mPresenter = presenter;
+        mThumbnails = new Object[0];
     }
 
     @NonNull
@@ -46,22 +49,54 @@ public class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.VideoEleme
         // ToDo manage long click
         if (element.isDirectory()) {
             viewHolder.subIcon.setVisibility(View.VISIBLE);
-            viewHolder.icon.setBackgroundResource(R.drawable.dossier);
+            Picasso.get().load(R.drawable.dossier).into(viewHolder.icon);
+            //viewHolder.icon.setBackgroundResource(R.drawable.dossier);
             //mImageLoader.displayImage("drawable://" + R.drawable.dossier, viewHolder.icon);
             //mImageLoader.displayImage(element.getImageURI(), viewHolder.subIcon, mDirectoryOptions);
+            setThumbnail(position, element, viewHolder.subIcon);
             viewHolder.itemView.setOnClickListener(v -> mPresenter.browseLocal(element));
         } else {
             viewHolder.subIcon.setVisibility(View.GONE);
             //element.setPosition(position, mHandler, mImageLoader, mFileOptions);
             //mImageLoader.displayImage(element.getImageURI(), viewHolder.icon, mFileOptions);
-            viewHolder.icon.setBackgroundResource(R.drawable.fichier);
+            setThumbnail(position, element, viewHolder.icon);
+            //viewHolder.icon.setBackgroundResource(R.drawable.fichier);
             viewHolder.itemView.setOnClickListener(v -> mPresenter.playVideo(Uri.parse(element.getPath())));
+        }
+    }
+
+    private void setThumbnail(int position, VideoElement element, ImageView view) {
+        if (mThumbnails[position] != null) {
+            if (mThumbnails[position] instanceof Uri) {
+                Picasso.get().load((Uri) mThumbnails[position]).into(view);
+            } else {
+                Picasso.get().load((int) mThumbnails[position]).into(view);
+            }
+        } else {
+            Picasso.get().load(R.drawable.loading_animation).into(view);
+            mPresenter.getImageUri(element);
         }
     }
 
     @Override
     public int getItemCount() {
         return mPresenter.getCurrentItems().size();
+    }
+
+    public void updateThumbnail(VideoElement element, Uri uri) {
+        int position = mPresenter.getCurrentItems().indexOf(element);
+        if (position >= 0) {
+            if (uri != null) {
+                mThumbnails[position] = uri;
+            } else {
+                if (element.isDirectory()) {
+                    mThumbnails[position] = R.drawable.empty;
+                } else {
+                    mThumbnails[position] = R.drawable.fichier;
+                }
+            }
+            notifyItemChanged(position);
+        }
     }
 
     class VideoElementHolder extends RecyclerView.ViewHolder {
@@ -76,5 +111,10 @@ public class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.VideoEleme
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public void update() {
+        mThumbnails = new Object[mPresenter.getCurrentItems().size()];
+        notifyDataSetChanged();
     }
 }

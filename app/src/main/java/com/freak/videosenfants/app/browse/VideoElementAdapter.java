@@ -78,12 +78,12 @@ public class VideoElementAdapter extends ArrayAdapter<VideoElement> {
         if (element.isDirectory()) {
             viewHolder.subIcon.setVisibility(View.VISIBLE);
             mImageLoader.displayImage("drawable://" + R.drawable.dossier, viewHolder.icon);
-            mImageLoader.displayImage(element.getImageURI(), viewHolder.subIcon, mDirectoryOptions);
+            //mImageLoader.displayImage(element.getImageURI(), viewHolder.subIcon, mDirectoryOptions);
         }
         else {
             viewHolder.subIcon.setVisibility(View.GONE);
             element.setPosition(position, mHandler, mImageLoader, mFileOptions);
-            mImageLoader.displayImage(element.getImageURI(), viewHolder.icon, mFileOptions);
+            //mImageLoader.displayImage(element.getImageURI(), viewHolder.icon, mFileOptions);
         }
 
         return convertView;
