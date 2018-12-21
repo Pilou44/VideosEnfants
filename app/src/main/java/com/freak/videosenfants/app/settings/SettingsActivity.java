@@ -1,25 +1,17 @@
 package com.freak.videosenfants.app.settings;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.view.LayoutInflater;
-import android.widget.LinearLayout;
 
 import com.freak.videosenfants.R;
-import com.freak.videosenfants.app.settings.dlna.DlnaPreferenceFragment;
-import com.freak.videosenfants.app.settings.general.GeneralPreferenceFragment;
+import com.freak.videosenfants.app.core.BaseActivity;
+import com.freak.videosenfants.app.settings.local.BrowseLocalDialogFragment;
 import com.freak.videosenfants.app.settings.local.LocalPreferenceFragment;
-import com.freak.videosenfants.app.settings.memory.MemoryPreferenceFragment;
 import com.freak.videosenfants.elements.ApplicationSingleton;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -28,7 +20,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public class SettingsActivity extends PreferenceActivity implements SettingsContract.View, HasSupportFragmentInjector {
+public class SettingsActivity extends BaseActivity implements SettingsContract.View, HasSupportFragmentInjector {
 
     @Inject
     DispatchingAndroidInjector<Fragment> mSupportFragmentInjector;
@@ -45,6 +37,8 @@ public class SettingsActivity extends PreferenceActivity implements SettingsCont
             setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_settings);
+
         AndroidInjection.inject(this);
         mPresenter.subscribe(this);
 
@@ -58,9 +52,10 @@ public class SettingsActivity extends PreferenceActivity implements SettingsCont
 
         }
 
+        mPresenter.showMainSettings(R.id.fragment);
     }
 
-    @Override
+    /*@Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
@@ -69,9 +64,6 @@ public class SettingsActivity extends PreferenceActivity implements SettingsCont
         root.addView(bar, 0);
     }
     
-    /**
-     * Populate the activity with the top-level headers.
-     */
     @Override
     public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.pref_headers, target);
@@ -83,7 +75,7 @@ public class SettingsActivity extends PreferenceActivity implements SettingsCont
                 LocalPreferenceFragment.class.getName().equals(fragmentName) ||
                 DlnaPreferenceFragment.class.getName().equals(fragmentName) ||
                 MemoryPreferenceFragment.class.getName().equals(fragmentName);
-    }
+    }*/
 
     @Override
     protected void onDestroy() {
@@ -92,12 +84,23 @@ public class SettingsActivity extends PreferenceActivity implements SettingsCont
     }
 
     @Override
-    public Context getContext() {
-        return this;
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return mSupportFragmentInjector;
     }
 
     @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return mSupportFragmentInjector;
+    public void refreshLocalRoots() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment);
+        if (fragment instanceof LocalPreferenceFragment) {
+            ((LocalPreferenceFragment) fragment).refreshLocalRoots();
+        }
+    }
+
+    @Override
+    public void refreshLocalSources() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(0);
+        if (fragment instanceof BrowseLocalDialogFragment) {
+            ((BrowseLocalDialogFragment) fragment).refreshLocalSources();
+        }
     }
 }

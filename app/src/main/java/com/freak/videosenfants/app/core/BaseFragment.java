@@ -32,10 +32,6 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         Icepick.restoreInstanceState(this, savedInstanceState);
     }
 
-    public boolean onBackPressed() {
-        return false;
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

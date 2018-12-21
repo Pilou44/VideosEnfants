@@ -43,7 +43,7 @@ public class BrowseLocalPreference extends BrowsePreference implements AdapterVi
         setDialogLayoutResource(R.layout.local_preference_dialog);
     }
 
-    @Override
+    /*@Override
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
         if (positiveResult && mSelectedElement != null) {
@@ -77,7 +77,7 @@ public class BrowseLocalPreference extends BrowsePreference implements AdapterVi
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
 
-    }
+    }*/
 
     private String[] getStorageDirectories()
     {

@@ -4,8 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.DialogPreference;
-import android.preference.PreferenceManager;
+import android.support.v7.preference.DialogPreference;
+import android.support.v7.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -73,7 +73,7 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
         }
     }
 
-    @Override
+    /*@Override
     protected View onCreateView(ViewGroup parent) {
         View preferenceView = super.onCreateView(parent);
         preferenceView.setOnClickListener(this);
@@ -95,7 +95,7 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
         else {
             removeButton.setVisibility(View.GONE);
         }
-    }
+    }*/
 
     @Override
     public void onClick(View view) {
@@ -114,7 +114,7 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
         return mContext;
     }
 
-    @Override
+    /*@Override
     protected void showDialog(Bundle state) {
         final Dialog dialog = new Dialog(mContext);
 
@@ -150,6 +150,6 @@ public class BrowsePreference extends DialogPreference implements View.OnClickLi
 
         dialog.setOnDismissListener(this);
         dialog.show();
-    }
+    }*/
 
 }

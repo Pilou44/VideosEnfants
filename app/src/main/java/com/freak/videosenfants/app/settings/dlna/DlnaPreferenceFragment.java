@@ -2,9 +2,9 @@ package com.freak.videosenfants.app.settings.dlna;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
+import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceManager;
+import android.support.v7.preference.PreferenceScreen;
 import android.util.Log;
 
 import com.freak.videosenfants.R;
@@ -12,7 +12,7 @@ import com.freak.videosenfants.elements.preferences.BrowsePreference;
 
 import java.util.Vector;
 
-public class DlnaPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class DlnaPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final boolean DEBUG = true;
     private static final String TAG = DlnaPreferenceFragment.class.getSimpleName();
     private Vector<BrowsePreference> mBrowsePrefs;
@@ -40,6 +40,10 @@ public class DlnaPreferenceFragment extends PreferenceFragment implements Shared
 
     }
 
+    @Override
+    public void onCreatePreferences(Bundle bundle, String s) {
+        addPreferencesFromResource(R.xml.pref_dlna);
+    }
 
 
     @Override

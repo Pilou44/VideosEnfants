@@ -87,7 +87,7 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
         mHandler = new Handler();
     }
 
-    @Override
+    /*@Override
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
 
@@ -135,7 +135,7 @@ public class BrowseDlnaPreference extends BrowsePreference implements AdapterVie
             editor.apply();
             this.notifyChanged();
         }
-    }
+    }*/
 
 
     @Override

@@ -2,7 +2,7 @@ package com.freak.videosenfants.elements.preferences;
 
 import java.io.File;
 
-class FileElement {
+public class FileElement {
 
     private String mName;
     private final File mFile;

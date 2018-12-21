@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageButton
+        android:id="@+id/remove_button"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:src="@drawable/supprimer"
+        android:backgroundTint="@color/transparent"
+        android:background="@null"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/general_padding"
+        android:contentDescription="@string/remove_description" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/remove_button"
+        android:layout_marginEnd="@dimen/general_padding"
+        android:layout_marginStart="@dimen/general_padding"
+        android:layout_marginTop="@dimen/one_half_padding"/>
+    <TextView
+        android:id="@+id/summary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?android:attr/textColorSecondary"
+        android:maxLines="4"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintEnd_toEndOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/title"/>
+    <TextView
+        android:id="@+id/value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?android:attr/textColorTertiary"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        app:layout_constraintStart_toStartOf="@id/summary"
+        app:layout_constraintEnd_toEndOf="@id/summary"
+        app:layout_constraintTop_toBottomOf="@id/summary"/>
+
+</android.support.constraint.ConstraintLayout>
