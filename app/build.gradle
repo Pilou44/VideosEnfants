@@ -13,6 +13,7 @@ ext {
     stethoVersion = '1.5.0'
     icepickVersion = '3.2.0'
     mockitoVersion = '2.19.0'
+    roomVersion = "1.1.1"
 
     androidSupportTestVersion = '1.0.0'
     espressoVersion = '3.0.0'
@@ -90,6 +91,11 @@ dependencies {
 
     // PICASSO
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    // ROOM
+    implementation "android.arch.persistence.room:runtime:$roomVersion"
+    kapt "android.arch.persistence.room:compiler:$roomVersion"
+    implementation "android.arch.persistence.room:rxjava2:$roomVersion"
 
     testImplementation 'junit:junit:4.12'
     implementation group: 'org.eclipse.jetty', name: 'jetty-server', version: '8.2.0.v20160908'

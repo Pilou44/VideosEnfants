@@ -1,44 +1,48 @@
 package com.freak.videosenfants.domain.bean;
 
-import android.app.Service;
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.SharedPreferences;
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Handler;
-import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.freak.videosenfants.R;
-import com.freak.videosenfants.services.GetThumbnailsService;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 
+@Entity(tableName = "local_roots")
 public class VideoElement {
 
-    private static final boolean DEBUG = true;
     private static final String TAG = VideoElement.class.getSimpleName();
 
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    public long mId;
+
     //private final Context mContext;
+    @ColumnInfo(name = "path")
+    public final String mPath;
+
+    //private ListView mListView;
+    @Ignore
     private final boolean mDirectory;
-    private final String mPath;
-    private ListView mListView;
+    @Ignore
     private String mName;
+    @Ignore
     private VideoElement mParent;
+    @Ignore
     private Long mSize;
+    @Ignore
     private String mPathFromRoot;
-    private GetThumbnailsService mService;
-    private boolean mBound;
-    private DisplayImageOptions mOptions;
-    private ImageLoader mImageLoader;
-    private Handler mHandler;
-    private int mPosition;
+    //private GetThumbnailsService mService;
+    //private boolean mBound;
+    //private DisplayImageOptions mOptions;
+    //private ImageLoader mImageLoader;
+    //private Handler mHandler;
+    //private int mPosition;
 
     /*private final ServiceConnection mConnection = new ServiceConnection() {
 
@@ -63,6 +67,12 @@ public class VideoElement {
         }
     };*/
 
+    public VideoElement(long id, String path) {
+        mId = id;
+        mPath = path;
+        mDirectory = true;
+    }
+
     public VideoElement(boolean directory, String path, String name, VideoElement parent) {
         mDirectory = directory;
         mPath = path;
@@ -83,12 +93,12 @@ public class VideoElement {
 
     public VideoElement(File file, VideoElement parent, ListView listView) {
         this(file, parent);
-        mListView = listView;
+        //mListView = listView;
     }
 
     public VideoElement(@SuppressWarnings("SameParameterValue") boolean directory, String path, String name, VideoElement parent, ListView listView) {
         this(directory, path, name, parent);
-        mListView = listView;
+        //mListView = listView;
     }
 
     public boolean isDirectory() {
@@ -247,12 +257,13 @@ public class VideoElement {
         }
     }*/
 
-    public void setPosition(int position, Handler handler, ImageLoader imageLoader, DisplayImageOptions options) {if (DEBUG)
-        Log.i(TAG, "Set position for " + mName + ": " + position);
-        mPosition = position;
-        mHandler = handler;
-        mOptions = options;
-        mImageLoader = imageLoader;
+    public void setPosition(int position, Handler handler, ImageLoader imageLoader, DisplayImageOptions options) {
+        //if (DEBUG)
+        //Log.i(TAG, "Set position for " + mName + ": " + position);
+        //mPosition = position;
+        //mHandler = handler;
+        //mOptions = options;
+        //mImageLoader = imageLoader;
     }
 
     public void setParent(VideoElement parent) {

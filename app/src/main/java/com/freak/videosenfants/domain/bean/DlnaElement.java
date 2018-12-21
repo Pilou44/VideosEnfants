@@ -1,22 +1,49 @@
 package com.freak.videosenfants.domain.bean;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.util.Log;
 
 import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.meta.RemoteDeviceIdentity;
 import org.fourthline.cling.model.meta.RemoteService;
 
+@Entity(tableName = "dlna_roots")
 public class DlnaElement {
+
     private static final String TAG = DlnaElement.class.getSimpleName();
-    private static final boolean DEBUG = true;
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    public long mId;
+
+    @ColumnInfo(name = "udn")
+    public String mUdn;
+    @ColumnInfo(name = "url")
+    public String mUrl;
+    @ColumnInfo(name = "path")
+    public String mPath;
+    @ColumnInfo(name = "max_age")
+    public int mMaxAge;
+
+    @Ignore
     private RemoteService mService;
-    private final String mName;
-    private final String mUdn;
-    private final String mUrl;
-    private final String mPath;
-    private final int mMaxAge;
+    @Ignore
+    private String mName;
+    @Ignore
     private boolean mExpanded;
+    @Ignore
     private int mIndent = 0;
+
+    public DlnaElement(long id, String udn, String url, String path, int maxAge) {
+        mId = id;
+        mUdn = udn;
+        mUrl = url;
+        mPath = path;
+        mMaxAge = maxAge;
+    }
 
     @SuppressWarnings("WeakerAccess")
     public DlnaElement(String udn, String url, String path, int maxAge, String name, int indent) {
@@ -37,8 +64,7 @@ public class DlnaElement {
         mPath = "0";
         mName = device.getDisplayString();
         mExpanded = false;
-        if (DEBUG)
-         Log.i(TAG, "New device " + mName);
+        Log.i(TAG, "New device " + mName);
     }
 
     public DlnaElement(String title, String path, DlnaElement parent) {
