@@ -5,7 +5,7 @@ import com.freak.videosenfants.app.core.BasePresenter;
 import com.freak.videosenfants.domain.bean.VideoElement;
 import com.freak.videosenfants.domain.useCase.GetLocalRootsUseCase;
 import com.freak.videosenfants.domain.useCase.GetLocalSourcesUseCase;
-import com.freak.videosenfants.elements.preferences.FileElement;
+import com.freak.videosenfants.domain.bean.FileElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +85,11 @@ public class SettingsPresenter extends BasePresenter implements SettingsContract
     public void retrieveLocalSources() {
         mLocalFiles.clear();
         mGetLocalSourcesUseCase.execute(new GetLocalSourcesSubscriber());
+    }
+
+    @Override
+    public void expandLocal(FileElement element) {
+        // ToDo
     }
 
     private class GetLocalRootsSubscriber extends ResourceObserver<List<VideoElement>> {

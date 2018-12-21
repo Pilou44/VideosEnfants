@@ -1,4 +1,4 @@
-package com.freak.videosenfants.elements.preferences;
+package com.freak.videosenfants.domain.bean;
 
 import java.io.File;
 

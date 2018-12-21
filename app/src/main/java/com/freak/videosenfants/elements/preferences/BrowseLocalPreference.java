@@ -1,18 +1,16 @@
 package com.freak.videosenfants.elements.preferences;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.domain.bean.FileElement;
 
 import java.io.File;
 import java.io.FileFilter;

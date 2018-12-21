@@ -3,7 +3,7 @@ package com.freak.videosenfants.domain.useCase;
 import android.content.Context;
 
 import com.freak.videosenfants.dagger.scope.PerActivity;
-import com.freak.videosenfants.elements.preferences.FileElement;
+import com.freak.videosenfants.domain.bean.FileElement;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class GetLocalSourcesUseCase extends UseCase<List<FileElement>, Void> {
             for (File file : files) {
                 String path = file.getAbsolutePath();
                 file = new File(path.replaceAll("/Android/data/" + mContext.getPackageName() + "/files", ""));
-                sources.add(new FileElement(file));
+                sources.add(new FileElement(file, file.getPath()));
             }
             return Observable.just(sources);
         });

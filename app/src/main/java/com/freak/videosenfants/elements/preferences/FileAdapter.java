@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.domain.bean.FileElement;
 
 import java.util.List;
 

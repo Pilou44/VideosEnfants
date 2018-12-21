@@ -2,7 +2,7 @@ package com.freak.videosenfants.app.settings;
 
 import com.freak.videosenfants.app.core.BaseContract;
 import com.freak.videosenfants.domain.bean.VideoElement;
-import com.freak.videosenfants.elements.preferences.FileElement;
+import com.freak.videosenfants.domain.bean.FileElement;
 
 import java.util.List;
 
@@ -34,6 +34,8 @@ public interface SettingsContract {
         List<FileElement> getLocalFiles();
 
         void retrieveLocalSources();
+
+        void expandLocal(FileElement element);
     }
 
     interface Router extends BaseContract.Router {
