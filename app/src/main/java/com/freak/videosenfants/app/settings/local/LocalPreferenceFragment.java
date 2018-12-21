@@ -8,10 +8,14 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import com.freak.videosenfants.R;
-import com.freak.videosenfants.app.settings.SettingsActivity;
+import com.freak.videosenfants.app.settings.SettingsContract;
 import com.freak.videosenfants.elements.preferences.BrowsePreference;
 
 import java.util.Vector;
+
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 
 public class LocalPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = LocalPreferenceFragment.class.getSimpleName();
@@ -19,9 +23,13 @@ public class LocalPreferenceFragment extends PreferenceFragment implements Share
     private Vector<BrowsePreference> mBrowsePrefs;
     private PreferenceScreen mScreen;
 
+    @Inject
+    public SettingsContract.Presenter mPresenter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AndroidSupportInjection.inject(this);
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.pref_local);

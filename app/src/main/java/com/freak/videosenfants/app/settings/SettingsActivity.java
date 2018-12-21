@@ -1,11 +1,13 @@
 package com.freak.videosenfants.app.settings;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
@@ -19,7 +21,21 @@ import com.freak.videosenfants.elements.ApplicationSingleton;
 
 import java.util.List;
 
-public class SettingsActivity extends PreferenceActivity {
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
+
+public class SettingsActivity extends PreferenceActivity implements SettingsContract.View, HasSupportFragmentInjector {
+
+    @Inject
+    DispatchingAndroidInjector<Fragment> mSupportFragmentInjector;
+
+
+    @Inject
+    SettingsContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +44,9 @@ public class SettingsActivity extends PreferenceActivity {
         else
             setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
+
+        AndroidInjection.inject(this);
+        mPresenter.subscribe(this);
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -66,4 +85,19 @@ public class SettingsActivity extends PreferenceActivity {
                 MemoryPreferenceFragment.class.getName().equals(fragmentName);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.unsubscribe(this);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return mSupportFragmentInjector;
+    }
 }
