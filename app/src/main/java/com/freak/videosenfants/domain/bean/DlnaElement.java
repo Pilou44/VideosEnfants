@@ -1,4 +1,4 @@
-package com.freak.videosenfants.elements.preferences;
+package com.freak.videosenfants.domain.bean;
 
 import android.util.Log;
 
@@ -6,7 +6,7 @@ import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.meta.RemoteDeviceIdentity;
 import org.fourthline.cling.model.meta.RemoteService;
 
-class DlnaElement {
+public class DlnaElement {
     private static final String TAG = DlnaElement.class.getSimpleName();
     private static final boolean DEBUG = true;
     private RemoteService mService;

@@ -6,21 +6,21 @@
         android:title="@string/pref_dlna_add_button"
         app:itemsNumber="@integer/dlna_servers_number" />
 
-    <com.freak.videosenfants.elements.preferences.BrowseDlnaPreference
+    <com.freak.videosenfants.app.settings.dlna.BrowseDlnaPreference
         android:defaultValue="@null"
         android:key="@string/key_dlna_browse_0"
         android:title="@string/pref_dlna_add"
         app:visible="false"
         app:deletable="true" />
 
-    <com.freak.videosenfants.elements.preferences.BrowseDlnaPreference
+    <com.freak.videosenfants.app.settings.dlna.BrowseDlnaPreference
         android:defaultValue="@null"
         android:key="@string/key_dlna_browse_1"
         android:title="@string/pref_dlna_add"
         app:visible="false"
         app:deletable="true" />
 
-    <com.freak.videosenfants.elements.preferences.BrowseDlnaPreference
+    <com.freak.videosenfants.app.settings.dlna.BrowseDlnaPreference
         android:defaultValue="@null"
         android:key="@string/key_dlna_browse_2"
         android:title="@string/pref_dlna_add"

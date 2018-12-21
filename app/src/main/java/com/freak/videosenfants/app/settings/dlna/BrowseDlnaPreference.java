@@ -1,4 +1,4 @@
-package com.freak.videosenfants.elements.preferences;
+package com.freak.videosenfants.app.settings.dlna;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.domain.bean.DlnaElement;
+import com.freak.videosenfants.elements.preferences.BrowsePreference;
 
 import org.fourthline.cling.android.AndroidUpnpService;
 import org.fourthline.cling.android.AndroidUpnpServiceImpl;

@@ -14,7 +14,7 @@ public class LocalBrowsingRepository {
     private PreferencesContent mPreferences;
 
     @Inject
-    public LocalBrowsingRepository(PreferencesContent preferences) {
+    LocalBrowsingRepository(PreferencesContent preferences) {
         mPreferences = preferences;
     }
 

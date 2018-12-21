@@ -1,4 +1,4 @@
-package com.freak.videosenfants.elements.preferences;
+package com.freak.videosenfants.app.settings.dlna;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.freak.videosenfants.R;
+import com.freak.videosenfants.domain.bean.DlnaElement;
 
 import java.util.List;
 
