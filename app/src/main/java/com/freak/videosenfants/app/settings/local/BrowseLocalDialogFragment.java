@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.support.AndroidSupportInjection;
 
 public class BrowseLocalDialogFragment extends BaseDialogFragment {
@@ -62,5 +63,16 @@ public class BrowseLocalDialogFragment extends BaseDialogFragment {
 
     public void refreshLocalSources() {
         mTree.getAdapter().notifyDataSetChanged();
+    }
+
+    public void notifyLocalSubsRetrieved(int position, int size) {
+        mTree.getAdapter().notifyItemChanged(position - 1);
+        mTree.getAdapter().notifyItemRangeInserted(position, size);
+    }
+
+    @OnClick(R.id.ok_button)
+    public void onOkButtonPressed() {
+        mPresenter.addLocalRoot(((LocalAdapter) mTree.getAdapter()).getSelected());
+        dismiss();
     }
 }

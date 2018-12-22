@@ -13,6 +13,8 @@ public interface SettingsContract {
         void refreshLocalRoots();
 
         void refreshLocalSources();
+
+        void notifyLocalSubsRetrieved(int position, int size);
     }
 
     interface Presenter extends BaseContract.Presenter {
@@ -36,6 +38,10 @@ public interface SettingsContract {
         void retrieveLocalSources();
 
         void expandLocal(FileElement element);
+
+        void addLocalRoot(FileElement element);
+
+        void retrieveLocalRoots();
     }
 
     interface Router extends BaseContract.Router {

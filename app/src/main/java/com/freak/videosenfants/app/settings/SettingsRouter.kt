@@ -8,7 +8,8 @@ import com.freak.videosenfants.app.settings.local.LocalPreferenceFragment
 class SettingsRouter : BaseRouter(), SettingsContract.Router {
 
     override fun showMainSettings(view: SettingsContract.View?, fragmentId: Int) {
-        changeFragment(view!!, MainSettingsFragment(), fragmentId)
+        val ft = getActivity(view).getSupportFragmentManager().beginTransaction()
+        ft.replace(fragmentId, MainSettingsFragment()).commit()
     }
 
     override fun showDlnaSettings(view: SettingsContract.View?, fragmentId: Int) {
@@ -31,5 +32,4 @@ class SettingsRouter : BaseRouter(), SettingsContract.Router {
         val ft = getActivity(view).getSupportFragmentManager().beginTransaction()
         ft.replace(fragmentId, fragment).addToBackStack(null).commit()
     }
-
 }

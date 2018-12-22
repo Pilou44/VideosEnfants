@@ -57,6 +57,8 @@ public class LocalPreferenceFragment extends BaseFragment implements SharedPrefe
         mRootsList.setLayoutManager(layoutManager);
         mRootsList.setAdapter(new RootsListAdapter(mPresenter));
 
+        mPresenter.retrieveLocalRoots();
+
         return view;
     }
 

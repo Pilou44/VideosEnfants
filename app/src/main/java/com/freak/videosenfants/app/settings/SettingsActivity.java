@@ -103,4 +103,12 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
             ((BrowseLocalDialogFragment) fragment).refreshLocalSources();
         }
     }
+
+    @Override
+    public void notifyLocalSubsRetrieved(int position, int size) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(0);
+        if (fragment instanceof BrowseLocalDialogFragment) {
+            ((BrowseLocalDialogFragment) fragment).notifyLocalSubsRetrieved(position, size);
+        }
+    }
 }

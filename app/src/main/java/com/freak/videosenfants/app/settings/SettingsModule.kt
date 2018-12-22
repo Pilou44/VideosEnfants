@@ -1,8 +1,7 @@
 package com.freak.videosenfants.app.settings
 
 import com.freak.videosenfants.dagger.scope.PerActivity
-import com.freak.videosenfants.domain.useCase.GetLocalRootsUseCase
-import com.freak.videosenfants.domain.useCase.GetLocalSourcesUseCase
+import com.freak.videosenfants.domain.useCase.*
 import dagger.Module
 import dagger.Provides
 
@@ -12,8 +11,18 @@ class SettingsModule {
 
     @Provides
     @PerActivity
-    fun provideSettingsPresenter(getLocalRootsUseCase: GetLocalRootsUseCase, getLocalSourcesUseCase: GetLocalSourcesUseCase, router: SettingsContract.Router): SettingsContract.Presenter {
-        return SettingsPresenter(getLocalRootsUseCase, getLocalSourcesUseCase, router)
+    fun provideSettingsPresenter(getLocalRootsUseCase: GetLocalRootsUseCase,
+                                 getLocalSourcesUseCase: GetLocalSourcesUseCase,
+                                 getLocalSubsUseCase: GetLocalSubsUseCase,
+                                 addLocalRootUseCase: AddLocalRootUseCase,
+                                 removeLocalRootUseCase: RemoveLocalRootUseCase,
+                                 router: SettingsContract.Router): SettingsContract.Presenter {
+        return SettingsPresenter(getLocalRootsUseCase,
+                getLocalSourcesUseCase,
+                getLocalSubsUseCase,
+                addLocalRootUseCase,
+                removeLocalRootUseCase,
+                router)
     }
 
     @Provides

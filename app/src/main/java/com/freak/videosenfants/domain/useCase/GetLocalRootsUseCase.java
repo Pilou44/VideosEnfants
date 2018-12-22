@@ -31,7 +31,8 @@ public class GetLocalRootsUseCase extends UseCase<List<VideoElement>, Void> {
 
     @Override
     protected Observable<List<VideoElement>> buildObservable(Void aVoid) {
-        return Observable.defer(() -> {
+        return mRepository.getLocalRoots();
+        /*return Observable.defer(() -> {
             ArrayList<VideoElement> result = new ArrayList<>();
             int nbRoots = mContext.getResources().getInteger(R.integer.local_roots_number);
             for (int i = 0 ; i < nbRoots ; i++){
@@ -45,6 +46,6 @@ public class GetLocalRootsUseCase extends UseCase<List<VideoElement>, Void> {
                 }
             }
             return Observable.just(result);
-        });
+        });*/
     }
 }

@@ -36,6 +36,9 @@ abstract class DatabaseContent : RoomDatabase() {
         @Insert
         fun insertAll(vararg locals: VideoElement): Array<Long>
 
+        @Insert
+        fun insert(local: VideoElement): Long
+
         @Delete
         fun delete(local: VideoElement) : Int
     }

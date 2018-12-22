@@ -52,15 +52,21 @@ class LocalAdapter extends RecyclerView.Adapter<LocalAdapter.FileHolder> {
         fileHolder.itemView.setOnClickListener(v -> {
             int oldSelected = mPresenter.getLocalFiles().indexOf(mSelectedElement);
             mSelectedElement = element;
-            mPresenter.expandLocal(element);
-            fileHolder.itemView.setBackgroundColor(0x66666666);
             notifyItemChanged(oldSelected);
+            if (!element.isExpanded()) {
+                mPresenter.expandLocal(element);
+            }
+            fileHolder.itemView.setBackgroundColor(0x66666666);
         });
     }
 
     @Override
     public int getItemCount() {
         return mPresenter.getLocalFiles().size();
+    }
+
+    public FileElement getSelected() {
+        return mSelectedElement;
     }
 
     class FileHolder extends RecyclerView.ViewHolder {
