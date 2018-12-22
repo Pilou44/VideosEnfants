@@ -411,7 +411,7 @@ public class BrowseDlnaActivity extends BrowseActivity implements AdapterView.On
 
                     // ToDo refactor
                     /*mDest = (Spinner) dialog.findViewById(R.id.copy_dest);
-                    DestSpinnerAdapter adapter = new DestSpinnerAdapter(BrowseDlnaActivity.this, BrowseLocalActivity.getLocalRoots(BrowseDlnaActivity.this));
+                    DestSpinnerAdapter adapter = new DestSpinnerAdapter(BrowseDlnaActivity.this, BrowseLocalActivity.getRoots(BrowseDlnaActivity.this));
                     mDest.setAdapter(adapter);
                     mDest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override

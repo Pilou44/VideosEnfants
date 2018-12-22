@@ -13,6 +13,8 @@ import android.view.Window;
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.app.core.BaseDialogFragment;
 import com.freak.videosenfants.app.settings.SettingsContract;
+import com.freak.videosenfants.domain.bean.BrowsableElement;
+import com.freak.videosenfants.domain.bean.FileElement;
 
 import javax.inject.Inject;
 
@@ -28,6 +30,8 @@ public class BrowseLocalDialogFragment extends BaseDialogFragment {
 
     @BindView(R.id.tree)
     RecyclerView mTree;
+
+    private int mType;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,12 +55,12 @@ public class BrowseLocalDialogFragment extends BaseDialogFragment {
         View view = inflater.inflate(R.layout.dialog_fragment_browse, container);
         mUnbinder = ButterKnife.bind(this, view);
 
-        mPresenter.retrieveLocalSources();
+        mPresenter.retrieveSources(mType);
 
         mTree.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         mTree.setLayoutManager(layoutManager);
-        mTree.setAdapter(new LocalAdapter(mPresenter));
+        mTree.setAdapter(new LocalAdapter(mPresenter, mType));
 
         return view;
     }
@@ -72,7 +76,11 @@ public class BrowseLocalDialogFragment extends BaseDialogFragment {
 
     @OnClick(R.id.ok_button)
     public void onOkButtonPressed() {
-        mPresenter.addLocalRoot(((LocalAdapter) mTree.getAdapter()).getSelected());
+        mPresenter.addRoot((BrowsableElement) ((LocalAdapter) mTree.getAdapter()).getSelected(), mType);
         dismiss();
+    }
+
+    public void setType(int type) {
+        mType = type;
     }
 }

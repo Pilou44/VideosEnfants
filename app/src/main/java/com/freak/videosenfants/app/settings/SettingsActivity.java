@@ -89,15 +89,15 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
     }
 
     @Override
-    public void refreshLocalRoots() {
+    public void refreshRoots() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment);
         if (fragment instanceof LocalPreferenceFragment) {
-            ((LocalPreferenceFragment) fragment).refreshLocalRoots();
+            ((LocalPreferenceFragment) fragment).refreshRoots();
         }
     }
 
     @Override
-    public void refreshLocalSources() {
+    public void refreshSources() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(0);
         if (fragment instanceof BrowseLocalDialogFragment) {
             ((BrowseLocalDialogFragment) fragment).refreshLocalSources();
@@ -105,7 +105,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.V
     }
 
     @Override
-    public void notifyLocalSubsRetrieved(int position, int size) {
+    public void notifySubsRetrieved(int position, int size) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(0);
         if (fragment instanceof BrowseLocalDialogFragment) {
             ((BrowseLocalDialogFragment) fragment).notifyLocalSubsRetrieved(position, size);

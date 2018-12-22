@@ -8,30 +8,19 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 
+@Singleton
 public class LocalBrowsingRepository {
 
-    private static final String KEY_LOCAL_BROWSE = "local_browse";
-    private static final String KEY_VISIBLE = "_visible";
-
     private final DatabaseContent.LocalDao mLocalDao;
-    private final PreferencesContent mPreferences;
 
     @Inject
-    LocalBrowsingRepository(PreferencesContent preferences, DatabaseContent db) {
-        mPreferences = preferences;
+    LocalBrowsingRepository(DatabaseContent db) {
         mLocalDao = db.localDao();
-    }
-
-    public Observable<Boolean> isLocalRootVisible(int index) {
-        return Observable.just(mPreferences.getBoolean(KEY_LOCAL_BROWSE + "_" + index + KEY_VISIBLE, false));
-    }
-
-    public Observable<String> getLocalRoot(int index) {
-        return Observable.just(mPreferences.getString(KEY_LOCAL_BROWSE + "_" + index, ""));
     }
 
     public Observable<Long> addLocalRoot(VideoElement element) {

@@ -10,16 +10,18 @@ import android.widget.TextView;
 
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.app.settings.SettingsContract;
-import com.freak.videosenfants.domain.bean.VideoElement;
+import com.freak.videosenfants.domain.bean.BaseElement;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 class RootsListAdapter extends RecyclerView.Adapter<RootsListAdapter.RootHolder> {
     private final SettingsContract.Presenter mPresenter;
+    private final int mType;
 
-    RootsListAdapter(SettingsContract.Presenter presenter) {
+    RootsListAdapter(SettingsContract.Presenter presenter, int type) {
         mPresenter = presenter;
+        mType = type;
     }
 
     @NonNull
@@ -31,14 +33,14 @@ class RootsListAdapter extends RecyclerView.Adapter<RootsListAdapter.RootHolder>
 
     @Override
     public void onBindViewHolder(@NonNull RootHolder viewHolder, int position) {
-        VideoElement element = mPresenter.getLocalRoots().get(position);
+        BaseElement element = mPresenter.getRoots(mType).get(position);
         viewHolder.mSummary.setText(element.getPath());
-        viewHolder.mRemoveButton.setOnClickListener(v -> mPresenter.removeLocalRoot(element));
+        viewHolder.mRemoveButton.setOnClickListener(v -> mPresenter.removeRoot(mType, element));
     }
 
     @Override
     public int getItemCount() {
-        return mPresenter.getLocalRoots().size();
+        return mPresenter.getRoots(mType).size();
     }
 
     class RootHolder extends RecyclerView.ViewHolder {

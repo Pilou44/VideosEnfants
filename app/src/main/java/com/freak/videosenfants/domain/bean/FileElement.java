@@ -2,23 +2,20 @@ package com.freak.videosenfants.domain.bean;
 
 import java.io.File;
 
-public class FileElement {
+public class FileElement extends BrowsableElement {
 
     private String mName;
     private final File mFile;
-    private boolean mExpanded;
-    private int mIndent = 0;
 
     @SuppressWarnings("WeakerAccess")
     public FileElement(File file) {
-        mFile = file;
-        mExpanded = false;
-        mName = file.getName();
+        this(file, 0);
     }
 
     public FileElement(File file, int indent) {
-        this(file);
-        mIndent = indent;
+        super(indent);
+        mFile = file;
+        mName = file.getName();
     }
 
     public FileElement(File file, String name) {
@@ -26,23 +23,12 @@ public class FileElement {
         mName = name;
     }
 
-    public void setExpanded(@SuppressWarnings("SameParameterValue") boolean expanded) {
-        mExpanded = expanded;
-    }
-
     public File getFile() {
         return mFile;
     }
 
-    public boolean isExpanded() {
-        return mExpanded;
-    }
-
+    @Override
     public String getName() {
         return mName;
-    }
-
-    public int getIndent() {
-        return mIndent;
     }
 }

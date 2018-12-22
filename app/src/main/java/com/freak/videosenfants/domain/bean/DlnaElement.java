@@ -11,7 +11,7 @@ import org.fourthline.cling.model.meta.RemoteDeviceIdentity;
 import org.fourthline.cling.model.meta.RemoteService;
 
 @Entity(tableName = "dlna_roots")
-public class DlnaElement {
+public class DlnaElement extends BrowsableElement implements BaseElement {
 
     private static final String TAG = DlnaElement.class.getSimpleName();
 
@@ -32,12 +32,9 @@ public class DlnaElement {
     private RemoteService mService;
     @Ignore
     private String mName;
-    @Ignore
-    private boolean mExpanded;
-    @Ignore
-    private int mIndent = 0;
 
     public DlnaElement(long id, String udn, String url, String path, int maxAge) {
+        super(0);
         mId = id;
         mUdn = udn;
         mUrl = url;
@@ -47,51 +44,38 @@ public class DlnaElement {
 
     @SuppressWarnings("WeakerAccess")
     public DlnaElement(String udn, String url, String path, int maxAge, String name, int indent) {
+        super(indent);
         mUdn = udn;
         mUrl = url;
         mPath = path;
         mMaxAge = maxAge;
         mName = name;
-        mIndent = indent;
-        mExpanded = false;
     }
 
     public DlnaElement(Device device, RemoteService service) {
+        super(0);
         mUdn = device.getIdentity().getUdn().getIdentifierString();
         mUrl = ((RemoteDeviceIdentity)device.getIdentity()).getDescriptorURL().toString();
         mMaxAge = device.getIdentity().getMaxAgeSeconds();
         mService = service;
         mPath = "0";
         mName = device.getDisplayString();
-        mExpanded = false;
         Log.i(TAG, "New device " + mName);
     }
 
     public DlnaElement(String title, String path, DlnaElement parent) {
+        super(parent.getIndent() + 1);
         mUdn = parent.getUdn();
         mUrl = parent.getUrl();
         mMaxAge = parent.getMaxAge();
         mService = parent.getService();
         mPath = path;
         mName = title;
-        mExpanded = false;
-        mIndent = parent.getIndent() + 1;
     }
 
+    @Override
     public String getName() {
         return mName;
-    }
-
-    public int getIndent() {
-        return mIndent;
-    }
-
-    public boolean isExpanded() {
-        return mExpanded;
-    }
-
-    public void setExpanded(@SuppressWarnings("SameParameterValue") boolean expanded) {
-        mExpanded = expanded;
     }
 
     public String getPath() {

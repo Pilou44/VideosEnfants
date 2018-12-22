@@ -1,7 +1,8 @@
 package com.freak.videosenfants.app.settings;
 
 import com.freak.videosenfants.app.core.BaseContract;
-import com.freak.videosenfants.domain.bean.VideoElement;
+import com.freak.videosenfants.domain.bean.BaseElement;
+import com.freak.videosenfants.domain.bean.BrowsableElement;
 import com.freak.videosenfants.domain.bean.FileElement;
 
 import java.util.List;
@@ -10,18 +11,21 @@ public interface SettingsContract {
 
     interface View extends BaseContract.View {
 
-        void refreshLocalRoots();
+        void refreshRoots();
 
-        void refreshLocalSources();
+        void refreshSources();
 
-        void notifyLocalSubsRetrieved(int position, int size);
+        void notifySubsRetrieved(int position, int size);
     }
 
     interface Presenter extends BaseContract.Presenter {
 
-        List<VideoElement> getLocalRoots();
+        int TYPE_LOCAL = 1;
+        int TYPE_UPNP = 2;
 
-        void removeLocalRoot(VideoElement element);
+        List<BaseElement> getRoots(int type);
+
+        void removeRoot(int type, BaseElement element);
 
         void showMainSettings(int fragment);
 
@@ -33,15 +37,15 @@ public interface SettingsContract {
 
         void showMemorySettings(int id);
 
-        List<FileElement> getLocalFiles();
+        List<BrowsableElement> getFiles(int type);
 
-        void retrieveLocalSources();
+        void retrieveSources(int type);
 
-        void expandLocal(FileElement element);
+        void expand(BrowsableElement element, int type);
 
-        void addLocalRoot(FileElement element);
+        void addRoot(BrowsableElement element, int type);
 
-        void retrieveLocalRoots();
+        void retrieveRoots(int type);
     }
 
     interface Router extends BaseContract.Router {

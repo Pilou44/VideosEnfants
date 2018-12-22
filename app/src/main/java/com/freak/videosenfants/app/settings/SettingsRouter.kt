@@ -2,8 +2,10 @@ package com.freak.videosenfants.app.settings
 
 import android.support.v4.app.Fragment
 import com.freak.videosenfants.app.core.BaseRouter
-import com.freak.videosenfants.app.settings.dlna.DlnaPreferenceFragment
 import com.freak.videosenfants.app.settings.local.LocalPreferenceFragment
+import android.os.Bundle
+
+
 
 class SettingsRouter : BaseRouter(), SettingsContract.Router {
 
@@ -13,7 +15,11 @@ class SettingsRouter : BaseRouter(), SettingsContract.Router {
     }
 
     override fun showDlnaSettings(view: SettingsContract.View?, fragmentId: Int) {
-        changeFragment(view!!, DlnaPreferenceFragment(), fragmentId)
+        val bundle = Bundle()
+        bundle.putString(LocalPreferenceFragment.KEY_TYPE, LocalPreferenceFragment.TYPE_UPNP)
+        val fragment = LocalPreferenceFragment();
+        fragment.arguments = bundle;
+        changeFragment(view!!, fragment, fragmentId)
     }
 
     override fun showGeneralSettings(view: SettingsContract.View?, fragmentId: Int) {
@@ -25,7 +31,11 @@ class SettingsRouter : BaseRouter(), SettingsContract.Router {
     }
 
     override fun showLocalSettings(view: SettingsContract.View?, fragmentId: Int) {
-        changeFragment(view!!, LocalPreferenceFragment(), fragmentId)
+        val bundle = Bundle()
+        bundle.putString(LocalPreferenceFragment.KEY_TYPE, LocalPreferenceFragment.TYPE_LOCAL)
+        val fragment = LocalPreferenceFragment();
+        fragment.arguments = bundle;
+        changeFragment(view!!, fragment, fragmentId)
     }
 
     private fun changeFragment(view: SettingsContract.View, fragment: Fragment, fragmentId: Int) {

@@ -14,7 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 
 @Entity(tableName = "local_roots")
-public class VideoElement {
+public class VideoElement implements BaseElement {
 
     private static final String TAG = VideoElement.class.getSimpleName();
 

@@ -2,14 +2,11 @@ package com.freak.videosenfants.app.settings.local;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +27,15 @@ import dagger.android.support.AndroidSupportInjection;
 
 public class LocalPreferenceFragment extends BaseFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = LocalPreferenceFragment.class.getSimpleName();
-    private static final boolean DEBUG = true;
+
+    public static final String KEY_TYPE = "type";
+    public static final String TYPE_LOCAL = "local";
+    public static final String TYPE_UPNP = "upnp";
+
     private Vector<BrowsePreference> mBrowsePrefs;
     private PreferenceScreen mScreen;
+
+    private int mType;
 
     @Inject
     public SettingsContract.Presenter mPresenter;
@@ -52,12 +55,18 @@ public class LocalPreferenceFragment extends BaseFragment implements SharedPrefe
         View view = inflater.inflate(R.layout.fragment_settings_local, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
+        String type = getArguments().getString(KEY_TYPE);
+        if (type.equals(TYPE_LOCAL)) {
+            mType = SettingsContract.Presenter.TYPE_LOCAL;
+        } else if (type.equals(TYPE_UPNP)) {
+            mType = SettingsContract.Presenter.TYPE_UPNP;
+        }
+        mPresenter.retrieveRoots(mType);
+
         mRootsList.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         mRootsList.setLayoutManager(layoutManager);
-        mRootsList.setAdapter(new RootsListAdapter(mPresenter));
-
-        mPresenter.retrieveLocalRoots();
+        mRootsList.setAdapter(new RootsListAdapter(mPresenter, mType));
 
         return view;
     }
@@ -108,10 +117,11 @@ public class LocalPreferenceFragment extends BaseFragment implements SharedPrefe
     public void onAddButtonClicked() {
         BrowseLocalDialogFragment browseLocalDialogFragment = new BrowseLocalDialogFragment();
         browseLocalDialogFragment.setCancelable(true);
+        browseLocalDialogFragment.setType(mType);
         browseLocalDialogFragment.show(getActivity().getSupportFragmentManager(), browseLocalDialogFragment.getTag());
     }
 
-    public void refreshLocalRoots() {
+    public void refreshRoots() {
         mRootsList.getAdapter().notifyDataSetChanged();
     }
 }

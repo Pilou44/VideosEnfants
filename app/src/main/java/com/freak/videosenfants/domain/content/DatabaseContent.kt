@@ -21,6 +21,9 @@ abstract class DatabaseContent : RoomDatabase() {
         @Insert
         fun insertAll(vararg dlnas: DlnaElement): Array<Long>
 
+        @Insert
+        fun insert(dlna: DlnaElement): Long
+
         @Delete
         fun delete(dlna: DlnaElement) : Int
     }

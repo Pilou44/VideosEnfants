@@ -1,5 +1,6 @@
 package com.freak.videosenfants.domain.useCase;
 
+import android.os.Handler;
 import android.util.Log;
 
 import com.freak.videosenfants.dagger.scope.PerActivity;
@@ -29,7 +30,7 @@ public class ListUpnpServersUseCase extends UseCase<DlnaElement, Void> {
     private final UpnpRepository mRepository;
 
     @Inject
-    public ListUpnpServersUseCase(Scheduler postExecutionThread, UpnpRepository repository) {
+    ListUpnpServersUseCase(Scheduler postExecutionThread, UpnpRepository repository) {
         super(postExecutionThread);
         mRepository = repository;
     }
@@ -54,10 +55,12 @@ public class ListUpnpServersUseCase extends UseCase<DlnaElement, Void> {
     private class UpnpSubscriber extends ResourceObserver<AndroidUpnpService> {
         private final ResourceObserver<DlnaElement> mUseCaseSubscriber;
         private final BrowseRegistryListener mRegistryListener;
+        private final Handler mHandler;
 
         private UpnpSubscriber(ResourceObserver<DlnaElement> useCaseSubscriber) {
             mUseCaseSubscriber = useCaseSubscriber;
-            mRegistryListener = new BrowseRegistryListener(mUseCaseSubscriber);
+            mHandler = new Handler();
+            mRegistryListener = new BrowseRegistryListener(mUseCaseSubscriber, mHandler);
         }
 
         @Override
@@ -88,9 +91,11 @@ public class ListUpnpServersUseCase extends UseCase<DlnaElement, Void> {
     class BrowseRegistryListener extends DefaultRegistryListener {
 
         private final ResourceObserver<DlnaElement> mUseCaseSubscriber;
+        private final Handler mHandler;
 
-        private BrowseRegistryListener(ResourceObserver<DlnaElement> useCaseSubscriber) {
+        private BrowseRegistryListener(ResourceObserver<DlnaElement> useCaseSubscriber, Handler handler) {
             mUseCaseSubscriber = useCaseSubscriber;
+            mHandler = handler;
         }
 
         /* Discovery performance optimization for very slow Android devices! */
@@ -135,7 +140,7 @@ public class ListUpnpServersUseCase extends UseCase<DlnaElement, Void> {
                 for (RemoteService service : (RemoteService[]) device.getServices()) {
                     if (service.getServiceType().getType().equals("ContentDirectory")) {
                         DlnaElement d = new DlnaElement(device, service);
-                        mUseCaseSubscriber.onNext(d);
+                        mHandler.post(() -> mUseCaseSubscriber.onNext(d));
                     }
                 }
             }

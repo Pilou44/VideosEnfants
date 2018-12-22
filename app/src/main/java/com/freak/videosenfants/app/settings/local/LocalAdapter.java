@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.freak.videosenfants.R;
 import com.freak.videosenfants.app.settings.SettingsContract;
-import com.freak.videosenfants.domain.bean.FileElement;
+import com.freak.videosenfants.domain.bean.BrowsableElement;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,10 +18,12 @@ import butterknife.ButterKnife;
 class LocalAdapter extends RecyclerView.Adapter<LocalAdapter.FileHolder> {
 
     private final SettingsContract.Presenter mPresenter;
-    private FileElement mSelectedElement;
+    private final int mType;
+    private BrowsableElement mSelectedElement;
 
-    LocalAdapter(SettingsContract.Presenter presenter) {
+    LocalAdapter(SettingsContract.Presenter presenter, int type) {
         mPresenter = presenter;
+        mType = type;
     }
 
     @NonNull
@@ -33,7 +35,7 @@ class LocalAdapter extends RecyclerView.Adapter<LocalAdapter.FileHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull FileHolder fileHolder, int position) {
-        FileElement element = mPresenter.getLocalFiles().get(position);
+        BrowsableElement element = mPresenter.getFiles(mType).get(position);
 
         //il ne reste plus qu'à remplir notre vue
         fileHolder.mName.setText(element.getName());
@@ -50,11 +52,11 @@ class LocalAdapter extends RecyclerView.Adapter<LocalAdapter.FileHolder> {
         }
 
         fileHolder.itemView.setOnClickListener(v -> {
-            int oldSelected = mPresenter.getLocalFiles().indexOf(mSelectedElement);
+            int oldSelected = mPresenter.getFiles(mType).indexOf(mSelectedElement);
             mSelectedElement = element;
             notifyItemChanged(oldSelected);
             if (!element.isExpanded()) {
-                mPresenter.expandLocal(element);
+                mPresenter.expand(element, mType);
             }
             fileHolder.itemView.setBackgroundColor(0x66666666);
         });
@@ -62,10 +64,10 @@ class LocalAdapter extends RecyclerView.Adapter<LocalAdapter.FileHolder> {
 
     @Override
     public int getItemCount() {
-        return mPresenter.getLocalFiles().size();
+        return mPresenter.getFiles(mType).size();
     }
 
-    public FileElement getSelected() {
+    public BrowsableElement getSelected() {
         return mSelectedElement;
     }
 
