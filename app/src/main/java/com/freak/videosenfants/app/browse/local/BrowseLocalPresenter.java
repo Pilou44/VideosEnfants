@@ -27,6 +27,7 @@ public class BrowseLocalPresenter extends BasePresenter implements BrowseLocalCo
     private final BrowseLocalContract.Router mRouter;
     private final ArrayList<VideoElement> mItems;
     private final GetThumbnailUseCase mGetThumbnailUseCase;
+    private final GetLocalRootsUseCase mGetLocalRootsUseCase;
 
     private List<VideoElement> mRoots;
     private BrowseLocalContract.View mView;
@@ -35,12 +36,11 @@ public class BrowseLocalPresenter extends BasePresenter implements BrowseLocalCo
     public BrowseLocalPresenter(GetLocalRootsUseCase getLocalRootsUseCase,
                                 GetThumbnailUseCase getThumbnailUseCase,
                                 BrowseLocalContract.Router router) {
+        mGetLocalRootsUseCase = getLocalRootsUseCase;
         mGetThumbnailUseCase = getThumbnailUseCase;
         mRouter = router;
 
         mItems = new ArrayList<>();
-
-        getLocalRootsUseCase.execute(new GetLocalRootsSubscriber());
     }
 
     @Override
@@ -98,6 +98,11 @@ public class BrowseLocalPresenter extends BasePresenter implements BrowseLocalCo
     public void getImageUri(VideoElement element) {
         mGetThumbnailUseCase.execute(new GetThumbnailSubscriber(element), element);
 
+    }
+
+    @Override
+    public void retrieveLocalRoots() {
+        mGetLocalRootsUseCase.execute(new GetLocalRootsSubscriber());
     }
 
     private List<VideoElement> sortItems(File[] files, VideoElement parent) {

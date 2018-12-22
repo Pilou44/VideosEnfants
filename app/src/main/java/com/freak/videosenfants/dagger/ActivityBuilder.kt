@@ -2,6 +2,8 @@ package com.freak.videosenfants.dagger
 
 import com.freak.videosenfants.app.browse.local.BrowseLocalActivity
 import com.freak.videosenfants.app.browse.local.BrowseLocalModule
+import com.freak.videosenfants.app.home.HomeActivity
+import com.freak.videosenfants.app.home.HomeModule
 import com.freak.videosenfants.app.settings.SettingsActivity
 import com.freak.videosenfants.app.settings.SettingsFragmentModule
 import com.freak.videosenfants.app.settings.SettingsModule
@@ -21,6 +23,10 @@ abstract class ActivityBuilder {
     @PerActivity
     @ContributesAndroidInjector(modules = arrayOf(BrowseLocalModule::class))
     internal abstract fun bindBrowseLocalActivity(): BrowseLocalActivity
+
+    @PerActivity
+    @ContributesAndroidInjector(modules = arrayOf(HomeModule::class))
+    internal abstract fun bindHomeActivity(): HomeActivity
 
     @PerActivity
     @ContributesAndroidInjector(modules = arrayOf(SettingsModule::class, SettingsFragmentModule::class))

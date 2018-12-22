@@ -70,6 +70,7 @@ public class VideoElement {
     public VideoElement(long id, String path) {
         mId = id;
         mPath = path;
+        mName = path;
         mDirectory = true;
     }
 

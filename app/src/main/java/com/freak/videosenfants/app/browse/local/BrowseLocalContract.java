@@ -29,6 +29,8 @@ public interface BrowseLocalContract {
         void goBack();
 
         void getImageUri(VideoElement element);
+
+        void retrieveLocalRoots();
     }
 
     interface Router extends BaseContract.Router {

@@ -58,6 +58,8 @@ public class BrowseLocalActivity extends BrowseActivity implements BrowseLocalCo
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         mListView.setLayoutManager(layoutManager);
         mListView.setAdapter(mAdapter);
+
+        mPresenter.retrieveLocalRoots();
     }
 
     @Override
